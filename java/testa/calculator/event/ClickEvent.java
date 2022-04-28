@@ -28,8 +28,9 @@ public class ClickEvent implements View.OnClickListener {
             case R.id.btnRemoveAll:
                 editText.setText("");
             case R.id.btnEquals:
-                String text = editText.getText().toString();
-                calculation(text);
+
+            case R.id.btnPlus:
+
             default:
                 String btnText = (String) button.getText();
                 editText.append(btnText);
@@ -38,8 +39,23 @@ public class ClickEvent implements View.OnClickListener {
 
     private String calculation(String text) {
         if(text != null) {
-
+            while(text.contains("*") || text.contains("/")) {
+                
+            }
         }
         return null;
+    }
+
+    private int plus() {
+        return -1;
+    }
+    private int minus() {
+        return -1;
+    }
+    private int multiply() {
+        return -1;
+    }
+    private int division() {
+        return -1;
     }
 }
