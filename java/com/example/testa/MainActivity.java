@@ -57,12 +57,25 @@ public class MainActivity extends AppCompatActivity {
         btnDivision = (Button)findViewById(R.id.btnDivision);
 
         // 숫자 터치 이벤트
-        ClickEvent touchEvent = new ClickEvent(this);
-        btnRemove.setOnClickListener(touchEvent);
-        btnRemoveAll.setOnClickListener(touchEvent);
-        btn7.setOnClickListener(touchEvent);
-        btn8.setOnClickListener(touchEvent);
-        btn9.setOnClickListener(touchEvent);
+        ClickEvent clickEvent = new ClickEvent(this);
+        btnRemove.setOnClickListener(clickEvent);
+        btnRemoveAll.setOnClickListener(clickEvent);
+        btn7.setOnClickListener(clickEvent);
+        btn8.setOnClickListener(clickEvent);
+        btn9.setOnClickListener(clickEvent);
+        btnPlus.setOnClickListener(clickEvent);
+        btn4.setOnClickListener(clickEvent);
+        btn5.setOnClickListener(clickEvent);
+        btn6.setOnClickListener(clickEvent);
+        btnMinus.setOnClickListener(clickEvent);
+        btn1.setOnClickListener(clickEvent);
+        btn2.setOnClickListener(clickEvent);
+        btn3.setOnClickListener(clickEvent);
+        btnMultiply.setOnClickListener(clickEvent);
+        btn0.setOnClickListener(clickEvent);
+        btnDot.setOnClickListener(clickEvent);
+        btnEquals.setOnClickListener(clickEvent);
+        btnDivision.setOnClickListener(clickEvent);
     }
     public EditText getTextView() {
         return textView;
