@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;     //이 어노테이션은 공부해�
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -30,7 +29,12 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener {
     String[] bit = new String[10];              //추가된 과제에서 부호를 용이하게 저장하기 위한 문자열
     int count = 1;                              //숫자와 부호를 순차적으로 저장하기 위해 사용 된  count
     ArrayList<String> a = new ArrayList<>();    //부호 없이 오로지 숫자만 저장 될 변수
-
+    
+    // 수정한 부분 시작
+    private Runnable runnable_up, runnable_down;
+    private Handler handler_up, handler_down;
+    //수정한 부분 끝
+    
     @SuppressLint("ClickableViewAccessibility")
     protected void onCreate(@Nullable Bundle saved){        //시작
         super.onCreate(saved);
@@ -52,6 +56,7 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener {
         changeBtn = findViewById(R.id.changeBtn);
         sort = findViewById(R.id.sort);
 
+        /*
         Integer[] btn ={R.id.numBtn0, R.id.numBtn1, R.id.numBtn2,
                 R.id.numBtn3, R.id.numBtn4, R.id.numBtn5,
                 R.id.numBtn6, R.id.numBtn7, R.id.numBtn8, R.id.numBtn9};
@@ -59,7 +64,9 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener {
         for(int i = 0; i<button.length; i++) {
             button[i] = findViewById(btn[i]);
             button[i].setOnClickListener(this);
+            button[i].setOnLongClickListener();
         }
+        */
 
         process.setOnClickListener(this);
         arith.setOnClickListener(this);
@@ -80,7 +87,33 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener {
         for(int i = 0; i <bit.length; i++){         //부호 초기화 
             bit[i] = "";
         }
+        // 수정한 부분 시작
+        LongClickEvent longClickEvent = new LongClickEvent(this);
+        touchUp.setOnLongClickListener(longClickEvent);
+        touchDown.setOnLongClickListener(longClickEvent);
+        TouchEvent touchEvent = new TouchEvent(this);
+        touchUp.setOnTouchListener(touchEvent);
+        touchDown.setOnTouchListener(touchEvent);
 
+        Integer[] btn ={R.id.numBtn0, R.id.numBtn1, R.id.numBtn2,
+                R.id.numBtn3, R.id.numBtn4, R.id.numBtn5,
+                R.id.numBtn6, R.id.numBtn7, R.id.numBtn8, R.id.numBtn9};
+
+        for(int i = 0; i<button.length; i++) {
+            button[i] = findViewById(btn[i]);
+            button[i].setOnClickListener(this);
+            button[i].setOnLongClickListener(longClickEvent);
+            button[i].setOnTouchListener(touchEvent);
+        }
+        backBtn.setOnLongClickListener(longClickEvent);
+        backBtn.setOnTouchListener(touchEvent);
+
+
+
+
+        //수정한 부분 끝
+
+        /*
         touchUp.setOnLongClickListener(new View.OnLongClickListener() {                             //버튼 LongClick
             @Override
             public boolean onLongClick(View v) {
@@ -103,6 +136,7 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener {
                 return false;
             }
         });
+
         touchDown.setOnLongClickListener(new View.OnLongClickListener() {                            //버튼 LongClick
             @Override
             public boolean onLongClick(View v) {
@@ -111,6 +145,7 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener {
                 return false;
             }
         });
+
 
         touchDown.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -125,8 +160,10 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener {
                 return false;
             }
         });
-    }
 
+         */
+    }
+    /*
     final Handler handler_up = new Handler();
     final Runnable runnable_up = new Runnable() {
         @Override
@@ -135,7 +172,6 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener {
                 result.append(st);
                 process.append(st);
                 handler_up.postDelayed(this,100);
-
         }
     };
     final Handler handler_down = new Handler();
@@ -153,6 +189,7 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener {
                 handler_down.postDelayed(this,100);
         }
     };
+    */
         @Override
         public void onClick(View v) {                                                               //버튼 어떤거 클릭 하냐에 따라 다른 결과
 
@@ -267,12 +304,6 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener {
                     startActivity(intent);
             }
         }
-
-
-
-
-
-
 
     // 결과값을 받고 난 뒤에 추가로 계산할 시
         public void resultNot(){
@@ -465,5 +496,60 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener {
             return;
         }
         process.setText(strResult);
+    }
+
+// 수정한 부분 시작
+    // 핸들러 세팅
+    public void setHandler(Button button) {
+        handler_up = new Handler();
+        handler_down = new Handler();
+        runnable_up = new Runnable() {
+            @Override
+            public void run() {
+                String st = (String)button.getText();               //버튼을 길게 누를시 0.1초 딜레이로 마지막 숫자 계속 추가
+                if(st != null) {
+                    st = st.trim();
+                    if(st.length() != 0) {
+                        result.append(st);
+                        process.append(st);
+                    }
+                }
+                handler_up.postDelayed(this, 100);
+            }
+        };
+        runnable_down = new Runnable() {
+            @Override                                                                                   //back버튼과 같은 코드를 사용
+            public void run() {                                                                         //버튼을 길게 누를시 0.1초 딜레이로 마지막 숫자 계속 감소
+                int size = result.getText().length();
+                int size1 = process.getText().length();
+                if (size >= 1) {
+                    result.setText(result.getText().toString().substring(0, size - 1));
+                }
+                if(size1 >=1){
+                    process.setText(process.getText().toString().substring(0, size1 - 1));
+                }
+                handler_down.postDelayed(this,100);
+            }
+        };
+    }
+
+    // getter
+    public EditText getResult() {
+            return result;
+    }
+    public TextView getProcess() {
+            return process;
+    }
+    public Handler getHandler_up() {
+            return handler_up;
+    }
+    public Handler getHandler_down() {
+            return handler_down;
+    }
+    public Runnable getRunnable_up() {
+            return runnable_up;
+    }
+    public Runnable getRunnable_down() {
+            return runnable_down;
     }
 }
