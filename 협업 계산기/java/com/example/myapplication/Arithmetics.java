@@ -30,10 +30,10 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
     String[] bit = new String[10];              //추가된 과제에서 부호를 용이하게 저장하기 위한 문자열
     int count = 0;                              //숫자와 부호를 순차적으로 저장하기 위해 사용 된  count
     ArrayList<String> numBer = new ArrayList<>();    //부호 없이 오로지 숫자만 저장 될 변수
-// 수정한 부분 시작(shin)
+    // 수정한 부분 시작(shin)
     private Runnable runnable_up, runnable_down;
     private Handler handler_up, handler_down;
-//수정한 부분 끝
+    //수정한 부분 끝
     @Override
     protected void onCreate(@Nullable Bundle saved){        //시작
         super.onCreate(saved);
@@ -85,11 +85,11 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
         touchUp.setOnTouchListener(this);
         touchDown.setOnLongClickListener(this);
         touchDown.setOnTouchListener(this);
-*/       
+*/
         type = "";
         mountProcess = "";
         iv = null;
-        for(int i = 0; i <bit.length; i++){         //부호 초기화 
+        for(int i = 0; i <bit.length; i++){         //부호 초기화
             bit[i] = "";
         }
 // 수정한 부분 시작(shin)
@@ -156,146 +156,146 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
 }
  */
 
- /* 주석처리(shin)
-        final Handler handler_up = new Handler();
-        final Runnable runnable_up = new Runnable() {
-            @Override
-            public void run() {
-                    String st = result.getText().toString().substring(result.length()-1);               //버튼을 길게 누를시 0.1초 딜레이로 마지막 숫자 계속 추가
-                    result.append(st);
-                    process.append(st);
-                    handler_up.postDelayed(this,100);
+    /* 주석처리(shin)
+           final Handler handler_up = new Handler();
+           final Runnable runnable_up = new Runnable() {
+               @Override
+               public void run() {
+                       String st = result.getText().toString().substring(result.length()-1);               //버튼을 길게 누를시 0.1초 딜레이로 마지막 숫자 계속 추가
+                       result.append(st);
+                       process.append(st);
+                       handler_up.postDelayed(this,100);
 
-            }
-        };
-        final Handler handler_down = new Handler();
-        final Runnable runnable_down = new Runnable() {
-            @Override                                                                                   //back버튼과 같은 코드를 사용
-            public void run() {                                                                         //버튼을 길게 누를시 0.1초 딜레이로 마지막 숫자 계속 감소
-                    int size = result.getText().length();
-                    int size1 = process.getText().length();
-                    if (size >= 1) {
-                        result.setText(result.getText().toString().substring(0, size - 1));
-                    }
-                    if(size1 >=1){
-                        process.setText(process.getText().toString().substring(0, size1 - 1));
-                    }
-                    handler_down.postDelayed(this,100);
-            }
-        };
-    */
-        @Override
-        public void onClick(View v) {                                                               //버튼 어떤거 클릭 하냐에 따라 다른 결과
-            double num;             //EditText에 적은 값을 저장하여 부호 버튼 클릭시 calculator()메소드로 값을 넘길 변수
-            select(v);              //누른 버튼은 selected = true가 되고 이전 버튼은 false로 만듭니다.
-            switch (v.getId()){
-                //번호 클릭
-                case R.id.numBtn0:
-                    result.append("0");
-                    process.append("0");break;
-                case R.id.numBtn1:
-                    result.append("1");
-                    process.append("1");break;
-                case R.id.numBtn2:
-                    result.append("2");
-                    process.append("2");break;
-                case R.id.numBtn3:
-                    result.append("3");
-                    process.append("3");break;
-                case R.id.numBtn4:
-                    result.append("4");
-                    process.append("4");break;
-                case R.id.numBtn5:
-                    result.append("5");
-                    process.append("5");break;
-                case R.id.numBtn6:
-                    result.append("6");
-                    process.append("6");break;
-                case R.id.numBtn7:
-                    result.append("7");
-                    process.append("7");break;
-                case R.id.numBtn8:
-                    result.append("8");
-                    process.append("8");break;
-                case R.id.numBtn9:
-                    result.append("9");
-                    process.append("9");break;
-                
-                //부호
-                case R.id.addBtn:
-                    if(process.getText().toString().equals("")){
-                        Toast.makeText(Arithmetics.this,"NOT NUMBER",Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                    resultNot();                                                 // 결과값 있는 상태로 추가 계산 시
-                    num = Double.parseDouble(result.getText().toString());      //EditText에 있는 값을 저장
-                    calculator("+", num); //계산                              //해당 부호와 num값을 calculator()에 넘깁니다.
-                    break;
+               }
+           };
+           final Handler handler_down = new Handler();
+           final Runnable runnable_down = new Runnable() {
+               @Override                                                                                   //back버튼과 같은 코드를 사용
+               public void run() {                                                                         //버튼을 길게 누를시 0.1초 딜레이로 마지막 숫자 계속 감소
+                       int size = result.getText().length();
+                       int size1 = process.getText().length();
+                       if (size >= 1) {
+                           result.setText(result.getText().toString().substring(0, size - 1));
+                       }
+                       if(size1 >=1){
+                           process.setText(process.getText().toString().substring(0, size1 - 1));
+                       }
+                       handler_down.postDelayed(this,100);
+               }
+           };
+       */
+    @Override
+    public void onClick(View v) {                                                               //버튼 어떤거 클릭 하냐에 따라 다른 결과
+        double num;             //EditText에 적은 값을 저장하여 부호 버튼 클릭시 calculator()메소드로 값을 넘길 변수
+        select(v);              //누른 버튼은 selected = true가 되고 이전 버튼은 false로 만듭니다.
+        switch (v.getId()){
+            //번호 클릭
+            case R.id.numBtn0:
+                result.append("0");
+                process.append("0");break;
+            case R.id.numBtn1:
+                result.append("1");
+                process.append("1");break;
+            case R.id.numBtn2:
+                result.append("2");
+                process.append("2");break;
+            case R.id.numBtn3:
+                result.append("3");
+                process.append("3");break;
+            case R.id.numBtn4:
+                result.append("4");
+                process.append("4");break;
+            case R.id.numBtn5:
+                result.append("5");
+                process.append("5");break;
+            case R.id.numBtn6:
+                result.append("6");
+                process.append("6");break;
+            case R.id.numBtn7:
+                result.append("7");
+                process.append("7");break;
+            case R.id.numBtn8:
+                result.append("8");
+                process.append("8");break;
+            case R.id.numBtn9:
+                result.append("9");
+                process.append("9");break;
 
-                case R.id.subBtn:
-                    int size = process.getText().length()-1;
-                    String pro = process.getText().toString().substring(size);
-                    if(pro.equals("*") || pro.equals("/")){
-                        arith.setText("-");
-                        process.append("-");
-                        result.setText("-");
-                        return;
-                    }
-                    resultNot();
-                    num = Double.parseDouble(result.getText().toString());
-                    calculator("-", num); //계산
-                    break;
+            //부호
+            case R.id.addBtn:
+                if(process.getText().toString().equals("")){
+                    Toast.makeText(Arithmetics.this,"NOT NUMBER",Toast.LENGTH_LONG).show();
+                    return;
+                }
+                resultNot();                                                 // 결과값 있는 상태로 추가 계산 시
+                num = Double.parseDouble(result.getText().toString());      //EditText에 있는 값을 저장
+                calculator("+", num); //계산                              //해당 부호와 num값을 calculator()에 넘깁니다.
+                break;
 
-                case R.id.mulBtn:
-                    if(process.getText().toString().equals("")){
-                        Toast.makeText(Arithmetics.this,"NOT NUMBER",Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                    resultNot();
-                    num = Double.parseDouble(result.getText().toString());
-                    calculator("*", num);
-                    break;
+            case R.id.subBtn:
+                int size = process.getText().length()-1;
+                String pro = process.getText().toString().substring(size);
+                if(pro.equals("*") || pro.equals("/")){
+                    arith.setText("-");
+                    process.append("-");
+                    result.setText("-");
+                    return;
+                }
+                resultNot();
+                num = Double.parseDouble(result.getText().toString());
+                calculator("-", num); //계산
+                break;
 
-                case R.id.divBtn:
-                    if(process.getText().toString().equals("")){
-                        Toast.makeText(Arithmetics.this,"NOT NUMBER",Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                    resultNot();
-                    num = Double.parseDouble(result.getText().toString());
-                    calculator("/", num);
-                    break;
+            case R.id.mulBtn:
+                if(process.getText().toString().equals("")){
+                    Toast.makeText(Arithmetics.this,"NOT NUMBER",Toast.LENGTH_LONG).show();
+                    return;
+                }
+                resultNot();
+                num = Double.parseDouble(result.getText().toString());
+                calculator("*", num);
+                break;
+
+            case R.id.divBtn:
+                if(process.getText().toString().equals("")){
+                    Toast.makeText(Arithmetics.this,"NOT NUMBER",Toast.LENGTH_LONG).show();
+                    return;
+                }
+                resultNot();
+                num = Double.parseDouble(result.getText().toString());
+                calculator("/", num);
+                break;
 
 
-                //콤마
-                case R.id.comma:
-                    result.append(".");
-                    process.append(".");
-                    break;
-                
-                //equla 
-                case R.id.equla:
-                    equals();       //계산 결과
-                    break;
-                
-                // backButton
-                case R.id.backBtn:  //가장 마지막에 적은 문자열 하나 삭제
-                    back();
-                    break;
-                
-                //초기화
-                case R.id.rollBackBtn:
-                    rollBack();     //초기화
-                    break;
+            //콤마
+            case R.id.comma:
+                result.append(".");
+                process.append(".");
+                break;
 
-                case R.id.sort:
-                    sort();     //sort함수 대신 사용할 정렬기능
-                    break;
-                case R.id.changeBtn:        //2진수 액티비티로 전환
-                    Intent intent = new Intent(getApplicationContext(), Arithmetics_Change.class);
-                    startActivity(intent);
-            }
+            //equla
+            case R.id.equla:
+                equals();       //계산 결과
+                break;
+
+            // backButton
+            case R.id.backBtn:  //가장 마지막에 적은 문자열 하나 삭제
+                back();
+                break;
+
+            //초기화
+            case R.id.rollBackBtn:
+                rollBack();     //초기화
+                break;
+
+            case R.id.sort:
+                sort();     //sort함수 대신 사용할 정렬기능
+                break;
+            case R.id.changeBtn:        //2진수 액티비티로 전환
+                Intent intent = new Intent(getApplicationContext(), Arithmetics_Change.class);
+                startActivity(intent);
         }
+    }
 
 
 
@@ -304,38 +304,38 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
 
 
     // 결과값을 받고 난 뒤에 추가로 계산할 시 결과값만 받고 기존에 저장된 배열 및 List 초기화
-        public void resultNot(){
-            if (process.getText().toString().contains("=")) {
-                numBer.clear();
-                count = 1;
-                Arrays.fill(bit, "");
-                mountProcess = "";
-                mountNum = 0.0;
-                minus = false;
-                equalsort = false;
-                process.setText(result.getText().toString());
-            }
+    public void resultNot(){
+        if (process.getText().toString().contains("=")) {
+            numBer.clear();
+            count = 1;
+            Arrays.fill(bit, "");
+            mountProcess = "";
+            mountNum = 0.0;
+            minus = false;
+            equalsort = false;
+            process.setText(result.getText().toString());
         }
+    }
 
     //계산 과정
     public void calculator(String col, Double v) {
-            bit[count] = col;                           //부호 배열로 저장 sort나 equals
-            if(!process.getText().toString().equals("0")){                                 // 첫수로 인해 숫자 0을 받을시 문제가 생기기에 일단 if로 빼놓음
-                numBer.add(String.valueOf(1*v));
-            }else{
-                process.setText("");
-            }
-            count++;
-            arith.setText(col);
-            process.setText(process.getText() + col);
-            if(col.equals("-")){
-                mountProcess += v;
-                result.setText("-");
-            }else{
-                mountProcess += v + col;
-                result.setText("");
-            }
+        bit[count] = col;                           //부호 배열로 저장 sort나 equals
+        if(!process.getText().toString().equals("0")){                                 // 첫수로 인해 숫자 0을 받을시 문제가 생기기에 일단 if로 빼놓음
+            numBer.add(String.valueOf(1*v));
+        }else{
+            process.setText("");
         }
+        count++;
+        arith.setText(col);
+        process.setText(process.getText() + col);
+        if(col.equals("-")){
+            mountProcess += v;
+            result.setText("-");
+        }else{
+            mountProcess += v + col;
+            result.setText("");
+        }
+    }
 
     // 계산 완료( = )
     public void equals(){
@@ -384,7 +384,7 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
         }
         result.setText(lastResultStr);
         arith.setText("");
-        }
+    }
 
 
     //한칸지우기
@@ -506,9 +506,9 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
         }
         int bcount = 0;
         for(int i =0; i<bitstr.size(); i++){
-                move[bcount] = bitb.get(i);
-                moveStr[bcount] = bitstr.get(i);
-                bcount++;
+            move[bcount] = bitb.get(i);
+            moveStr[bcount] = bitstr.get(i);
+            bcount++;
         }
         for(int i = 0; i<bcount; i++){                         //숫자 크기 내림순 저장
             for(int k = 0; k<bcount; k++) {
@@ -543,7 +543,7 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
         }
         process.setText(strResult);
     }
-// 수정한 부분 시작(shin)
+    // 수정한 부분 시작(shin)
     // 핸들러 세팅
     public void setHandler(Button button) {
         handler_up = new Handler();
