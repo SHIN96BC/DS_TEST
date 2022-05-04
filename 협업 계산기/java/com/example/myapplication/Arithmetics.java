@@ -16,25 +16,24 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class Arithmetics extends AppCompatActivity implements OnClickListener {  //터치따로
     private View iv;                      //selected를 위해 이전 사용한 View를 저장할 변수
     private EditText result;
     private TextView process, arith;
-    String type, mountProcess, oneProcess;                  // 부호, 과정 문자열 , equals 사용시 저장 될 마지막 숫자 문자열
+    String type, mountProcess, oneProcess,twoProcess;                  // 부호, 과정 문자열 , equals 사용시 저장 될 마지막 숫자 문자열
     Double mountNum = 0.0;                            //최초 계산기 때 순서대로 값을 계산 및 저장한 변수
-    boolean  minus;                               // 최초 숫자가 음수일 경우 값을 if를 나누기 위해 사용한 변수
+    boolean  minus, equalsort;                              // 최초 숫자가 음수일 경우 값을 if를 나누기 위해 사용한 변수
     Button[] button = new Button[10];
-    String[] bit = new String[8];              //추가된 과제에서 부호를 용이하게 저장하기 위한 문자열
+    String[] bit = new String[10];              //추가된 과제에서 부호를 용이하게 저장하기 위한 문자열
     int count = 0;                              //숫자와 부호를 순차적으로 저장하기 위해 사용 된  count
     ArrayList<String> numBer = new ArrayList<>();    //부호 없이 오로지 숫자만 저장 될 변수
-
-// 수정한 부분 시작(shin)
+    // 수정한 부분 시작(shin)
     private Runnable runnable_up, runnable_down;
     private Handler handler_up, handler_down;
-//수정한 부분 끝
-
+    //수정한 부분 끝
     @Override
     protected void onCreate(@Nullable Bundle saved){        //시작
         super.onCreate(saved);
@@ -67,7 +66,6 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
             button[i].setOnClickListener(this);
         }
  */
-
         process.setOnClickListener(this);
         arith.setOnClickListener(this);
         result.setOnClickListener(this);
@@ -82,14 +80,12 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
         changeBtn.setOnClickListener(this);
         sort.setOnClickListener(this);
 
-
 /* 주석처리 (shin)
         touchUp.setOnLongClickListener(this);
         touchUp.setOnTouchListener(this);
         touchDown.setOnLongClickListener(this);
         touchDown.setOnTouchListener(this);
 */
-
         type = "";
         mountProcess = "";
         iv = null;
@@ -158,37 +154,36 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
         }
         return false;
 }
-/*
  */
 
     /* 주석처리(shin)
-        final Handler handler_up = new Handler();
-        final Runnable runnable_up = new Runnable() {
-            @Override
-            public void run() {
-                    String st = result.getText().toString().substring(result.length()-1);               //버튼을 길게 누를시 0.1초 딜레이로 마지막 숫자 계속 추가
-                    result.append(st);
-                    process.append(st);
-                    handler_up.postDelayed(this,100);
+           final Handler handler_up = new Handler();
+           final Runnable runnable_up = new Runnable() {
+               @Override
+               public void run() {
+                       String st = result.getText().toString().substring(result.length()-1);               //버튼을 길게 누를시 0.1초 딜레이로 마지막 숫자 계속 추가
+                       result.append(st);
+                       process.append(st);
+                       handler_up.postDelayed(this,100);
 
-            }
-        };
-        final Handler handler_down = new Handler();
-        final Runnable runnable_down = new Runnable() {
-            @Override                                                                                   //back버튼과 같은 코드를 사용
-            public void run() {                                                                         //버튼을 길게 누를시 0.1초 딜레이로 마지막 숫자 계속 감소
-                    int size = result.getText().length();
-                    int size1 = process.getText().length();
-                    if (size >= 1) {
-                        result.setText(result.getText().toString().substring(0, size - 1));
-                    }
-                    if(size1 >=1){
-                        process.setText(process.getText().toString().substring(0, size1 - 1));
-                    }
-                    handler_down.postDelayed(this,100);
-            }
-        };
-    */
+               }
+           };
+           final Handler handler_down = new Handler();
+           final Runnable runnable_down = new Runnable() {
+               @Override                                                                                   //back버튼과 같은 코드를 사용
+               public void run() {                                                                         //버튼을 길게 누를시 0.1초 딜레이로 마지막 숫자 계속 감소
+                       int size = result.getText().length();
+                       int size1 = process.getText().length();
+                       if (size >= 1) {
+                           result.setText(result.getText().toString().substring(0, size - 1));
+                       }
+                       if(size1 >=1){
+                           process.setText(process.getText().toString().substring(0, size1 - 1));
+                       }
+                       handler_down.postDelayed(this,100);
+               }
+           };
+       */
     @Override
     public void onClick(View v) {                                                               //버튼 어떤거 클릭 하냐에 따라 다른 결과
         double num;             //EditText에 적은 값을 저장하여 부호 버튼 클릭시 calculator()메소드로 값을 넘길 변수
@@ -246,15 +241,6 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
                     result.setText("-");
                     return;
                 }
-                    /*if(process.getText().toString().equals("") ||process.getText().toString().equals("0") ){  // 만약 첫 수가 음수일시 각 TextView에 표시하고 부호 등을 저장합니다.
-                        process.append("-");
-                        result.setText("");
-                        arith.setText("-");
-                        type ="-";
-                        minus = true;
-                        bit[0] ="-";
-                        return;
-                    }*/
                 resultNot();
                 num = Double.parseDouble(result.getText().toString());
                 calculator("-", num); //계산
@@ -289,7 +275,7 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
 
             //equla
             case R.id.equla:
-                equals(type);       //계산 결과
+                equals();       //계산 결과
                 break;
 
             // backButton
@@ -307,9 +293,7 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
                 break;
             case R.id.changeBtn:        //2진수 액티비티로 전환
                 Intent intent = new Intent(getApplicationContext(), Arithmetics_Change.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION); // Activity 전환 시 효과 제거
                 startActivity(intent);
-                break;
         }
     }
 
@@ -319,105 +303,87 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
 
 
 
-    // 결과값을 받고 난 뒤에 추가로 계산할 시 AVN alcsvn 스탭앱
+    // 결과값을 받고 난 뒤에 추가로 계산할 시 결과값만 받고 기존에 저장된 배열 및 List 초기화
     public void resultNot(){
         if (process.getText().toString().contains("=")) {
+            numBer.clear();
+            count = 1;
+            Arrays.fill(bit, "");
+            mountProcess = "";
+            mountNum = 0.0;
+            minus = false;
+            equalsort = false;
             process.setText(result.getText().toString());
         }
     }
 
     //계산 과정
     public void calculator(String col, Double v) {
-/*            if(arith.getText().toString().equals("")){  //첫 수가 -가 아닐 경우
-                mountNum += Double.parseDouble(process.getText().toString());       //먼저계산
-                numBer.add(String.valueOf(mountNum));                                    //숫자 저장
-                mountProcess += v + col;                                            //과정 String
-                bit[0] = col;
-                arith.setText(col);
-                process.setText(process.getText() + col);
-                result.setText("");
-                type = col;
-               return;
-            }*/
-        bit[count] = col;
-        if(v != 0){                                 // 첫수로 인해 숫자 0을 받을시 문제가 생기기에 일단 if로 빼놓음
+        bit[count] = col;                           //부호 배열로 저장 sort나 equals
+        if(!process.getText().toString().equals("0")){                                 // 첫수로 인해 숫자 0을 받을시 문제가 생기기에 일단 if로 빼놓음
             numBer.add(String.valueOf(1*v));
-        }
-            /*if(!minus){                                                         //첫수가 마이너스일 경우
-                numBer.add(String.valueOf(1*v));
-            }else{
-                String minusV = v.toString().substring(1);
-                numBer.add(minusV);
-                bit[count] = col;
-                count--;
-            }*/
-        if (col.equals("+")) {                                                                 //이전 부호를 저장해뒀다가 연산반응 ex) 9+5<<에서 -클릭시 이전에 눌러서 저장된 + 부호로 9+5계산 이후 -부호 저장
-            mountNum += 1 * v;
-        }
-/*            if (type.equals("-")) {
-                if(minus) {
-                    mountNum += 1 * v;
-                    minus = false;
-                }else{
-                    mountNum += -1 * v;
-                }
-            }*/
-        if (col.equals("-")) {
-            mountNum -= 1 * v;
-        }
-        if (col.equals("*")) {
-            mountNum *= 1 * v;
-            if(process.getText().toString().equals("0")){
-                process.setText("1");
-                mountNum = 1.0;
-            }
-        }
-        if (col.equals("/")) {
-            mountNum /= 1 * v;
-            if(process.getText().toString().equals("0")){
-                process.setText("1");
-                mountNum = 1.0;
-            }
+        }else{
+            process.setText("");
         }
         count++;
         arith.setText(col);
-        /*type = col;  */                                                                           //클릭한 부호를 저장
-        mountProcess += v + col;
         process.setText(process.getText() + col);
-        result.setText("");
-
+        if(col.equals("-")){
+            mountProcess += v;
+            result.setText("-");
+        }else{
+            mountProcess += v + col;
+            result.setText("");
+        }
     }
 
     // 계산 완료( = )
-    public void equals(String t){
-        String twoProcess;
-        Double lastResult = 0.0;
-        String lastResultStr = "";
-        if(t.equals("") || result.getText().toString().equals("")){
+    public void equals(){
+        if(result.getText().toString().equals("") || arith.getText().toString().equals("")){
             return;
         }
+        if(mountProcess.charAt(0) == '0'){
+            mountProcess = mountProcess.substring(3);
+        }
+        Log.d(String.valueOf(count), String.valueOf(numBer.size()));
+        if(!equalsort){
+            numBer.add(result.getText().toString());
+        }
+        double lastResult = 0.0;
+        String lastResultStr = "";
         oneProcess = result.getText().toString();
-        twoProcess = (mountProcess + oneProcess).replaceAll(".0", "");
-        if(t.equals("+")){
-            lastResult = mountNum + Double.parseDouble(oneProcess);
+        twoProcess = (mountProcess + oneProcess).replace(".0","");
+        for(int i = 0; i<numBer.size(); i ++){
+            if(bit[i].equals("*")){
+                double test1 = Double.parseDouble(numBer.get(i-1));
+                double test2 = Double.parseDouble(numBer.get(i));
+                lastResult += test1 * test2;
+            }
+            if(bit[i].equals("/")){
+                double test1 = Double.parseDouble(numBer.get(i-1));
+                double test2 = Double.parseDouble(numBer.get(i));
+                lastResult += test1 / test2;
+            }
         }
-        if(t.equals("-")){
-            lastResult = mountNum - Double.parseDouble(oneProcess);
+        ArrayList<String> subNum = new ArrayList<>();
+        subNum.addAll(numBer);
+        for(int i = subNum.size()-1; i>=0; i--){
+            if(bit[i].equals("*") || bit[i].equals("/")) {
+                subNum.remove(i);
+                subNum.remove(i-1);
+            }
         }
-        if(t.equals("*")){
-            lastResult = mountNum * Double.parseDouble(oneProcess);
+        for(int i =0; i<subNum.size(); i++){
+            lastResult += Double.parseDouble(subNum.get(i));
         }
-        if(t.equals("/")){
-            lastResult = mountNum / Double.parseDouble(oneProcess);
-        }
-        bit[count] = arith.getText().toString();
         lastResultStr = String.valueOf(lastResult).replace(".0","");
-        process.setText(twoProcess + "=" + lastResultStr);
+        if(!equalsort){
+            process.setText(twoProcess + "=" + lastResultStr);
+        }else{
+            process.append("=" + lastResultStr);
+        }
         result.setText(lastResultStr);
         arith.setText("");
-        mountProcess = "";
-        mountNum = 0.0;
-        minus = false;
     }
 
 
@@ -442,12 +408,12 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
         type = "";
         mountProcess = "";
         oneProcess = "";
+        twoProcess ="";
         minus = false;
+        equalsort = false;
         count = 0;
         numBer.clear();
-        for(int i = 0; i <bit.length; i++){
-            bit[i] = "";
-        }
+        Arrays.fill(bit, "");
     }
 
     // 버튼 style 유지 셀렉터
@@ -468,47 +434,28 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
         String[] str = new String[8];
         double[] b = new double[8];
         String strResult = new String();
-        if(process.getText().toString().contains("=")){                    //이미 결과값을 받은 상태인지 아니면 과정인지 확인
-            /*int index = process.getText().toString().indexOf("=");
-            String subStr = process.getText().toString().substring(0, index);
-            a = subStr.split("\\+|-|\\*|/");*/
-            numBer.add(oneProcess);
-        }else{
-            /*bit[count] = arith.getText().toString();*/
+        ArrayList<String> bitstr = new ArrayList<>();
+        ArrayList<Double> bitb = new ArrayList<>();
+        if(!process.getText().toString().contains("=")){                    //이미 결과값을 받은 상태인지 아니면 과정인지 확인
             numBer.add(result.getText().toString());
-            /*a = (process.getText().toString().split("\\+|-|\\*|/"));*/
         }
-        /*if(process.getText().toString().substring(0,1).equals("-")){
-            for(int i = 0; i<a.size()-1; i++){
-                a.get(i) = a[i+1];
+        for (String s : bit) {
+            if (!s.equals("")) {
+                bitstr.add(s);
             }
-            a[a.length-1] = "";
-        }else{*/
+        }
         for(int i=0; i<numBer.size(); i++){                          //숫자와 부호 합칩니다.
             String test;
-            if(bit[i].equals("*")||bit[i].equals("/")){
-                test = numBer.get(i);
-            }else{
-                test = bit[i] + numBer.get(i);
-            }
+            test = numBer.get(i);
             b[i] = Double.parseDouble(test);
+            bitb.add(b[i]);
         }
-/*        for (int i =0; i<=a.length; i++) {
-            int bitCount = 0;
-            if (bit[i] == "*" || bit[i] == "/") {
-                abc[bitCount] = b[i-1] + bit[i] + b[i];
-                Log.d(abc[bitCount],i+"번째");
-                bitCount++;
-            }
-        }*/
+
         double[] d = new double[8];
         double[] move = new double[8];
         String[] moveStr = new String[8];
         int c = 0;
- /*       for(int i =0; i<d.length; i++){
-            d[i] = -99.9;
-        }*/
-        for(int i = 0; i<numBer.size(); i++){      // 곱하기와 나누기 계산 정렬
+        for(int i = bitstr.size(); i>=0; i--){      // 곱하기와 나누기 계산 정렬
             if(bit[i].equals("*")){
                 if(b[i-1]<b[i]){
                     Double change = b[i];
@@ -521,8 +468,10 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
                 }else{
                     abc[c] = "+"+ b[i-1] +"*"+ b[i];
                 }
-                bit[i-1] = "n";
-                bit[i] = "n";
+                bitstr.remove(i);
+                bitstr.remove(i-1);
+                bitb.remove(i);
+                bitb.remove(i-1);
                 c++;
             }
             if(bit[i].equals("/")) {
@@ -532,7 +481,11 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
                     b[i - 1] = change;
                 }
                 d[c] = b[i-1];
-                abc[c] = b[i-1] +"/"+ b[i];
+                if(b[i-1]<0){
+                    abc[c] = b[i-1] +"/"+ b[i];
+                }else{
+                    abc[c] = "+"+ b[i-1] +"/"+ b[i];
+                }
                 c++;
             }
         }
@@ -552,12 +505,10 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
             }
         }
         int bcount = 0;
-        for(int i =0; i<bit.length; i++){
-            if(!(bit[i].equals("n") || bit[i].equals(""))){
-                move[bcount] = b[i];
-                moveStr[bcount] = bit[i];
-                bcount++;
-            }
+        for(int i =0; i<bitstr.size(); i++){
+            move[bcount] = bitb.get(i);
+            moveStr[bcount] = bitstr.get(i);
+            bcount++;
         }
         for(int i = 0; i<bcount; i++){                         //숫자 크기 내림순 저장
             for(int k = 0; k<bcount; k++) {
@@ -572,10 +523,10 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
                     }
                 }
             }
-        }//----------------------------------------------
+        }
         for(int i =0; i<c; i++){
             str[i] = abc[i];
-            strResult += str[i];
+            strResult += str[i].replaceAll(".0", "");
         }
         for(int i = 0; i<bcount; i++){                        //타입과 숫자 순차적으로 저장
             if(move[i]<0){
@@ -585,14 +536,13 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
             }
             strResult += str[c+i].replace(".0", "");
         }
+        equalsort = true;      //sort를 사용하면 과정 값이 고정되게 한다. >>sort 누르고 equal 누르면 순서가 다시 돌아가는 문제점 해결하기 위함
         if(process.getText().toString().contains("=")){
-            process.setText(String.format("%s=%s", strResult.toString(), result.getText().toString().replace(".0", "")));
+            process.setText(String.format("%s=%s", strResult, result.getText().toString()));
             return;
         }
         process.setText(strResult);
     }
-
-
     // 수정한 부분 시작(shin)
     // 핸들러 세팅
     public void setHandler(Button button) {
