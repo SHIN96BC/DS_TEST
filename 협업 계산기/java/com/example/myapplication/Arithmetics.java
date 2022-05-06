@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.MotionEvent;
+import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -13,7 +13,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,14 +33,24 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
     String[] bit = new String[10];              //추가된 과제에서 부호를 용이하게 저장하기 위한 문자열
     int count = 0;                              //숫자와 부호를 순차적으로 저장하기 위해 사용 된  count
     ArrayList<String> numBer = new ArrayList<>();    //부호 없이 오로지 숫자만 저장 될 변수
-    // 수정한 부분 시작(shin)
+// 수정한 부분 시작(shin)
     private Runnable runnable_up, runnable_down;
     private Handler handler_up, handler_down;
-    //수정한 부분 끝
+    private Toolbar mainToolBar;
+    private ActionBarDrawerToggle drawerToggle;
+//수정한 부분 끝
     @Override
     protected void onCreate(@Nullable Bundle saved){        //시작
         super.onCreate(saved);
         setContentView(R.layout.activity_arithmetics);
+
+// 수정한 부분(shin 2022.05.06)
+        // toolbar
+        mainToolBar = (Toolbar)findViewById(R.id.main_tool_bar);
+        setSupportActionBar(mainToolBar);
+
+// 수정한 부분 끝
+
         Button addBtn, subBtn, divBtn, mulBtn, equal, rollBackBtn, comma, backBtn, touchUp,touchDown, binary, sort;
 
         process = findViewById(R.id.process);
@@ -188,43 +201,53 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
     public void onClick(View v) {                                                               //버튼 어떤거 클릭 하냐에 따라 다른 결과
         double num;             //EditText에 적은 값을 저장하여 부호 버튼 클릭시 calculator()메소드로 값을 넘길 변수
         select(v);              //누른 버튼은 selected = true가 되고 이전 버튼은 false로 만듭니다.
-        switch (v.getId()){
+        switch (v.getId()) {
             //번호 클릭
             case R.id.numBtn0:
                 result.append("0");
-                process.append("0");break;
+                process.append("0");
+                break;
             case R.id.numBtn1:
                 result.append("1");
-                process.append("1");break;
+                process.append("1");
+                break;
             case R.id.numBtn2:
                 result.append("2");
-                process.append("2");break;
+                process.append("2");
+                break;
             case R.id.numBtn3:
                 result.append("3");
-                process.append("3");break;
+                process.append("3");
+                break;
             case R.id.numBtn4:
                 result.append("4");
-                process.append("4");break;
+                process.append("4");
+                break;
             case R.id.numBtn5:
                 result.append("5");
-                process.append("5");break;
+                process.append("5");
+                break;
             case R.id.numBtn6:
                 result.append("6");
-                process.append("6");break;
+                process.append("6");
+                break;
             case R.id.numBtn7:
                 result.append("7");
-                process.append("7");break;
+                process.append("7");
+                break;
             case R.id.numBtn8:
                 result.append("8");
-                process.append("8");break;
+                process.append("8");
+                break;
             case R.id.numBtn9:
                 result.append("9");
-                process.append("9");break;
+                process.append("9");
+                break;
 
             //부호
             case R.id.addBtn:
-                if(process.getText().toString().equals("")){
-                    Toast.makeText(Arithmetics.this,"NOT NUMBER",Toast.LENGTH_LONG).show();
+                if (process.getText().toString().equals("")) {
+                    Toast.makeText(Arithmetics.this, "NOT NUMBER", Toast.LENGTH_LONG).show();
                     return;
                 }
                 resultNot();                                                 // 결과값 있는 상태로 추가 계산 시
@@ -233,9 +256,9 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
                 break;
 
             case R.id.subBtn:
-                int size = process.getText().length()-1;
+                int size = process.getText().length() - 1;
                 String pro = process.getText().toString().substring(size);
-                if(pro.equals("*") || pro.equals("/")){
+                if (pro.equals("*") || pro.equals("/")) {
                     arith.setText("-");
                     process.append("-");
                     result.setText("-");
@@ -247,8 +270,8 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
                 break;
 
             case R.id.mulBtn:
-                if(process.getText().toString().equals("")){
-                    Toast.makeText(Arithmetics.this,"NOT NUMBER",Toast.LENGTH_LONG).show();
+                if (process.getText().toString().equals("")) {
+                    Toast.makeText(Arithmetics.this, "NOT NUMBER", Toast.LENGTH_LONG).show();
                     return;
                 }
                 resultNot();
@@ -257,8 +280,8 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
                 break;
 
             case R.id.divBtn:
-                if(process.getText().toString().equals("")){
-                    Toast.makeText(Arithmetics.this,"NOT NUMBER",Toast.LENGTH_LONG).show();
+                if (process.getText().toString().equals("")) {
+                    Toast.makeText(Arithmetics.this, "NOT NUMBER", Toast.LENGTH_LONG).show();
                     return;
                 }
                 resultNot();
@@ -294,6 +317,7 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
             case R.id.binary:        //2진수 액티비티로 전환
                 Intent intent = new Intent(getApplicationContext(), Arithmetics_Change.class);
                 startActivity(intent);
+                break;
         }
     }
 
@@ -543,7 +567,7 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
         }
         process.setText(strResult);
     }
-    // 수정한 부분 시작(shin)
+// 수정한 부분 시작(shin)
     // 핸들러 세팅
     public void setHandler(Button button) {
         handler_up = new Handler();
@@ -595,6 +619,7 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
         return runnable_down;
     }
 // 수정한 부분 끝
+
 }
 //정렬하고 equal 시 순서가 다시 섞이는 문제
 //포커싱과 셀렉터 양립 구현 실패
