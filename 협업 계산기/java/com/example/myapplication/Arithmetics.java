@@ -38,7 +38,7 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
     protected void onCreate(@Nullable Bundle saved){        //시작
         super.onCreate(saved);
         setContentView(R.layout.activity_arithmetics);
-        Button addBtn, subBtn, divBtn, mulBtn, equal, rollBackBtn, comma, backBtn, touchUp,touchDown, changeBtn,sort;
+        Button addBtn, subBtn, divBtn, mulBtn, equal, rollBackBtn, comma, backBtn, touchUp,touchDown, binary, sort;
 
         process = findViewById(R.id.process);
         arith = findViewById(R.id.arith);
@@ -51,9 +51,9 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
         backBtn = findViewById(R.id.backBtn);
         rollBackBtn = findViewById(R.id.rollBackBtn);
         comma = findViewById(R.id.comma);
-        touchUp = findViewById(R.id.touchUp);
-        touchDown = findViewById(R.id.touchDown);
-        changeBtn = findViewById(R.id.changeBtn);
+//        touchUp = findViewById(R.id.touchUp);
+//        touchDown = findViewById(R.id.touchDown);
+        binary = findViewById(R.id.binary);
         sort = findViewById(R.id.sort);
 
 /* 주석처리(shin)
@@ -77,7 +77,7 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
         backBtn.setOnClickListener(this);
         rollBackBtn.setOnClickListener(this);
         comma.setOnClickListener(this);
-        changeBtn.setOnClickListener(this);
+        binary.setOnClickListener(this);
         sort.setOnClickListener(this);
 
 /* 주석처리 (shin)
@@ -95,11 +95,11 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
 // 수정한 부분 시작(shin)
         // 제 3 클래스로 이벤트 구현
         LongClickEvent longClickEvent = new LongClickEvent(this);
-        touchUp.setOnLongClickListener(longClickEvent);
-        touchDown.setOnLongClickListener(longClickEvent);
+//        touchUp.setOnLongClickListener(longClickEvent);
+//        touchDown.setOnLongClickListener(longClickEvent);
         TouchEvent touchEvent = new TouchEvent(this);
-        touchUp.setOnTouchListener(touchEvent);
-        touchDown.setOnTouchListener(touchEvent);
+//        touchUp.setOnTouchListener(touchEvent);
+//        touchDown.setOnTouchListener(touchEvent);
         setHandler(null); // 핸들러 초기 세팅
 
         // 버튼 세팅
@@ -291,7 +291,7 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
             case R.id.sort:
                 sort();     //sort함수 대신 사용할 정렬기능
                 break;
-            case R.id.changeBtn:        //2진수 액티비티로 전환
+            case R.id.binary:        //2진수 액티비티로 전환
                 Intent intent = new Intent(getApplicationContext(), Arithmetics_Change.class);
                 startActivity(intent);
         }
