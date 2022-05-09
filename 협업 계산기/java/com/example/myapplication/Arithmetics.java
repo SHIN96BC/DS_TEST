@@ -18,6 +18,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.google.android.material.navigation.NavigationView;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -44,12 +46,22 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
         super.onCreate(saved);
         setContentView(R.layout.activity_arithmetics);
 
-// 수정한 부분(shin 2022.05.06)
+// 수정한 부분 시작(shin 2022.05.06)
         // toolbar
         mainToolBar = (Toolbar)findViewById(R.id.main_tool_bar);
         setSupportActionBar(mainToolBar);
-
 // 수정한 부분 끝
+
+// 수정한 부분 시작(shin 2022.05.09)
+        DrawerLayout drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close);
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+        NavigationView navigationView = (NavigationView)findViewById(R.id.navigation_view);
+        MenuBarEvent menuBarEvent = new MenuBarEvent(this);
+        navigationView.setNavigationItemSelectedListener(menuBarEvent);
+// 수정한 부분 끝
+
 
         Button addBtn, subBtn, divBtn, mulBtn, equal, rollBackBtn, comma, backBtn, touchUp,touchDown, binary, sort;
 

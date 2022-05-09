@@ -18,13 +18,13 @@ public class MenuBarEvent implements NavigationView.OnNavigationItemSelectedList
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.btn_arithmetics:
-                Toast.makeText(arithmetics, "계산기", Toast.LENGTH_LONG).show();
+                Toast.makeText(arithmetics, "Arithmetics", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btn_binary:
-                Toast.makeText(arithmetics, "2진법", Toast.LENGTH_LONG).show();
+                Toast.makeText(arithmetics, "Binary", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btn_data:
-                Toast.makeText(arithmetics, "데이터", Toast.LENGTH_LONG).show();
+                Toast.makeText(arithmetics, "Data", Toast.LENGTH_SHORT).show();
                 break;
         }
         return true;
