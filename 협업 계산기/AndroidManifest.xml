@@ -20,10 +20,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SettingActivity" />
-        <activity android:name=".MenuActivity" />
-        <activity android:name=".SubActivity" />
-        <activity android:name=".MainActivity" />
         <activity android:name=".Arithmetics_Change" />
         <activity android:name=".DateArithmetics"/>
     </application>

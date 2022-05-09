@@ -16,7 +16,73 @@
         <include
             layout="@layout/tool_bar"
             />
-
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="Start"
+            android:textSize="30dp"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp">
+            <TextView
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/startDay"
+                android:text=""
+                android:textSize="30dp"/>
+            <Button
+                android:id="@+id/btn_date_start"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:drawableTop="@drawable/ic_date"
+                android:layout_gravity="center"
+                />
+        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="Last"
+            android:textSize="30dp"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp">
+            <TextView
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/lastDay"
+                android:text=""
+                android:textSize="30dp"/>
+            <Button
+                android:id="@+id/btn_date_last"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:drawableTop="@drawable/ic_date"
+                android:layout_gravity="center"
+                />
+        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Result"
+            android:textSize="30dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="70dp"/>
+        <TextView
+            android:id="@+id/resultDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1Day"
+            android:textSize="30dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"/>
     </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView
