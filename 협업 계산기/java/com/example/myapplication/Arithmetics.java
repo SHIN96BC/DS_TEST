@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -54,9 +53,9 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
 
 // 수정한 부분 시작(shin 2022.05.09)
         DrawerLayout drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close);
-        drawerLayout.addDrawerListener(actionBarDrawerToggle);
-        actionBarDrawerToggle.syncState();
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, mainToolBar, R.string.drawer_open, R.string.drawer_close);
+        drawerLayout.addDrawerListener(drawerToggle);
+        drawerToggle.syncState();
         NavigationView navigationView = (NavigationView)findViewById(R.id.navigation_view);
         MenuBarEvent menuBarEvent = new MenuBarEvent(this);
         navigationView.setNavigationItemSelectedListener(menuBarEvent);
