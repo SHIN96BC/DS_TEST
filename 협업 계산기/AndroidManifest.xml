@@ -25,6 +25,7 @@
         <activity android:name=".SubActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".Arithmetics_Change" />
+        <activity android:name=".DateArithmetics"/>
     </application>
 
 
