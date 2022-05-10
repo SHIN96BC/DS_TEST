@@ -1,10 +1,12 @@
 package com.example.myapplication;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -28,7 +30,6 @@ public class DateArithmetics extends AppCompatActivity implements View.OnClickLi
     private ActionBarDrawerToggle drawerToggle;
 
     // 안드로이드 os 버전 때문에 발생하는 LocalDate 에러를 해결하는 Annotation
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,10 +77,19 @@ public class DateArithmetics extends AppCompatActivity implements View.OnClickLi
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_date_start:
-                startActivity(new Intent(this, CalendarView.class));
+//                startActivity(new Intent(this, CalendarView.class));
+                DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+
+                    }
+                }, 2022, 04, 10);
+                datePickerDialog.show();
                 break;
             case R.id.btn_date_last:
 
         }
     }
+
+
 }

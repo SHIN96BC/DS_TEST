@@ -22,6 +22,7 @@
         </activity>
         <activity android:name=".Arithmetics_Change" />
         <activity android:name=".DateArithmetics"/>
+        <activity android:name=".CalendarView"/>
     </application>
 
 
