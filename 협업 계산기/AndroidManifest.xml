@@ -12,17 +12,18 @@
         android:theme="@style/Theme.MyApplication">
         <activity
             android:name=".Arithmetics"
-            android:exported="true"
-            android:screenOrientation="portrait">
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Arithmetics_Change" />
+        <activity
+            android:name=".Arithmetics_Change"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
         <activity android:name=".DateArithmetics"/>
-        <activity android:name=".CalendarView"/>
     </application>
 
 

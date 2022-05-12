@@ -165,7 +165,7 @@ public class DateArithmetics extends AppCompatActivity implements View.OnClickLi
                     long resultDay = (lastDate.getTime() - startDate.getTime()) / (24*60*60*1000);
                     // startDate를 더 크게 설정한 경우에 음수가 나오는걸 막기위한 코드
                     if(resultDay < 0) {
-                        resultDay += resultDay*2;
+                        resultDay += resultDay*(-2);
                     }
                     return resultDay;
                 } catch (ParseException e) {

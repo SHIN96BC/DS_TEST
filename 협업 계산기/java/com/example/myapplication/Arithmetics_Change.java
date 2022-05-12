@@ -13,8 +13,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
+
+import com.google.android.material.navigation.NavigationView;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -30,10 +35,30 @@ public class Arithmetics_Change extends AppCompatActivity implements View.OnClic
     int count = 0;
     String num1, substr, operator;
     String resultNum = "";
+// 추가한 부분(shin 2022.05.12)
+    private Toolbar mainToolBar;
+    private ActionBarDrawerToggle drawerToggle;
+// 추가한 부분 끝
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_arithmetics_change);
+
+// 수정한 부분 시작(shin 2022.05.12)
+        // toolbar
+        mainToolBar = (Toolbar)findViewById(R.id.main_tool_bar);
+        setSupportActionBar(mainToolBar);
+// 수정한 부분 끝
+
+// 수정한 부분 시작(shin 2022.05.12)
+        DrawerLayout drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, mainToolBar, R.string.drawer_open, R.string.drawer_close);
+        drawerLayout.addDrawerListener(drawerToggle);
+        drawerToggle.syncState();
+        NavigationView navigationView = (NavigationView)findViewById(R.id.navigation_view);
+        MenuBarEvent menuBarEvent = new MenuBarEvent(this);
+        navigationView.setNavigationItemSelectedListener(menuBarEvent);
+// 수정한 부분 끝
 
         arith = findViewById(R.id.arith);
         process = findViewById(R.id.process);
