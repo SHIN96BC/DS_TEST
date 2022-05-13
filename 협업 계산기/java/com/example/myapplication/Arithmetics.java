@@ -21,6 +21,8 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Stack;
 
 
 public class Arithmetics extends AppCompatActivity implements OnClickListener {  //터치따로
@@ -37,7 +39,7 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
     private Runnable runnable_up, runnable_down;
     private Handler handler_up, handler_down;
     double sqrnum = 0.0;
-// 추가한 부분(shin 2022.05.12)
+    // 추가한 부분(shin 2022.05.12)
     private Toolbar mainToolBar;
     private ActionBarDrawerToggle drawerToggle;
 // 추가한 부분 끝
@@ -121,6 +123,128 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
         backBtn.setOnTouchListener(touchEvent);
     }
 
+// 실험용 소스(shin 2022-05-13)
+    Stack<String> stack = new Stack<>();
+    List<String> processList = new ArrayList<>();
+    @Override
+    public void onClick(View view) {
+        Button button = (Button)view;
+        String buttonStr = button.getText().toString();
+        switch(view.getId()) {
+            //번호 클릭
+            case R.id.numBtn0:
+                result.append("0");
+                break;
+            case R.id.numBtn1:
+                result.append("1");
+                break;
+            case R.id.numBtn2:
+                result.append("2");
+                break;
+            case R.id.numBtn3:
+                result.append("3");
+                break;
+            case R.id.numBtn4:
+                result.append("4");
+                break;
+            case R.id.numBtn5:
+                result.append("5");
+                break;
+            case R.id.numBtn6:
+                result.append("6");
+                break;
+            case R.id.numBtn7:
+                result.append("7");
+                break;
+            case R.id.numBtn8:
+                result.append("8");
+                break;
+            case R.id.numBtn9:
+                result.append("9");
+                break;
+            //부호
+            case R.id.addBtn:
+            case R.id.subBtn:
+            case R.id.mulBtn:
+            case R.id.divBtn:
+                setStack(buttonStr);
+                break;
+            // backButton
+            case R.id.backBtn:  //가장 마지막에 적은 문자열 하나 삭제
+                remove();
+                break;
+
+            //초기화
+            case R.id.rollBackBtn:
+                removeAll();     //초기화
+                break;
+        }
+    }
+
+    // 입력값이 부호일때 처리하는 메서드
+    private void setStack(String sign) {
+        String message = result.getText().toString();
+        // 아무것도 입력값이 없을 때 처리
+        if(message == null || message.length() == 0) {
+            if(sign.equals("+") || sign.equals("-")) {
+                result.append(sign);
+            }else {
+                Toast.makeText(Arithmetics.this, "Null NUMBER", Toast.LENGTH_LONG).show();
+                return;
+            }
+        }
+
+        // 부호 입력후에 다시 부호가 입력되었을 경우
+        if(processList.size() != 0) {
+            String processListStr = processList.get(processList.size()-1);
+            if(processListStr.equals("+") || processListStr.equals("-") || processListStr.equals("*") || processListStr.equals("/")) {
+                if(sign.equals("+") || sign.equals("-")) {
+                    String checkOverlap = processList.get(processList.size()-2);
+                    if(checkOverlap.equals("+") || checkOverlap.equals("-") || checkOverlap.equals("*") | checkOverlap.equals("/")) {
+                        return;
+                    }else {
+                        result.setText("");
+                        // stack 의 마지막 부호를 바꿔준다.
+                        processList.remove(processList.size()-1);
+                        processList.add(sign);
+                    }
+                }else {
+                    result.setText("");
+                    // stack 의 마지막 부호를 바꿔준다.
+                    processList.remove(processList.size()-1);
+                    processList.add(sign);
+                }
+            }else {
+                processList.add(message);
+                processList.add(sign);
+            }
+        }else {
+            processList.add(message);
+            processList.add(sign);
+        }
+        // process 새로 새팅
+        makeProcessMessage();
+    }
+
+    private void makeProcessMessage() {
+        StringBuffer stringBuffer = new StringBuffer();
+        process.setText("");
+        for(String processStr: processList) {
+            stringBuffer.append(processStr);
+        }
+        String processStr = stringBuffer.toString();
+        process.setText(processStr);
+    }
+
+    private void removeAll() {
+
+    }
+
+    private void remove() {
+
+    }
+
+/* 기존 소스 시작
     @Override
     public void onClick(View v) {                                                               //버튼 어떤거 클릭 하냐에 따라 다른 결과
         double num;             //EditText에 적은 값을 저장하여 부호 버튼 클릭시 calculator()메소드로 값을 넘길 변수
@@ -224,7 +348,7 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
                 String rootResult = String.valueOf(Math.floor(rtnum4*100)/100).replace(".0","");    //소수점 2자리까지만 표시
                 if(rtnum3<0){                                                               //받은 값이 음수냐 양수냐
                     Toast.makeText(Arithmetics.this,"No such number exists.",Toast.LENGTH_LONG).show();
-                    /*result.setText(String.format("-%s", rootResult));*/
+//                    result.setText(String.format("-%s", rootResult));
                 }else{
                     result.setText(rootResult);
                 }
@@ -266,6 +390,7 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
                 break;
             case R.id.binary:        //2진수 액티비티로 전환
                 Intent intent = new Intent(getApplicationContext(), Arithmetics_Change.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION); // Activity 전환 시 효과 제거
                 startActivity(intent);
         }
     }
@@ -348,7 +473,7 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
         if(equalsort){
             twoProcess = process.getText().toString();
         }
-        /*lastResult = Math.floor(rtnum4*100)/100).replace(".0","");*/
+//        lastResult = Math.floor(rtnum4*100)/100).replace(".0","");
         lastResultStr = String.valueOf(lastResult).replace(".0","");
         process.setText(twoProcess.replaceAll(".0","")+ "=" + lastResultStr);
         result.setText(lastResultStr);
@@ -526,6 +651,8 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
         }
         process.setText(strResult);
     }
+*/ //기존 소스 끝
+
     // 핸들러 세팅
     public void setHandler(Button button) {
         handler_up = new Handler();

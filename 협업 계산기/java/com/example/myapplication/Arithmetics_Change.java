@@ -30,7 +30,7 @@ public class Arithmetics_Change extends AppCompatActivity implements View.OnClic
     private ImageView[] result = new ImageView[10];
     private TextView process, arith;
     private View iv;
-    private Button numBtn0, numBtn1, addBtn, subBtn, mulBtn, divBtn, remainBtn, equal, backBtn, rollBackBtn, homeBtn, andBtn, orBtn, xorBtn;
+    private Button numBtn0, numBtn1, addBtn, subBtn, mulBtn, divBtn, remainBtn, equal, backBtn, rollBackBtn, homeBtn, andBtn, orBtn, xorBtn, empty;
     private int count = 0;
     private String num1, substr, operator;
     private String resultNum = "";
@@ -75,6 +75,7 @@ public class Arithmetics_Change extends AppCompatActivity implements View.OnClic
         andBtn = findViewById(R.id.andBtn);
         orBtn = findViewById(R.id.orBtn);
         xorBtn = findViewById(R.id.xorBtn);
+        empty = findViewById(R.id.empty);
 
         arith.setOnClickListener(this);
         process.setOnClickListener(this);
@@ -92,6 +93,7 @@ public class Arithmetics_Change extends AppCompatActivity implements View.OnClic
         andBtn.setOnClickListener(this);
         orBtn.setOnClickListener(this);
         xorBtn.setOnClickListener(this);
+        empty.setOnClickListener(this);
 
         iv = null;
 
@@ -114,6 +116,7 @@ public class Arithmetics_Change extends AppCompatActivity implements View.OnClic
     @Override
     public void onClick(View view) {
         String[] num2;
+        select(view);
         resultNum = "";
         switch (view.getId()) {
             case R.id.numBtn0:
@@ -145,8 +148,9 @@ public class Arithmetics_Change extends AppCompatActivity implements View.OnClic
                             Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
                             roll(0);
                             process.setText(num1);
-                            num1 = process.getText().toString().replaceAll("\\+","");
+                            num1 = process.getText().toString().replaceAll("\\+|-|\\*|/|AND|OR|XOR|%","");
                             arith.setText(operator);
+                            select(empty);
                         }
                     });
                     myAlertBuilder.show();
@@ -171,8 +175,9 @@ public class Arithmetics_Change extends AppCompatActivity implements View.OnClic
                             Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
                             roll(0);
                             process.setText(num1);
-                            num1 = process.getText().toString().replaceAll("-","");
+                            num1 = process.getText().toString().replaceAll("\\+|-|\\*|/|AND|OR|XOR|%","");
                             arith.setText(operator);
+                            select(empty);
                         }
                     });
                     myAlertBuilder.show();
@@ -201,8 +206,9 @@ public class Arithmetics_Change extends AppCompatActivity implements View.OnClic
                             Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
                             roll(0);
                             process.setText(num1);
-                            num1 = process.getText().toString().replaceAll("\\*","");
+                            num1 = process.getText().toString().replaceAll("\\+|-|\\*|/|AND|OR|XOR|%","");
                             arith.setText(operator);
+                            select(empty);
                         }
                     });
                     myAlertBuilder.show();
@@ -227,8 +233,9 @@ public class Arithmetics_Change extends AppCompatActivity implements View.OnClic
                             Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
                             roll(0);
                             process.setText(num1);
-                            num1 = process.getText().toString().replaceAll("/","");
+                            num1 = process.getText().toString().replaceAll("\\+|-|\\*|/|AND|OR|XOR|%","");
                             arith.setText(operator);
+                            select(empty);
                         }
                     });
                     myAlertBuilder.show();
@@ -253,8 +260,9 @@ public class Arithmetics_Change extends AppCompatActivity implements View.OnClic
                             Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
                             roll(0);
                             process.setText(num1);
-                            num1 = process.getText().toString().replaceAll("%","");
+                            num1 = process.getText().toString().replaceAll("\\+|-|\\*|/|AND|OR|XOR|%","");
                             arith.setText(operator);
+                            select(empty);
                         }
                     });
                     myAlertBuilder.show();
@@ -279,8 +287,9 @@ public class Arithmetics_Change extends AppCompatActivity implements View.OnClic
                             Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
                             roll(0);
                             process.setText(num1);
-                            num1 = process.getText().toString().replaceAll("AND","");
+                            num1 = process.getText().toString().replaceAll("\\+|-|\\*|/|AND|OR|XOR|%","");
                             arith.setText(operator);
+                            select(empty);
                         }
                     });
                     myAlertBuilder.show();
@@ -305,8 +314,9 @@ public class Arithmetics_Change extends AppCompatActivity implements View.OnClic
                             Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
                             roll(0);
                             process.setText(num1);
-                            num1 = process.getText().toString().replaceAll("OR","");
+                            num1 = process.getText().toString().replaceAll("\\+|-|\\*|/|AND|OR|XOR|%","");
                             arith.setText(operator);
+                            select(empty);
                         }
                     });
                     myAlertBuilder.show();
@@ -331,8 +341,9 @@ public class Arithmetics_Change extends AppCompatActivity implements View.OnClic
                             Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
                             roll(0);
                             process.setText(num1);
-                            num1 = process.getText().toString().replaceAll("XOR","");
+                            num1 = process.getText().toString().replaceAll("\\+|-|\\*|/|AND|OR|XOR|%","");
                             arith.setText(operator);
+                            select(empty);
                         }
                     });
                     myAlertBuilder.show();
@@ -515,7 +526,7 @@ public class Arithmetics_Change extends AppCompatActivity implements View.OnClic
                 iv.setSelected(false);      //다를시 이전 View를 false로 변환
             }
         }
-        ew.setSelected(true);               //받은 View를 ture로 변환
+        ew.setSelected(true);               //받은 View를 true로 변환
         iv = ew;                            //다음 View와 받은 View를 비교하기 위해 다시 저장
     }
 
