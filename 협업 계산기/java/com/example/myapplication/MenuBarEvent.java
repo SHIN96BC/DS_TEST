@@ -38,7 +38,7 @@ public class MenuBarEvent implements NavigationView.OnNavigationItemSelectedList
                 break;
         }
         activity.startActivity(intent);
-        activity.finish();
+        activity.finish(); // 전에 켜져있던 Activity를 종료한다
         return true;
     }
 }

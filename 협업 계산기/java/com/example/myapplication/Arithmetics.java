@@ -37,7 +37,7 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
     private Runnable runnable_up, runnable_down;
     private Handler handler_up, handler_down;
     double sqrnum = 0.0;
-// 추가한 부분(shin 2022.05.06)
+// 추가한 부분(shin 2022.05.12)
     private Toolbar mainToolBar;
     private ActionBarDrawerToggle drawerToggle;
 // 추가한 부분 끝
@@ -47,13 +47,13 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
         super.onCreate(saved);
         setContentView(R.layout.activity_arithmetics);
 
-// 수정한 부분 시작(shin 2022.05.06)
+// 수정한 부분 시작(shin 2022.05.12)
         // toolbar
         mainToolBar = (Toolbar)findViewById(R.id.main_tool_bar);
         setSupportActionBar(mainToolBar);
 // 수정한 부분 끝
 
-// 수정한 부분 시작(shin 2022.05.09)
+// 수정한 부분 시작(shin 2022.05.12)
         DrawerLayout drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, mainToolBar, R.string.drawer_open, R.string.drawer_close);
         drawerLayout.addDrawerListener(drawerToggle);

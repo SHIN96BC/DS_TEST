@@ -1,299 +1,318 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/text1"
+    tools:context=".Arithmetics"
+    android:id="@+id/drawer_layout"
+    android:fitsSystemWindows="true"
+    >
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="사칙연산 계산기" />
-
-    <TextView
-        android:id="@+id/text2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="사칙연산계산기"
-        android:textAlignment="center"
-        android:textSize="30sp" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/result0"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_weight="1" />
-
-        <ImageView
-            android:id="@+id/result1"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_weight="1" />
-
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <include
+            layout="@layout/tool_bar"
+            />
         <TextView
-            android:layout_width="10dp"
-            android:layout_height="50dp" />
-
-        <ImageView
-            android:id="@+id/result2"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_weight="1" />
-
-        <ImageView
-            android:id="@+id/result3"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_weight="1" />
-
-        <ImageView
-            android:id="@+id/result4"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_weight="1" />
-
-        <ImageView
-            android:id="@+id/result5"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_weight="1" />
-
-        <TextView
-            android:layout_width="10dp"
-            android:layout_height="50dp" />
-
-        <ImageView
-            android:id="@+id/result6"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_weight="1" />
-
-        <ImageView
-            android:id="@+id/result7"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_weight="1" />
-
-        <ImageView
-            android:id="@+id/result8"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_weight="1" />
-
-        <ImageView
-            android:id="@+id/result9"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_weight="1" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/process"
+            android:id="@+id/text1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:height="40dp"
-            android:text="" />
+            android:text="사칙연산 계산기" />
 
         <TextView
-            android:id="@+id/arith"
+            android:id="@+id/text2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:height="40dp"
-            android:gravity="end"
-            android:text="" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+            android:text="사칙연산계산기"
+            android:textAlignment="center"
+            android:textSize="30sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
-            <Button
-                android:id="@+id/backBtn"
+            <ImageView
+                android:id="@+id/result0"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/btn_color_selector"
-                android:text="←" />
+                android:layout_height="50dp"
+                android:layout_weight="1" />
 
-            <Button
-                android:id="@+id/andBtn"
+            <ImageView
+                android:id="@+id/result1"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/btn_color_selector"
-                android:text="AND" />
+                android:layout_height="50dp"
+                android:layout_weight="1" />
 
-            <Button
-                android:id="@+id/numBtn1"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/btn_color_selector"
-                android:text="1" />
+            <TextView
+                android:layout_width="10dp"
+                android:layout_height="50dp" />
 
-            <Button
-                android:id="@+id/numBtn0"
+            <ImageView
+                android:id="@+id/result2"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/btn_color_selector"
-                android:text="0" />
+                android:layout_height="50dp"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:id="@+id/result3"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:id="@+id/result4"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:id="@+id/result5"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="10dp"
+                android:layout_height="50dp" />
+
+            <ImageView
+                android:id="@+id/result6"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:id="@+id/result7"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:id="@+id/result8"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:id="@+id/result9"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_weight="1" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/rollBackBtn"
+            <TextView
+                android:id="@+id/process"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@drawable/btn_color_selector"
-                android:text="C" />
-
-            <Button
-                android:id="@+id/orBtn"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/btn_color_selector"
-                android:text="OR" />
-
-
-            <Button
-                android:id="@+id/bracket"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/btn_color_selector"
-                android:text="( )"
-                android:textAllCaps="false" />
-
-            <Button
-                android:id="@+id/equla"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/btn_color_selector"
-                android:text="=" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <Button
-                android:id="@+id/empty"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/btn_color"
-                android:enabled="false"
+                android:height="40dp"
                 android:text="" />
 
-            <Button
-                android:id="@+id/xorBtn"
+            <TextView
+                android:id="@+id/arith"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@drawable/btn_color_selector"
-                android:text="XOR" />
+                android:height="40dp"
+                android:gravity="end"
+                android:text="" />
 
-            <Button
-                android:id="@+id/addBtn"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/btn_color_selector"
-                android:text="+" />
-
-            <Button
-                android:id="@+id/subBtn"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/btn_color_selector"
-                android:text="-" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-            <Button
-                android:id="@+id/hexa"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/btn_color_selector"
-                android:text="Hexa" />
+                android:orientation="vertical">
 
-            <Button
-                android:id="@+id/homeBtn"
+                <Button
+                    android:id="@+id/backBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_color_selector"
+                    android:text="←" />
+
+                <Button
+                    android:id="@+id/andBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_color_selector"
+                    android:text="AND" />
+
+                <Button
+                    android:id="@+id/numBtn1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_color_selector"
+                    android:text="1" />
+
+                <Button
+                    android:id="@+id/numBtn0"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_color_selector"
+                    android:text="0" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/btn_color_selector"
-                android:text="Home" />
+                android:orientation="vertical">
 
-            <Button
-                android:id="@+id/mulBtn"
+                <Button
+                    android:id="@+id/rollBackBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_color_selector"
+                    android:text="C" />
+
+                <Button
+                    android:id="@+id/orBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_color_selector"
+                    android:text="OR" />
+
+
+                <Button
+                    android:id="@+id/mulBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_color_selector"
+                    android:text="*" />
+
+                <Button
+                    android:id="@+id/equla"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_color_selector"
+                    android:text="=" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/btn_color_selector"
-                android:text="*" />
+                android:orientation="vertical">
 
-            <Button
-                android:id="@+id/divBtn"
+                <Button
+                    android:id="@+id/empty"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_color"
+                    android:enabled="false"
+                    android:text="" />
+
+                <Button
+                    android:id="@+id/xorBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_color_selector"
+                    android:text="XOR" />
+
+                <Button
+                    android:id="@+id/addBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_color_selector"
+                    android:text="+" />
+
+                <Button
+                    android:id="@+id/subBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_color_selector"
+                    android:text="-" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/btn_color_selector"
-                android:text="/" />
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/hexa"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_color_selector"
+                    android:text="Hexa" />
+
+                <Button
+                    android:id="@+id/homeBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_color_selector"
+                    android:text="Home" />
+
+                <Button
+                    android:id="@+id/divBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_color_selector"
+                    android:text="/" />
+
+                <Button
+                    android:id="@+id/remainBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_color_selector"
+                    android:text="%" />
+
+            </LinearLayout>
         </LinearLayout>
-
     </LinearLayout>
-
-</LinearLayout>
+    <com.google.android.material.navigation.NavigationView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:id="@+id/navigation_view"
+        android:layout_gravity="left"
+        app:menu="@menu/tool_bar_menu"/>
+</androidx.drawerlayout.widget.DrawerLayout>
