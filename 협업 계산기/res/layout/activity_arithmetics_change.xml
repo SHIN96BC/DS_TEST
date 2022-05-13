@@ -201,14 +201,13 @@
 
 
                 <Button
-                    android:id="@+id/bracket"
+                    android:id="@+id/mulBtn"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/btn_color_selector"
-                    android:text="( )"
-                    android:textAllCaps="false" />
+                    android:text="*" />
 
                 <Button
                     android:id="@+id/equla"
@@ -289,15 +288,6 @@
                     android:text="Home" />
 
                 <Button
-                    android:id="@+id/mulBtn"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/btn_color_selector"
-                    android:text="*" />
-
-                <Button
                     android:id="@+id/divBtn"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -305,6 +295,16 @@
                     android:layout_weight="1"
                     android:background="@drawable/btn_color_selector"
                     android:text="/" />
+
+                <Button
+                    android:id="@+id/remainBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_color_selector"
+                    android:text="%" />
+
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
