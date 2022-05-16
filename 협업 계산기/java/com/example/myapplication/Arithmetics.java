@@ -21,6 +21,7 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
 
@@ -124,8 +125,8 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
     }
 
 // 실험용 소스(shin 2022-05-13)
-    Stack<String> stack = new Stack<>();
     List<String> processList = new ArrayList<>();
+    boolean endProcess = false;
     @Override
     public void onClick(View view) {
         Button button = (Button)view;
@@ -133,41 +134,32 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
         switch(view.getId()) {
             //번호 클릭
             case R.id.numBtn0:
-                result.append("0");
-                break;
             case R.id.numBtn1:
-                result.append("1");
-                break;
             case R.id.numBtn2:
-                result.append("2");
-                break;
             case R.id.numBtn3:
-                result.append("3");
-                break;
-            case R.id.numBtn4:
-                result.append("4");
-                break;
             case R.id.numBtn5:
-                result.append("5");
-                break;
             case R.id.numBtn6:
-                result.append("6");
-                break;
             case R.id.numBtn7:
-                result.append("7");
-                break;
             case R.id.numBtn8:
-                result.append("8");
-                break;
             case R.id.numBtn9:
-                result.append("9");
+                // 계산이 한번 끝나면 배열과 result 를 비워준다.
+                if(endProcess) {
+                    processList.clear();
+                    result.setText("");
+                }
+                result.append(buttonStr);
+                endProcess = false;
                 break;
             //부호
             case R.id.addBtn:
             case R.id.subBtn:
             case R.id.mulBtn:
             case R.id.divBtn:
+                if(endProcess) {
+                    processList.clear();
+                }
                 setStack(buttonStr);
+                endProcess = false;
                 break;
             // backButton
             case R.id.backBtn:  //가장 마지막에 적은 문자열 하나 삭제
@@ -178,71 +170,409 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
             case R.id.rollBackBtn:
                 removeAll();     //초기화
                 break;
+            // 연산과정
+            case R.id.equla:
+                String resultStr = result.getText().toString();
+                // 마지막으로 숫자가 입력 되었는지 확인해서 배열에 추가해주고, 입력되지 않았으면 마지막 부호를 지우고 연산한다.
+                if(resultStr != null && resultStr.length() != 0) {
+                    processList.add(resultStr);
+                }else {
+                    processList.remove(processList.size()-1);
+                }
+                // 마지막 숫자를 넣어서 process 를 세팅한다.
+                makeProcessMessage();
+
+                // 연산과정을 거쳐서 한번 더 process 를 세팅한다.
+                processList.add("=");
+                // 소수점 아래가 있는지 체크
+                double CResult = process(process.getText().toString());
+                if(checkResultDouble(CResult)) {
+                    processList.add(Double.toString(CResult));
+                    result.setText(Double.toString(CResult));
+                }else {
+                    long intResult = (long)CResult;
+                    processList.add(Long.toString(intResult));
+                    result.setText(Long.toString(intResult));
+                }
+                makeProcessMessage();
+                endProcess = true;
+                break;
+            // sort
+            case R.id.sort:
+                processList = arraySort(processList);
+                makeProcessMessage();
+        }
+    }
+
+    // double 인지 체크하는 메서드
+    private boolean checkResultDouble(double result) {
+        if((result % 1) == 0) {
+            return false;
+        }else {
+            return true;
         }
     }
 
     // 입력값이 부호일때 처리하는 메서드
     private void setStack(String sign) {
         String message = result.getText().toString();
-        // 아무것도 입력값이 없을 때 처리
+        result.setText("");
+        // 아무것도 입력값이 없을 때 처리(숫자 없이 부호만 눌렀을 때)
         if(message == null || message.length() == 0) {
-            if(sign.equals("+") || sign.equals("-")) {
-                result.append(sign);
-            }else {
-                Toast.makeText(Arithmetics.this, "Null NUMBER", Toast.LENGTH_LONG).show();
-                return;
-            }
-        }
-
-        // 부호 입력후에 다시 부호가 입력되었을 경우
-        if(processList.size() != 0) {
-            String processListStr = processList.get(processList.size()-1);
-            if(processListStr.equals("+") || processListStr.equals("-") || processListStr.equals("*") || processListStr.equals("/")) {
-                if(sign.equals("+") || sign.equals("-")) {
-                    String checkOverlap = processList.get(processList.size()-2);
-                    if(checkOverlap.equals("+") || checkOverlap.equals("-") || checkOverlap.equals("*") | checkOverlap.equals("/")) {
-                        return;
+            // 이미 process 에 기존 입력값이 있을 때
+            if(processList.size() != 0) {
+                String processListStr1 = processList.get(processList.size()-1);
+                // 배열에 마지막에 들어있는 값을 확인해서 - 이외에 부호일 때 처리
+                if(checkSign(processListStr1, 3)) { // number 3 은 - 를 뺀 나머지 부호들인지 검사
+                    if(sign.equals("-")) {
+                        // 입력받은 부호가 - 라면 음수가 존재하기 때문에 허용한다.
+                        result.setText("");
+                        result.append(sign);
+                        processList.add(sign);
                     }else {
                         result.setText("");
-                        // stack 의 마지막 부호를 바꿔준다.
+                        // 그외에 부호들이라면 배열의 마지막 부호를 바꿔준다.
                         processList.remove(processList.size()-1);
                         processList.add(sign);
                     }
+                }else if(processListStr1.equals("-")) {
+                    // 첫번째 부호가 - 일 경우 음수를 나타내는 - 일 수도 있기 때문에 2번째 인덱스 까지 검사합니다.
+                    // 배열의 크기가 1보다 큰지 먼저 검사한다.(마지막에서 하나 전 인덱스를 검사해야하는데 크기가 1이면 에러가 발생하기 때문입니다)
+                    if(processList.size() > 1) {
+                        // 배열의 마지막 부호가 - 일때는 하나 전 인덱스도 부호인지 확인해야한다.(음수가 존재하기 때문이다)
+                        String processListStr2 = processList.get(processList.size() - 2);
+                        // 마지막 부호가 - 일 때 마지막에서 하나 전 인덱스의 값이 부호인지 검사한다.
+                        if(checkSign(processListStr2, 4)) {  // number 4 는 모든 부호 검사
+                            if(sign.equals("-")) {
+                                processList.remove(processList.size() - 1);
+                            } else {
+                                result.setText("");
+                                // 그외에 부호들이라면 배열의 마지막 부호를 바꿔준다.
+                                processList.remove(processList.size() - 1);
+                                processList.remove(processList.size() - 1);
+                                processList.add(sign);
+                            }
+                        } else {
+                            // 마지막 인덱스에서 하나전의 값이 부호가 아닐 경우 입력받은 - 는 음수를 나타내므로 -를 추가해서 입력한다.
+                            if(sign.equals("-")) {
+                                processList.add(sign);
+                            }else {
+                                result.setText("");
+                                // list 의 마지막 부호를 바꿔준다.
+                                processList.remove(processList.size() - 1);
+                                processList.add(sign);
+                            }
+                        }
+                    }else {
+                        // 배열이 1보다 작거나 같을 때 처리
+                        if (sign.equals("+")) {
+                            result.setText("");
+                            // 눌린 버튼이 + 라면 음수에서 양수로 변경 된 것이므로 - 부호를 제거한다.
+                            processList.remove(processList.size() - 1);
+                        } else if (sign.equals("-")) {
+                            result.setText("");
+                        } else {
+                            Toast.makeText(Arithmetics.this, "Null NUMBER", Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                    }
                 }else {
-                    result.setText("");
-                    // stack 의 마지막 부호를 바꿔준다.
-                    processList.remove(processList.size()-1);
+                    // 부호가 아닐 때 처리
+                    processList.add(sign);
+                }
+            }else {
+                // process 에 기존 입력값이 없을 때
+                if(sign.equals("-")) {
+                    processList.add(sign);
+                    result.append(sign);
+                }else {
+                    Toast.makeText(Arithmetics.this, "Null NUMBER", Toast.LENGTH_LONG).show();
+                    return;
+                } 
+            }
+        }else {
+            // 숫자가 있을 때 음수인지 아닌지 체크
+            if(processList.size() != 0) {
+                String processListStr1 = processList.get(processList.size() - 1);
+                if(processListStr1.equals("-")) {
+                    // 맨 처음 - 인지 검사
+                    if(processList.size() > 1) {
+                        String processListStr2 = processList.get(processList.size() - 2);
+                        if(checkSign(processListStr2, 4)) { // number 4 는 모든 부호 검사
+                            // 만약 마지막에서 하나 전의 값이 부호라면 입력받은 숫자가 음수라는 의미이므로 숫자에 -를 더해 준다.
+                            processList.remove(processList.size() - 1);
+                            StringBuffer stringBuffer = new StringBuffer();
+                            stringBuffer.append("-");
+                            stringBuffer.append(message);
+                            processList.add(stringBuffer.toString());
+                            processList.add(sign);
+                        }else {
+                            // 만약 마지막에서 하나 전의 값이 부호가 아니라면 마이너스라는 의미이기 때문에 숫자만 입력한다.
+                            processList.add(message);
+                            processList.add(sign);
+                        }
+                    }else {
+                        // 만약 맨 처음 입력된 - 라면 음수 이므로 - 를 붙여서 숫자를 배열에 저장한다.
+                        processList.remove(processList.size() - 1);
+                        StringBuffer stringBuffer = new StringBuffer();
+                        stringBuffer.append("-");
+                        stringBuffer.append(message);
+                        processList.add(stringBuffer.toString());
+                        processList.add(sign);
+                    }
+                }else {
+                    processList.add(message);
                     processList.add(sign);
                 }
             }else {
                 processList.add(message);
                 processList.add(sign);
             }
-        }else {
-            processList.add(message);
-            processList.add(sign);
         }
-        // process 새로 새팅
+        // process 새로 세팅
         makeProcessMessage();
-    }
 
+    }
+    
+    // 배열에 있는 값으로 process 의 내용을 작성하는 메서드
     private void makeProcessMessage() {
         StringBuffer stringBuffer = new StringBuffer();
         process.setText("");
         for(String processStr: processList) {
             stringBuffer.append(processStr);
+            stringBuffer.append(" ");
         }
         String processStr = stringBuffer.toString();
+        processStr = processStr.trim();
         process.setText(processStr);
     }
 
+    // 모두 지우기
     private void removeAll() {
-
+        String message = result.getText().toString();
+        // 값이 있을 때는 result 만 비우고 값이 없을 때는 process 까지 초기화
+        if(message != null && message.length() != 0) {
+            result.setText("");
+        }else {
+            resetAll();
+        }
     }
 
+    // 하나 지우기
     private void remove() {
-
+        String message = result.getText().toString();
+        if(message != null && message.length() != 0) {
+            result.setText(message.substring(0, message.length()-1));
+        }else {
+            // result 에 아무것도 없지만 process 에는 값이 있을 때
+            if(processList.size() != 0) {
+                String processListStr1 = processList.get(processList.size()-1);
+                // 배열에 마지막 값이 부호이면 부호만 지워주고 숫자일 경우에는 초기화 시킨다.
+                if(checkSign(processListStr1, 4)) { // number 4 는 모든 부호 검사
+                    processList.remove(processList.size()-1);
+                    makeProcessMessage();
+                }else {
+                    resetAll();
+                }
+            }else {
+                // process 도 비어 있다면 모두 초기화
+                resetAll();
+            }
+        }
     }
+    
+    // 배열과 result, process 를 초기화하는 메서드
+    private void resetAll() {
+        result.setText("");
+        process.setText("");
+        processList.clear();
+        endProcess = false;
+    }
+
+    // 부호인지 체크하는 메서드
+    private boolean checkSign(String sign, int number) {
+        if(number == 4) {
+            if (sign.equals("+") || sign.equals("-") || sign.equals("*") || sign.equals("/")) {
+                return true;
+            }else {
+                return false;
+            }
+        }else if(number == 3) {
+            if (sign.equals("+") || sign.equals("*") || sign.equals("/")) {
+                return true;
+            }else {
+                return false;
+            }
+        }else {
+            return false;
+        }
+    }
+
+    // sort 메서드
+    private List<String> arraySort(List<String> array) {
+        List<String> resultArr = new ArrayList<>();
+        String[] tempStrArr = new String[array.size()];
+        for(int i = 0; i < array.size(); i++) {
+            if(checkSign(array.get(i), 4)) continue;
+                for(int j = i+1; j < array.size(); j++) {
+                if(checkSign(array.get(j), 4)) continue;
+
+            }
+        }
+
+        return resultArr;
+    }
+
+    // git hub 에서 stack 연산 코드 추가
+    public static double num1;
+    public static double num2;
+    public static double resultNumber;
+
+    //사용자의 input을 각각 구분하여 ArrayList에 저장하는 메소드
+    private ArrayList splitTokens(String equation) {
+        String[] inputData = equation.split(" "); //공백을 기준
+
+        ArrayList inputList = new ArrayList();
+        double number = 0;
+
+        boolean flag = false;
+        for (String data : inputData) {
+            if (data.equals(" ")) {
+                continue;
+            }
+            if (checkNumber(data)) {
+                System.out.println("checkNumber(data) = " + checkNumber(data));
+                number = number * 10 + Double.parseDouble(data);
+                flag = true;
+            } else {
+                if (flag) {
+                    inputList.add(number);
+                    number = 0;
+                }
+                flag = false;
+                inputList.add(data);
+            }
+        }
+
+        if (flag) {
+            inputList.add(number);
+        }
+
+        return inputList;
+    }
+
+    //후위 표기식으로 변형
+    private ArrayList infixToPostfix(ArrayList inputData) {
+        ArrayList result = new ArrayList();
+        HashMap level = new HashMap();
+        Stack stack = new Stack();
+
+        //각 기호의 우선순위 레벨. 곱하기, 나누기 > 더하기, 빼기 > 기타
+        level.put("*", 3);
+        level.put("/", 3);
+        level.put("+", 2);
+        level.put("-", 2);
+        level.put("(", 1);
+
+        for (Object object : inputData) {
+            if (object.equals("(")) {
+                stack.push(object);
+            } else if (object.equals(")")) {
+                while (!stack.peek().equals("(")) {
+                    Object val = stack.pop();
+                    if (!val.equals("(")) {
+                        result.add(val);
+                    }
+                }
+                stack.pop();
+            } else if (level.containsKey(object)) {
+                if (stack.isEmpty()) {
+                    stack.push(object);
+                } else {
+                    if (Double.parseDouble(level.get(stack.peek()).toString()) >= Double.parseDouble(level.get(object).toString())) {
+                        result.add(stack.pop());
+                        stack.push(object);
+                    } else {
+                        stack.push(object);
+                    }
+                }
+            } else {
+                result.add(object);
+            }
+        }
+
+        while (!stack.isEmpty()) {
+            result.add(stack.pop());
+        }
+
+        return result;
+    }
+
+    //후위 표기식을 계산
+    private Double postFixEval(ArrayList expr) {
+        // 실험용 출력
+        for(Object e: expr) {
+            System.out.println("e: " + e.toString());
+        }
+
+        Stack numberStack = new Stack();
+        for (Object o : expr) {
+            if (o instanceof Double) {
+                numberStack.push(o);
+            } else if (o.equals("+")) {
+                num1 = (Double) numberStack.pop();
+                num2 = (Double) numberStack.pop();
+                numberStack.push(num2 + num1);
+            } else if (o.equals("-")) {
+                num1 = (Double) numberStack.pop();
+                num2 = (Double) numberStack.pop();
+                numberStack.push(num2 - num1);
+            } else if (o.equals("*")) {
+                num1 = (Double) numberStack.pop();
+                num2 = (Double) numberStack.pop();
+                numberStack.push(num2 * num1);
+            } else if (o.equals("/")) {
+                num1 = (Double) numberStack.pop();
+                num2 = (Double) numberStack.pop();
+                numberStack.push(num2 / num1);
+            }
+        }
+
+        resultNumber = (Double) numberStack.pop();
+
+        return resultNumber;
+    }
+
+    public Double process(String equation) {
+        ArrayList postfix = infixToPostfix(splitTokens(equation));
+        Double result = postFixEval(postfix);
+        return result;
+    }
+
+    public boolean checkNumber(String str) {
+        char check;
+
+        if (str.equals(""))
+            return false;
+
+        for (int i = 0; i < str.length(); i++) {
+            check = str.charAt(i);
+            if (check < 48 || check > 58) {
+                System.out.println("check = " + check);
+                if (check != '.'){
+                    // 음수 구분용 - 인지 체크
+                    if(check == '-' && str.length() != 1) {
+                        return true;
+                    }
+                    return false;
+                }
+
+            }
+        }
+        return true;
+    }
+
+// 실험용 소스 끝
 
 /* 기존 소스 시작
     @Override
