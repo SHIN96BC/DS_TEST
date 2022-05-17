@@ -126,7 +126,6 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
 
 // 실험용 소스(shin 2022-05-13)
     List<String> processList = new ArrayList<>();
-    boolean endProcess = false;
     @Override
     public void onClick(View view) {
         Button button = (Button)view;
@@ -137,29 +136,20 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
             case R.id.numBtn1:
             case R.id.numBtn2:
             case R.id.numBtn3:
+            case R.id.numBtn4:
             case R.id.numBtn5:
             case R.id.numBtn6:
             case R.id.numBtn7:
             case R.id.numBtn8:
             case R.id.numBtn9:
-                // 계산이 한번 끝나면 배열과 result 를 비워준다.
-                if(endProcess) {
-                    processList.clear();
-                    result.setText("");
-                }
                 result.append(buttonStr);
-                endProcess = false;
                 break;
             //부호
             case R.id.addBtn:
             case R.id.subBtn:
             case R.id.mulBtn:
             case R.id.divBtn:
-                if(endProcess) {
-                    processList.clear();
-                }
                 setStack(buttonStr);
-                endProcess = false;
                 break;
             // backButton
             case R.id.backBtn:  //가장 마지막에 적은 문자열 하나 삭제
@@ -175,6 +165,17 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
                 String resultStr = result.getText().toString();
                 // 마지막으로 숫자가 입력 되었는지 확인해서 배열에 추가해주고, 입력되지 않았으면 마지막 부호를 지우고 연산한다.
                 if(resultStr != null && resultStr.length() != 0) {
+                    if(processList.get(processList.size()-1).equals("-")) {
+                        // 두번째 전 까지 부호라면 음수라는 의미이다.
+                        if(checkSign(processList.get(processList.size()-2),4)) {
+                            // 마지막 수가 음수일 경우 처리
+                            processList.remove(processList.size()-1);
+                            StringBuffer stringBuffer = new StringBuffer();
+                            stringBuffer.append("-");
+                            stringBuffer.append(resultStr);
+                            resultStr = stringBuffer.toString();
+                        }
+                    }
                     processList.add(resultStr);
                 }else {
                     processList.remove(processList.size()-1);
@@ -190,17 +191,18 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
                     processList.add(Double.toString(CResult));
                     result.setText(Double.toString(CResult));
                 }else {
-                    long intResult = (long)CResult;
-                    processList.add(Long.toString(intResult));
-                    result.setText(Long.toString(intResult));
+                    int intResult = (int)CResult;
+                    processList.add(Integer.toString(intResult));
+                    result.setText(Integer.toString(intResult));
                 }
                 makeProcessMessage();
-                endProcess = true;
+                processList.clear();
                 break;
             // sort
             case R.id.sort:
-                processList = arraySort(processList);
-                makeProcessMessage();
+                String sortStr = process.getText().toString();
+                processList = arraySortResultList(sortStr);
+                if(processList != null) makeProcessMessage();
         }
     }
 
@@ -345,6 +347,7 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
         String processStr = stringBuffer.toString();
         processStr = processStr.trim();
         process.setText(processStr);
+        System.out.println("processStr = " + processStr);
     }
 
     // 모두 지우기
@@ -386,7 +389,6 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
         result.setText("");
         process.setText("");
         processList.clear();
-        endProcess = false;
     }
 
     // 부호인지 체크하는 메서드
@@ -408,22 +410,217 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
         }
     }
 
-    // sort 메서드
-    private List<String> arraySort(List<String> array) {
-        List<String> resultArr = new ArrayList<>();
-        String[] tempStrArr = new String[array.size()];
-        for(int i = 0; i < array.size(); i++) {
-            if(checkSign(array.get(i), 4)) continue;
-                for(int j = i+1; j < array.size(); j++) {
-                if(checkSign(array.get(j), 4)) continue;
+    // sort 메서드(2022-05-16 제작중)
+    // string 을 받아서 sort 하고 List 로 반환
+    private List<String> arraySortResultList(String str) {
+        if(str == null || str.length() == 0) return null;
+        int index = 0;
+        // 맨앞에 숫자가 음수가 될 수도 있으므로 맨 앞에 공백을 추가해서 음수일때 - 를 넣을 수 있도록 한자리를 확보한다.
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append(" ");
+        stringBuffer.append(str);
 
+        // split 메서드를 이용해서 공백 기준으로 잘라서 배열로 만든다.
+        String[] tempStrArr = stringBuffer.toString().split(" ");
+        // 곱셈 나눗셈 먼저 정렬해주는 메서드 만들어서 return 타입을 Map 으로 주고 곱셈 나눗셈이 끝나는 인덱스랑 배열을 넣어서 반환
+        // 그 다음 플러스, 마이너스 정렬 시작점 index 에 반환받은 인덱스를 대입한다.
+
+        // 일단 한번 섞어준다.
+        tempStrArr = arraySort(index, tempStrArr);
+        for(String str1: tempStrArr) {
+            System.out.println("tempStrArr1 = " + str1);
+        }
+
+        // 부호가 빠진곳은 없는지 체크
+        tempStrArr = changeListIntoStringArray(signCheckStrArray(tempStrArr));
+        for(String str1: tempStrArr) {
+            System.out.println("tempStrArr 부호 체크 후 = " + str1);
+        }
+
+        // 배열에 첫번째 값이 최대값과 같은지 체크해서 다르다면 한번 더 arraySort를 실행 시켜준다.
+        System.out.println("tempStrArr[0] = " + tempStrArr[0]);
+        if(!maxNumberStringArray(index, tempStrArr).equals(tempStrArr[0])) {
+            System.out.println("Sort 한번 더 실행");
+            tempStrArr = changeListIntoStringArray(signCheckStrArray(arraySort(index, tempStrArr)));
+        }
+
+        return changeStringArrayIntoList(tempStrArr);
+    }
+
+    // 배열을 정렬해주는 메서드
+    private String[] arraySort(int index, String[] tempStrArr) {
+        for(int i = index; i < tempStrArr.length; i++) {
+            // 부호면 continue
+            if(checkSign(tempStrArr[i], 4)) continue;
+            if(tempStrArr[i].equals(" ")) continue;
+            if(tempStrArr[i].equals("=")) break;
+            for(int j = i+1; j < tempStrArr.length; j++) {
+                // 부호면 continue
+                if(checkSign(tempStrArr[j], 4)) continue;
+                if(tempStrArr[j].equals(" ")) continue;
+                if(tempStrArr[j].equals("=")) break;
+                if(stringComparison(tempStrArr[i], tempStrArr[j])) {
+                    // 숫자 바꾸기
+                    String tempStr = "";
+                    // 숫자 왼쪽에 부호도 같이 이동
+                    // i 가 0이면 맨 앞에 부호가 없다는 의미이다.
+                    if(i == 0) {
+                        if(tempStrArr[j-1].equals("-")) {
+                            // 바꿔야하는 숫자 앞에 부호가 - 이고 숫자가 음수가 아니라면 - 를 추가해서 이동한다.
+                            if(!checkMinus(tempStrArr[j])) {
+                                tempStr = tempStrArr[i];
+                                tempStrArr[i] = "-" + tempStrArr[j];
+                                tempStrArr[j] = tempStr;
+                                continue;
+                            }
+                        }
+                        tempStr = tempStrArr[i];
+                        tempStrArr[i] = tempStrArr[j];
+                        tempStrArr[j] = tempStr;
+
+                        // 남아있는 부호 제거
+                        if(checkSign(tempStrArr[j-1], 4)) tempStrArr[j-1] = "";
+
+                    }else {
+                        // (2022-05-17 문제점) 음수 때문에 숫자 사이에 부호가 없는 경우가 발생해서 -1 이라는 고정값을 사용할 수가 없다.
+                        tempStr = tempStrArr[i];
+                        tempStrArr[i] = tempStrArr[j];
+                        tempStrArr[j] = tempStr;
+
+                        tempStr = tempStrArr[i-1];
+                        tempStrArr[i-1] = tempStrArr[j-1];
+                        tempStrArr[j-1] = tempStr;
+                    }
+                }
+            }
+        }
+        return tempStrArr;
+    }
+
+    // 배열에서 가장 큰 값을 찾는 메서드
+    private String maxNumberStringArray(int index, String[] strArray) {
+        double maxNumber = 0.0;
+        for(int i= index; i < strArray.length; i++) {
+            if(checkSign(strArray[i], 4)) continue;
+            if(strArray[i].equals("=")) break;
+            try {
+                double tempNumber = Double.parseDouble(strArray[i]);
+                if(tempNumber > maxNumber) {
+                    maxNumber = tempNumber;
+                }
+            }catch(NumberFormatException nfe) {
+            }
+        }
+        System.out.println("maxNumber = " + Double.toString(maxNumber));
+        return Double.toString(maxNumber);
+    }
+
+    // 마지막으로 부호가 빠진곳은 없는지, 첫번째 숫자가 음수라면 - 랑 숫자를 붙여주는  메서드
+    private List<String> signCheckStrArray(String[] strArray) {
+        ArrayList<String> arrayList = new ArrayList<>();
+
+        for(int i = 0; i < strArray.length; i++) {
+            // 공백이 있다면 continue
+            if(strArray[i].equals(" ") || strArray[i].length()==0) continue;
+            // 첫번째 인덱스가 - 라면 음수라는 것이므로 그 다음 인덱스와 합쳐서 저장하고, i를 2로 바꾼다.(합친 숫자는 건너뛴다)
+            if(i == 0) {
+                if(strArray[i].equals("-")) {
+                    arrayList.add(strArray[i] + strArray[i+1]);
+                    i += 1;
+                    continue;
+                }else if(checkSign(strArray[i], 4)) {
+                    continue;
+                }else {
+                    arrayList.add(strArray[i]);
+                    continue;
+                }
+            }
+            // 등호라면 마지막이므로 break
+            if(strArray[i].equals("=")) {
+                arrayList.add(strArray[i]);
+                arrayList.add(strArray[i+1]);
+                break;
+            }
+            // 부호가 빠진 곳이 있는지 체크
+
+            if(checkSign(strArray[i], 4)) {
+                arrayList.add(strArray[i]);
+            }else {
+                if(arrayList.size() > 0){
+                    // 배열의 i 번째가 숫자라면 List의 마지막 인덱스를 확인해서 부호가 아니라면 + 를 추가해준다.
+                    if(checkSign(arrayList.get(arrayList.size()-1), 4)) {
+                        // 만약 List의 마지막 인덱스가 - 라면
+                        if(arrayList.get(arrayList.size()-1).equals("-")) {
+                            // 숫자가 음수인지 확인해서 음수가 아니면 - 를 붙여서 저장한다.
+                            if(!checkMinus(strArray[i])) {
+                                arrayList.remove(arrayList.size()-1);
+                                arrayList.add("-"+strArray[i]);
+                                i += 1;
+                                continue;
+                            }
+                        }
+                        arrayList.add(strArray[i]);
+                    }else {
+                        arrayList.add("+");
+                        arrayList.add(strArray[i]);
+                    }
+                }else {
+                    arrayList.add(strArray[i]);
+                }
             }
         }
 
-        return resultArr;
+        return arrayList;
     }
 
-    // git hub 에서 stack 연산 코드 추가
+    // 음수인지 체크하는 메서드
+    private boolean checkMinus(String str) {
+        try {
+            double strD = Integer.parseInt(str);
+            if(strD < 0) {
+                return true;
+            }
+        }catch (NumberFormatException nfe) {
+        }
+        return false;
+    }
+
+    // string 으로 받아서 숫자 크기 비교하는 메서드(오른쪽 파라미터로 들어온 값이 더 크면 true)
+    private boolean stringComparison(String left, String right) {
+        try {
+            double leftD = Double.parseDouble(left);
+            double rightD = Double.parseDouble(right);
+            System.out.println("leftD = " + leftD + ", rightD = " + rightD);
+            if(rightD > leftD) {
+                return true;
+            }
+        }catch(NumberFormatException nfe) {
+        }
+        return false;
+    }
+
+    // String 배열을 List 로 바꾸는 메서드
+    private List<String> changeStringArrayIntoList(String[] stringArr) {
+        List<String> resultArr = new ArrayList<>();
+        for(String str: stringArr) {
+            if(str.equals(" ")) continue;
+            resultArr.add(str);
+        }
+        return  resultArr;
+    }
+
+    // List 를 String 배열로 바꾸는 메서드
+    private String[] changeListIntoStringArray(List<String> list) {
+        String[] strArray = new String[list.size()];
+        for(int i = 0; i < list.size(); i++) {
+            if(list.get(i).equals(" ")) continue;
+            strArray[i] = list.get(i);
+        }
+        return strArray;
+    }
+
+
+    // # git hub 에서 stack 연산 코드 추가 #
     public static double num1;
     public static double num2;
     public static double resultNumber;
@@ -441,7 +638,6 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
                 continue;
             }
             if (checkNumber(data)) {
-                System.out.println("checkNumber(data) = " + checkNumber(data));
                 number = number * 10 + Double.parseDouble(data);
                 flag = true;
             } else {
