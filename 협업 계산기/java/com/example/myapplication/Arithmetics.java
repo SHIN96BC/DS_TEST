@@ -434,14 +434,21 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
         // 부호가 빠진곳은 없는지 체크
         tempStrArr = changeListIntoStringArray(signCheckStrArray(tempStrArr));
         for(String str1: tempStrArr) {
-            System.out.println("tempStrArr 부호 체크 후 = " + str1);
+            System.out.println("tempStrArr 부호 체크 후1 = " + str1);
         }
 
         // 배열에 첫번째 값이 최대값과 같은지 체크해서 다르다면 한번 더 arraySort를 실행 시켜준다.
         System.out.println("tempStrArr[0] = " + tempStrArr[0]);
         if(!maxNumberStringArray(index, tempStrArr).equals(tempStrArr[0])) {
+            // 2022-05-17 일단 문제점 해결 했는데 부호체크 메서드를 너무 많이 사용하는 문제를 해결할 수 없는지 생각해보자
             System.out.println("Sort 한번 더 실행");
+            // Sort 하기전에 부호 빠진곳이 없는지 확인
+            tempStrArr = changeListIntoStringArray(signCheckStrArray(tempStrArr));
+            // Sort 하고나서도 부호 빠진곳이 없는지 체크
             tempStrArr = changeListIntoStringArray(signCheckStrArray(arraySort(index, tempStrArr)));
+            for(String str1: tempStrArr) {
+                System.out.println("tempStrArr 부호 체크 후(한번더 실행) = " + str1);
+            }
         }
 
         return changeStringArrayIntoList(tempStrArr);
@@ -482,7 +489,6 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
                         if(checkSign(tempStrArr[j-1], 4)) tempStrArr[j-1] = "";
 
                     }else {
-                        // (2022-05-17 문제점) 음수 때문에 숫자 사이에 부호가 없는 경우가 발생해서 -1 이라는 고정값을 사용할 수가 없다.
                         tempStr = tempStrArr[i];
                         tempStrArr[i] = tempStrArr[j];
                         tempStrArr[j] = tempStr;
