@@ -19,11 +19,15 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Deque;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
 
 
@@ -150,7 +154,7 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
             case R.id.subBtn:
             case R.id.mulBtn:
             case R.id.divBtn:
-                setStack(buttonStr);
+                setSign(buttonStr);
                 break;
             // backButton
             case R.id.backBtn:  //가장 마지막에 적은 문자열 하나 삭제
@@ -202,7 +206,7 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
             // sort
             case R.id.sort:
                 String sortStr = process.getText().toString();
-                processList = arraySortResultList(sortStr);
+                if(sortStr != null && sortStr.length() != 0) processList = arraySortResultList(sortStr);
                 if(processList != null) makeProcessMessage();
         }
     }
@@ -217,7 +221,7 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
     }
 
     // 입력값이 부호일때 처리하는 메서드
-    private void setStack(String sign) {
+    private void setSign(String sign) {
         String message = result.getText().toString();
         result.setText("");
         // 아무것도 입력값이 없을 때 처리(숫자 없이 부호만 눌렀을 때)
@@ -406,6 +410,12 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
             }else {
                 return false;
             }
+        }else if(number == 2) {
+            if (sign.equals("*") || sign.equals("/")) {
+                return true;
+            }else {
+                return false;
+            }
         }else {
             return false;
         }
@@ -425,7 +435,12 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
         String[] tempStrArr = stringBuffer.toString().split(" ");
         // 곱셈 나눗셈 먼저 정렬해주는 메서드 만들어서 return 타입을 Map 으로 주고 곱셈 나눗셈이 끝나는 인덱스랑 배열을 넣어서 반환
         // 그 다음 플러스, 마이너스 정렬 시작점 index 에 반환받은 인덱스를 대입한다.
-
+        Map<Integer, String[]> map = mulAndDivSort(tempStrArr);
+        Set<Integer> keys = map.keySet();
+        for(int key: keys) {
+            index = key;
+            tempStrArr = map.get(key);
+        }
 
         // 일단 한번 섞어준다.
         tempStrArr = arraySort(index, tempStrArr);
@@ -480,9 +495,79 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
     }
 
     // 곱셈 나눗셈 먼저 정렬해주는 메서드
-    private Map<Integer, String[]> MulAndDivSort(String[] strArray) {
-        Map<Integer, String[]> map = new HashMap<>();
+    private Map<Integer, String[]> mulAndDivSort(String[] strArray) {
+        Deque<String> deque = new ArrayDeque<>();
+        for(int i = 0; i < strArray.length; i++) {
+            // i 번째가 * 이나 / 일때 처리
+            if(checkSign(strArray[i], 2)) {
+                // 먼저 어디까지 곱셈 나눗셈이 이어져 있는지 확인한다.
+                int index = i;
+                for(int j = i+2; i < strArray.length; j+=2) {
+                    if(!checkSign(strArray[j], 2)) break;
+                    index = j;
+                }
+                // * 또는 / 일 경우 먼저 왼쪽 숫자 앞에 부호를 확인하고 - 라면 음수로 바꿔준다.
+                if(strArray[i-2].equals("+")) {
+                    strArray[i-2] = "";
+                }else if(strArray[i-2].equals("-")) {
+                    strArray[i-2] = "";
+                    strArray[i-1] = "-" + strArray[i-1];
+                }
+                // 오른쪽 숫자가 더 크면 두 숫자의 인덱스를 바꿔준다
+                for(int j = i; j <= index; j+=2) {
+                    // 맨 왼쪽 값을 기준으로 두고 오른쪽이 클 때 서로 바꿔준다.
+                    if(stringComparison(strArray[i-1], strArray[j+1])) {
+                        String strTemp = strArray[i-1];
+                        strArray[i-1] = strArray[j+1];
+                        strArray[j+1] = strTemp;
+                    }
+                }
+                // 이제 * / 보다 앞에있는 연산과 위치를 바꿔줘야 하는데
+                // * / 보다 앞에 + - 가 몇개나 있을 지 모르는게 문제다.
+                //해결: 어차피 음수처리는 되었으니 그냥 곱셈끼리 붙을 때 부호 없으면 + 붙여주면 될거같다.
+                //      Deque 을 사용해서 맨 앞에 숫자가 크면 앞으로 붙이고, 작으면 뒤로 붙이면 될거같다.
+                if(deque.peek() == null) {
+                    for(int j = i-1; j <= index+1; j++) {
+                        deque.add(strArray[j]);
+                        strArray[j] = "";
+                    }
+                }else if(stringComparison(deque.peekFirst(), strArray[i-1])){
+                    deque.addFirst("+");
+                    for(int j = index+1; j >= i-1; j--) {
+                        deque.addFirst(strArray[j]);
+                        strArray[j] = "";
+                    }
+                }else {
+                    deque.add("+");
+                    for(int j = i-1; j <= index+1; j++) {
+                        deque.add(strArray[j]);
+                        strArray[j] = "";
+                    }
+                }
+                // index 까지는 작업이 끝났으므로 i를 index로 바꿔준다.
+                i = index;
+            }
+        }
 
+        // 이제 * / 이 정리된 Deque 과 배열에 남은 + - 값들을 합쳐준다.
+        List<String> resultList = new ArrayList<>();
+        while(deque.peek() != null) {
+            System.out.println("deque.pollFirst() = " + deque.pollFirst());
+            resultList.add(deque.pollFirst());
+        }
+        // 곱셈이 끝나는 인덱스 값
+        int mapIndex = resultList.size();
+        for(String str: strArray) {
+            if(!str.equals("") && !str.equals(" ") && str != null && str.length() != 0) resultList.add(str);
+        }
+
+        // 실험용 출력
+        for(String str: resultList) {
+            System.out.println("str = " + str);
+        }
+
+        Map<Integer, String[]> map = new HashMap<>();
+        map.put(mapIndex, changeListIntoStringArray(resultList));
         return map;
     }
 
@@ -535,7 +620,7 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
         return tempStrArr;
     }
 
-    // 배열에서 가장 큰 값을 찾는 메서드
+    // 배열에서 가장 큰 값을 찾는 메서드(+ - 에서만)
     private String maxNumberStringArray(int index, String[] strArray) {
         double maxNumber = 0.0;
         for(int i= index; i < strArray.length; i++) {
