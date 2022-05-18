@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 
@@ -411,7 +412,7 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
     }
 
     // sort 메서드(2022-05-16 제작중)
-    // string 을 받아서 sort 하고 List 로 반환
+    // string 을 받아서 값을 처리하고 List 로 반환
     private List<String> arraySortResultList(String str) {
         if(str == null || str.length() == 0) return null;
         int index = 0;
@@ -425,6 +426,7 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
         // 곱셈 나눗셈 먼저 정렬해주는 메서드 만들어서 return 타입을 Map 으로 주고 곱셈 나눗셈이 끝나는 인덱스랑 배열을 넣어서 반환
         // 그 다음 플러스, 마이너스 정렬 시작점 index 에 반환받은 인덱스를 대입한다.
 
+
         // 일단 한번 섞어준다.
         tempStrArr = arraySort(index, tempStrArr);
         for(String str1: tempStrArr) {
@@ -432,9 +434,18 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
         }
 
         // 부호가 빠진곳은 없는지 체크
-        tempStrArr = changeListIntoStringArray(signCheckStrArray(tempStrArr));
-        for(String str1: tempStrArr) {
-            System.out.println("tempStrArr 부호 체크 후1 = " + str1);
+        int stop = 0;
+        while(checkSignAll(tempStrArr)) {
+            // 혹시 뭔가 문제가 생겼을 때 무한루프가 되는 것을 방지한다.(100번까지만 루프)
+            if(stop > 100) {
+                setErrorMessage();
+                return null;
+            }
+            tempStrArr = changeListIntoStringArray(signCheckStrArray(tempStrArr));
+            for(String str1: tempStrArr) {
+                System.out.println("tempStrArr 부호 체크 후1 = " + str1);
+            }
+            stop++;
         }
 
         // 배열에 첫번째 값이 최대값과 같은지 체크해서 다르다면 한번 더 arraySort를 실행 시켜준다.
@@ -442,16 +453,37 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
         if(!maxNumberStringArray(index, tempStrArr).equals(tempStrArr[0])) {
             // 2022-05-17 일단 문제점 해결 했는데 부호체크 메서드를 너무 많이 사용하는 문제를 해결할 수 없는지 생각해보자
             System.out.println("Sort 한번 더 실행");
-            // Sort 하기전에 부호 빠진곳이 없는지 확인
-            tempStrArr = changeListIntoStringArray(signCheckStrArray(tempStrArr));
-            // Sort 하고나서도 부호 빠진곳이 없는지 체크
-            tempStrArr = changeListIntoStringArray(signCheckStrArray(arraySort(index, tempStrArr)));
+
+            // Sort
+            tempStrArr = arraySort(index, tempStrArr);
             for(String str1: tempStrArr) {
                 System.out.println("tempStrArr 부호 체크 후(한번더 실행) = " + str1);
+            }
+
+            // Sort 하고나서 부호 빠진곳이 없는지 확인
+            stop = 0;
+            while(checkSignAll(tempStrArr)) {
+                // 혹시 뭔가 문제가 생겼을 때 무한루프가 되는 것을 방지한다.(100번까지만 루프)
+                if(stop > 100) {
+                    setErrorMessage();
+                    return null;
+                }
+                tempStrArr = changeListIntoStringArray(signCheckStrArray(tempStrArr));
+                for (String str1 : tempStrArr) {
+                    System.out.println("tempStrArr 부호 체크 후1 = " + str1);
+                }
+                stop++;
             }
         }
 
         return changeStringArrayIntoList(tempStrArr);
+    }
+
+    // 곱셈 나눗셈 먼저 정렬해주는 메서드
+    private Map<Integer, String[]> MulAndDivSort(String[] strArray) {
+        Map<Integer, String[]> map = new HashMap<>();
+
+        return map;
     }
 
     // 배열을 정렬해주는 메서드
@@ -519,6 +551,41 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
         }
         System.out.println("maxNumber = " + Double.toString(maxNumber));
         return Double.toString(maxNumber);
+    }
+
+    // 부호가 다 있는지 체크하는 메서드
+    private boolean checkSignAll(String[] strArray) {
+        int signNumber = 0;
+        int numberNumber = 0;
+
+        for(String str: strArray) {
+            if(str == null || str.length() == 0 || str.equals(" ")) {
+                continue;
+            }else if(checkSign(str, 4)) {
+                signNumber++;
+            }else if(str.equals("=")) {
+                break;
+            }else {
+                numberNumber++;
+            }
+        }
+        System.out.println("numberNumber = " + numberNumber);
+        System.out.println("signNumber = " + signNumber);
+
+        if(checkSign(strArray[0], 4)) {
+            // 배열 맨 앞에 부호가 - 라면 부호가 숫자와 갯수가 같아야 전부 정상적으로 존재한다는 의미이다.
+            return (numberNumber != signNumber)? true:false;
+        }else {
+            // 숫자 갯수보다 부호가 한개 적으면 부호가 전부 정상적으로 존재한다는 의미이다.
+            return (numberNumber-1 != signNumber)? true:false;
+        }
+    }
+
+    // 작업에 문제가 생겼을 때 에러 메세지를 보여주는 메서드
+    private void setErrorMessage() {
+        result.setText("");
+        process.setText("Error");
+        resetAll();
     }
 
     // 마지막으로 부호가 빠진곳은 없는지, 첫번째 숫자가 음수라면 - 랑 숫자를 붙여주는  메서드
