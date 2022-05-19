@@ -55,13 +55,9 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
         super.onCreate(saved);
         setContentView(R.layout.activity_arithmetics);
 
-// 수정한 부분 시작(shin 2022.05.12)
         // toolbar
         mainToolBar = (Toolbar)findViewById(R.id.main_tool_bar);
         setSupportActionBar(mainToolBar);
-// 수정한 부분 끝
-
-// 수정한 부분 시작(shin 2022.05.12)
         DrawerLayout drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, mainToolBar, R.string.drawer_open, R.string.drawer_close);
         drawerLayout.addDrawerListener(drawerToggle);
@@ -69,7 +65,7 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
         NavigationView navigationView = (NavigationView)findViewById(R.id.navigation_view);
         MenuBarEvent menuBarEvent = new MenuBarEvent(this);
         navigationView.setNavigationItemSelectedListener(menuBarEvent);
-// 수정한 부분 끝
+
 
         Button addBtn, subBtn, divBtn, mulBtn, equal, rollBackBtn, comma, backBtn, binary,sort, sqr, bracket, root;
 
@@ -129,7 +125,6 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
         backBtn.setOnTouchListener(touchEvent);
     }
 
-// 실험용 소스(shin 2022-05-13)
     List<String> processList = new ArrayList<>();
     @Override
     public void onClick(View view) {
@@ -929,9 +924,8 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
         return true;
     }
 
-// 실험용 소스 끝
 
-/* 기존 소스 시작
+/*
     @Override
     public void onClick(View v) {                                                               //버튼 어떤거 클릭 하냐에 따라 다른 결과
         double num;             //EditText에 적은 값을 저장하여 부호 버튼 클릭시 calculator()메소드로 값을 넘길 변수
@@ -1338,7 +1332,7 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
         }
         process.setText(strResult);
     }
-*/ //기존 소스 끝
+*/ 
 
     // 핸들러 세팅
     public void setHandler(Button button) {
