@@ -135,6 +135,10 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
     public void onClick(View view) {
         Button button = (Button)view;
         String buttonStr = button.getText().toString();
+        if(result.getText().toString().equals("0") && process.getText().toString().equals("0")) {
+            process.setText("");
+            result.setText("");
+        }
         switch(view.getId()) {
             //번호 클릭
             case R.id.numBtn0:
@@ -361,8 +365,9 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
     // 모두 지우기
     private void removeAll() {
         String message = result.getText().toString();
+        String PMessage = process.getText().toString();
         // 값이 있을 때는 result 만 비우고 값이 없을 때는 process 까지 초기화
-        if(message != null && message.length() != 0) {
+        if(message != null && message.length() > 1 && PMessage.length() != 0) {
             result.setText("");
         }else {
             resetAll();
@@ -372,7 +377,7 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
     // 하나 지우기
     private void remove() {
         String message = result.getText().toString();
-        if(message != null && message.length() != 0) {
+        if(message != null && message.length() > 1) {
             result.setText(message.substring(0, message.length()-1));
         }else {
             // result 에 아무것도 없지만 process 에는 값이 있을 때
@@ -394,8 +399,8 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
     
     // 배열과 result, process 를 초기화하는 메서드
     private void resetAll() {
-        result.setText("");
-        process.setText("");
+        result.setText("0");
+        process.setText("0");
         processList.clear();
     }
 
@@ -436,20 +441,21 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
 
         // split 메서드를 이용해서 공백 기준으로 잘라서 배열로 만든다.
         String[] tempStrArr = stringBuffer.toString().split(" ");
-        // 곱셈 나눗셈 먼저 정렬해주는 메서드 만들어서 return 타입을 Map 으로 주고 곱셈 나눗셈이 끝나는 인덱스랑 배열을 넣어서 반환
-        // 그 다음 플러스, 마이너스 정렬 시작점 index 에 반환받은 인덱스를 대입한다.
-        Map<Integer, String[]> map = mulAndDivSort(tempStrArr);
-        Set<Integer> keys = map.keySet();
-        for(int key: keys) {
-            index = key;
-            tempStrArr = map.get(key);
+
+        // 곱하기 나누기가 있을때는 먼저 정렬해준다.
+        if(stringBuffer.toString().contains("*") || stringBuffer.toString().contains("/")) {
+            // 곱셈 나눗셈 먼저 정렬해주는 메서드 만들어서 return 타입을 Map 으로 주고 곱셈 나눗셈이 끝나는 인덱스랑 배열을 넣어서 반환
+            // 그 다음 플러스, 마이너스 정렬 시작점 index 에 반환받은 인덱스를 대입한다.
+            Map<Integer, String[]> map = mulAndDivSort(tempStrArr);
+            Set<Integer> keys = map.keySet();
+            for(int key: keys) {
+                index = key;
+                tempStrArr = map.get(key);
+            }
         }
 
         // 일단 한번 섞어준다.
         tempStrArr = arraySort(index, tempStrArr);
-        for(String str1: tempStrArr) {
-            System.out.println("tempStrArr1 = " + str1);
-        }
 
         // 부호가 빠진곳은 없는지 체크
         int stop = 0;
@@ -460,24 +466,14 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
                 return null;
             }
             tempStrArr = changeListIntoStringArray(signCheckStrArray(tempStrArr));
-            for(String str1: tempStrArr) {
-                System.out.println("tempStrArr 부호 체크 후1 = " + str1);
-            }
             stop++;
         }
 
         // 배열에 첫번째 값이 최대값과 같은지 체크해서 다르다면 한번 더 arraySort를 실행 시켜준다.
-        System.out.println("tempStrArr[0] = " + tempStrArr[0]);
-        if(!maxNumberStringArray(index, tempStrArr).equals(tempStrArr[0])) {
-            // 2022-05-17 일단 문제점 해결 했는데 부호체크 메서드를 너무 많이 사용하는 문제를 해결할 수 없는지 생각해보자
-            System.out.println("Sort 한번 더 실행");
 
+        if(!maxNumberStringArray(index, tempStrArr).equals(tempStrArr[0])) {
             // Sort
             tempStrArr = arraySort(index, tempStrArr);
-            for(String str1: tempStrArr) {
-                System.out.println("tempStrArr 부호 체크 후(한번더 실행) = " + str1);
-            }
-
             // Sort 하고나서 부호 빠진곳이 없는지 확인
             stop = 0;
             while(checkSignAll(tempStrArr)) {
@@ -487,9 +483,6 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
                     return null;
                 }
                 tempStrArr = changeListIntoStringArray(signCheckStrArray(tempStrArr));
-                for (String str1 : tempStrArr) {
-                    System.out.println("tempStrArr 부호 체크 후1 = " + str1);
-                }
                 stop++;
             }
         }
@@ -562,18 +555,11 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
         List<String> resultList = new ArrayList<>();
         while(deque.size() != 0) {
             resultList.add(deque.pollFirst());
-            System.out.println("resultList.get(resultList.size()-1) = " + resultList.get(resultList.size()-1));
         }
         // 곱셈이 끝나는 인덱스 값
         int mapIndex = resultList.size()+1;
         for(String str: strArray) {
             if(!str.equals("") && !str.equals(" ") && str != null && str.length() != 0) resultList.add(str);
-        }
-
-        // 2022-05-18 NullPointerException 발생 List 안에 null 값이 들어가있고, *, / 부호들이 사라짐
-        // 실험용 출력
-        for(String str: resultList) {
-            System.out.println("str = " + str);
         }
 
         Map<Integer, String[]> map = new HashMap<>();
@@ -583,7 +569,6 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
 
     // 배열을 정렬해주는 메서드
     private String[] arraySort(int index, String[] tempStrArr) {
-        System.out.println("index = " + index + ", tempStrArr = " + Arrays.deepToString(tempStrArr));
         for(int i = index; i < tempStrArr.length; i++) {
             // 부호면 continue
             if(checkSign(tempStrArr[i], 4)) continue;
@@ -645,7 +630,6 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
             }catch(NumberFormatException nfe) {
             }
         }
-        System.out.println("maxNumber = " + Double.toString(maxNumber));
         return Double.toString(maxNumber);
     }
 
@@ -665,8 +649,6 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
                 numberNumber++;
             }
         }
-        System.out.println("numberNumber = " + numberNumber);
-        System.out.println("signNumber = " + signNumber);
 
         if(checkSign(strArray[0], 4)) {
             // 배열 맨 앞에 부호가 - 라면 부호가 숫자와 갯수가 같아야 전부 정상적으로 존재한다는 의미이다.
@@ -759,7 +741,6 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
         try {
             double leftD = Double.parseDouble(left);
             double rightD = Double.parseDouble(right);
-            System.out.println("leftD = " + leftD + ", rightD = " + rightD);
             if(rightD > leftD) {
                 return true;
             }
@@ -839,8 +820,6 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
         level.put("-", 2);
         level.put("(", 1);
 
-        System.out.println("inputData = " + inputData);
-
         for (Object object : inputData) {
             if (object.equals("(")) {
                 stack.push(object);
@@ -853,7 +832,6 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
                 }
                 stack.pop();
             } else if (level.containsKey(object)) {
-                System.out.println("object = " + object);
                 if (stack.isEmpty()) {
                     stack.push(object);
                 } else {
@@ -861,7 +839,6 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
                     // 해결: - 부호와 + 부호를 비교할때 >= 는 비교식 때문에 -가 배열로 들어가버려서 생기는 문제였다. 비교식을 > 로 변경했다.
                     // 문제: 비교식을 > 로 수정하면 * 와 / 를 비교할때 배열에 남아있게되는 문제가 발생한다.
                     // 해결: if 문을 사용해서 * / 일때와 + - 일때의 처리를 다르게 해준다.
-                    System.out.println("stack.peek() = " + stack.peek());
                     if(checkSign(stack.peek().toString(), 2)) {
                         if (Double.parseDouble(level.get(stack.peek()).toString()) >= Double.parseDouble(level.get(object).toString())) {
                             result.add(stack.pop());
@@ -878,9 +855,6 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
             }
         }
 
-        // 실험용 출력
-        System.out.println("stack = " + stack);
-
         while (!stack.isEmpty()) {
             result.add(stack.pop());
         }
@@ -890,11 +864,6 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
 
     //후위 표기식을 계산
     private Double postFixEval(ArrayList expr) {
-        // 실험용 출력
-        for(Object e: expr) {
-            System.out.println("e: " + e.toString());
-        }
-        
         //(shin) stack 하나로 모든 계산을 수행했더니 +, - 가 뒤에서부터 계산되어서 결과값이 맞지않는 문제가 있어서 Deque 과 stack 을 사용한 방법으로 수정
         Stack plusMinusStack = new Stack();
         Deque numberStack = new ArrayDeque();
@@ -908,17 +877,12 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
                 num1 = (Double) numberStack.pollLast();
                 num2 = (Double) numberStack.pollLast();
                 numberStack.addLast(num2 * num1);
-                System.out.println(num2 + "*" + num1 + "="  + (num2 * num1));
             } else if (o.equals("/")) {
                 num1 = (Double) numberStack.pollLast();
                 num2 = (Double) numberStack.pollLast();
                 numberStack.addLast(num2 / num1);
-                System.out.println(num2 + "/" + num1 + "="  + (num2 / num1));
             }
         }
-        System.out.println("numberStack1 = " + numberStack);
-        System.out.println("plusMinusStack = " + plusMinusStack);
-
         // 스텍은 뒤에서부터 꺼내고, 숫자는 앞에서 부터 꺼낸다.(+ - 는 왼쪽부터 계산)
         while (plusMinusStack.size() != 0) {
             Object o = plusMinusStack.pop();
@@ -926,12 +890,10 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
                 num1 = (Double) numberStack.pop();
                 num2 = (Double) numberStack.pop();
                 numberStack.push(num1 + num2);
-                System.out.println(num1 + "+" + num2 + "="  + (num1 + num2));
             } else if (o.equals("-")) {
                 num1 = (Double) numberStack.pop();
                 num2 = (Double) numberStack.pop();
                 numberStack.push(num1 - num2);
-                System.out.println(num1 + "-" + num2 + "="  + (num1 - num2));
             }
         }
 
