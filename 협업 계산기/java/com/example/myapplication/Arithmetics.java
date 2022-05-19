@@ -183,7 +183,10 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
                     }
                     processList.add(resultStr);
                 }else {
-                    processList.remove(processList.size()-1);
+                    // 현재 배열에 있는 마지막 값이 부호라면 지워준다.
+                    if(checkSign(processList.get(processList.size()-1), 4)) {
+                        processList.remove(processList.size()-1);
+                    }
                 }
                 // 마지막 숫자를 넣어서 process 를 세팅한다.
                 makeProcessMessage();
@@ -451,8 +454,8 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
         // 부호가 빠진곳은 없는지 체크
         int stop = 0;
         while(checkSignAll(tempStrArr)) {
-            // 혹시 뭔가 문제가 생겼을 때 무한루프가 되는 것을 방지한다.(100번까지만 루프)
-            if(stop > 100) {
+            // 혹시 뭔가 문제가 생겼을 때 무한루프가 되는 것을 방지한다.(10번까지만 루프)
+            if(stop > 10) {
                 setErrorMessage();
                 return null;
             }
@@ -478,8 +481,8 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
             // Sort 하고나서 부호 빠진곳이 없는지 확인
             stop = 0;
             while(checkSignAll(tempStrArr)) {
-                // 혹시 뭔가 문제가 생겼을 때 무한루프가 되는 것을 방지한다.(100번까지만 루프)
-                if(stop > 100) {
+                // 혹시 뭔가 문제가 생겼을 때 무한루프가 되는 것을 방지한다.(10번까지만 루프)
+                if(stop > 10) {
                     setErrorMessage();
                     return null;
                 }
@@ -497,11 +500,12 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
     // 곱셈 나눗셈 먼저 정렬해주는 메서드
     private Map<Integer, String[]> mulAndDivSort(String[] strArray) {
         Deque<String> deque = new ArrayDeque<>();
+        int index = 0;
         for(int i = 0; i < strArray.length; i++) {
             // i 번째가 * 이나 / 일때 처리
             if(checkSign(strArray[i], 2)) {
                 // 먼저 어디까지 곱셈 나눗셈이 이어져 있는지 확인한다.
-                int index = i;
+                index = i;
                 for(int j = i+2; i < strArray.length; j+=2) {
                     if(!checkSign(strArray[j], 2)) break;
                     index = j;
@@ -513,20 +517,25 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
                     strArray[i-2] = "";
                     strArray[i-1] = "-" + strArray[i-1];
                 }
-                // 오른쪽 숫자가 더 크면 두 숫자의 인덱스를 바꿔준다
-                for(int j = i; j <= index; j+=2) {
-                    // 맨 왼쪽 값을 기준으로 두고 오른쪽이 클 때 서로 바꿔준다.
-                    if(stringComparison(strArray[i-1], strArray[j+1])) {
-                        String strTemp = strArray[i-1];
-                        strArray[i-1] = strArray[j+1];
-                        strArray[j+1] = strTemp;
+
+                // / 는 위치가 바뀌면 안된다. 그러므로 * 일때만 위치를 바꿔준다.
+                if(strArray[i].equals("*")) {
+                    // 오른쪽 숫자가 더 크면 두 숫자의 인덱스를 바꿔준다
+                    for(int j = i; j <= index; j+=2) {
+                        // 맨 왼쪽 값을 기준으로 두고 오른쪽이 클 때 서로 바꿔준다.
+                        if(stringComparison(strArray[i-1], strArray[j+1])) {
+                            String strTemp = strArray[i-1];
+                            strArray[i-1] = strArray[j+1];
+                            strArray[j+1] = strTemp;
+                        }
                     }
                 }
+
                 // 이제 * / 보다 앞에있는 연산과 위치를 바꿔줘야 하는데
                 // * / 보다 앞에 + - 가 몇개나 있을 지 모르는게 문제다.
                 //해결: 어차피 음수처리는 되었으니 그냥 곱셈끼리 붙을 때 부호 없으면 + 붙여주면 될거같다.
                 //      Deque 을 사용해서 맨 앞에 숫자가 크면 앞으로 붙이고, 작으면 뒤로 붙이면 될거같다.
-                if(deque.peek() == null) {
+                if(deque.size() == 0) {
                     for(int j = i-1; j <= index+1; j++) {
                         deque.add(strArray[j]);
                         strArray[j] = "";
@@ -545,22 +554,23 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
                     }
                 }
                 // index 까지는 작업이 끝났으므로 i를 index로 바꿔준다.
-                i = index;
+                i = index+1;
             }
         }
 
         // 이제 * / 이 정리된 Deque 과 배열에 남은 + - 값들을 합쳐준다.
         List<String> resultList = new ArrayList<>();
-        while(deque.peek() != null) {
-            System.out.println("deque.pollFirst() = " + deque.pollFirst());
+        while(deque.size() != 0) {
             resultList.add(deque.pollFirst());
+            System.out.println("resultList.get(resultList.size()-1) = " + resultList.get(resultList.size()-1));
         }
         // 곱셈이 끝나는 인덱스 값
-        int mapIndex = resultList.size();
+        int mapIndex = resultList.size()+1;
         for(String str: strArray) {
             if(!str.equals("") && !str.equals(" ") && str != null && str.length() != 0) resultList.add(str);
         }
 
+        // 2022-05-18 NullPointerException 발생 List 안에 null 값이 들어가있고, *, / 부호들이 사라짐
         // 실험용 출력
         for(String str: resultList) {
             System.out.println("str = " + str);
@@ -573,6 +583,7 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
 
     // 배열을 정렬해주는 메서드
     private String[] arraySort(int index, String[] tempStrArr) {
+        System.out.println("index = " + index + ", tempStrArr = " + Arrays.deepToString(tempStrArr));
         for(int i = index; i < tempStrArr.length; i++) {
             // 부호면 continue
             if(checkSign(tempStrArr[i], 4)) continue;
@@ -828,6 +839,8 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
         level.put("-", 2);
         level.put("(", 1);
 
+        System.out.println("inputData = " + inputData);
+
         for (Object object : inputData) {
             if (object.equals("(")) {
                 stack.push(object);
@@ -840,20 +853,33 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
                 }
                 stack.pop();
             } else if (level.containsKey(object)) {
+                System.out.println("object = " + object);
                 if (stack.isEmpty()) {
                     stack.push(object);
                 } else {
-                    if (Double.parseDouble(level.get(stack.peek()).toString()) >= Double.parseDouble(level.get(object).toString())) {
-                        result.add(stack.pop());
-                        stack.push(object);
-                    } else {
-                        stack.push(object);
+                    // 여기서 level 을 나타내는 숫자들로 비교를 하다보니, + 와 - 부호의 순서가 맞지않는 현상이 발생했다.
+                    // 해결: - 부호와 + 부호를 비교할때 >= 는 비교식 때문에 -가 배열로 들어가버려서 생기는 문제였다. 비교식을 > 로 변경했다.
+                    // 문제: 비교식을 > 로 수정하면 * 와 / 를 비교할때 배열에 남아있게되는 문제가 발생한다.
+                    // 해결: if 문을 사용해서 * / 일때와 + - 일때의 처리를 다르게 해준다.
+                    System.out.println("stack.peek() = " + stack.peek());
+                    if(checkSign(stack.peek().toString(), 2)) {
+                        if (Double.parseDouble(level.get(stack.peek()).toString()) >= Double.parseDouble(level.get(object).toString())) {
+                            result.add(stack.pop());
+                        }
+                    }else{
+                        if (Double.parseDouble(level.get(stack.peek()).toString()) > Double.parseDouble(level.get(object).toString())) {
+                            result.add(stack.pop());
+                        }
                     }
+                    stack.push(object);
                 }
             } else {
                 result.add(object);
             }
         }
+
+        // 실험용 출력
+        System.out.println("stack = " + stack);
 
         while (!stack.isEmpty()) {
             result.add(stack.pop());
@@ -868,27 +894,44 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
         for(Object e: expr) {
             System.out.println("e: " + e.toString());
         }
-
-        Stack numberStack = new Stack();
+        
+        //(shin) stack 하나로 모든 계산을 수행했더니 +, - 가 뒤에서부터 계산되어서 결과값이 맞지않는 문제가 있어서 Deque 과 stack 을 사용한 방법으로 수정
+        Stack plusMinusStack = new Stack();
+        Deque numberStack = new ArrayDeque();
         for (Object o : expr) {
             if (o instanceof Double) {
-                numberStack.push(o);
-            } else if (o.equals("+")) {
+                // Deque 은 push 와 pop 을 하게 되면 맨 앞에서부터 넣고 빼고 하므로 addLast 나 add 메서드를 사용해야한다.
+                numberStack.addLast(o);
+            } else if (o.equals("+") || o.equals("-")) {
+                plusMinusStack.push(o);
+            } else if (o.equals("*")) {
+                num1 = (Double) numberStack.pollLast();
+                num2 = (Double) numberStack.pollLast();
+                numberStack.addLast(num2 * num1);
+                System.out.println(num2 + "*" + num1 + "="  + (num2 * num1));
+            } else if (o.equals("/")) {
+                num1 = (Double) numberStack.pollLast();
+                num2 = (Double) numberStack.pollLast();
+                numberStack.addLast(num2 / num1);
+                System.out.println(num2 + "/" + num1 + "="  + (num2 / num1));
+            }
+        }
+        System.out.println("numberStack1 = " + numberStack);
+        System.out.println("plusMinusStack = " + plusMinusStack);
+
+        // 스텍은 뒤에서부터 꺼내고, 숫자는 앞에서 부터 꺼낸다.(+ - 는 왼쪽부터 계산)
+        while (plusMinusStack.size() != 0) {
+            Object o = plusMinusStack.pop();
+            if (o.equals("+")) {
                 num1 = (Double) numberStack.pop();
                 num2 = (Double) numberStack.pop();
-                numberStack.push(num2 + num1);
+                numberStack.push(num1 + num2);
+                System.out.println(num1 + "+" + num2 + "="  + (num1 + num2));
             } else if (o.equals("-")) {
                 num1 = (Double) numberStack.pop();
                 num2 = (Double) numberStack.pop();
-                numberStack.push(num2 - num1);
-            } else if (o.equals("*")) {
-                num1 = (Double) numberStack.pop();
-                num2 = (Double) numberStack.pop();
-                numberStack.push(num2 * num1);
-            } else if (o.equals("/")) {
-                num1 = (Double) numberStack.pop();
-                num2 = (Double) numberStack.pop();
-                numberStack.push(num2 / num1);
+                numberStack.push(num1 - num2);
+                System.out.println(num1 + "-" + num2 + "="  + (num1 - num2));
             }
         }
 
@@ -912,15 +955,13 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
         for (int i = 0; i < str.length(); i++) {
             check = str.charAt(i);
             if (check < 48 || check > 58) {
-                System.out.println("check = " + check);
                 if (check != '.'){
                     // 음수 구분용 - 인지 체크
-                    if(check == '-' && str.length() != 1) {
+                    if(check == '-' && str.length() > 1) {
                         return true;
                     }
                     return false;
                 }
-
             }
         }
         return true;
