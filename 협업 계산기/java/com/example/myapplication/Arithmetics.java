@@ -1332,7 +1332,7 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
         }
         process.setText(strResult);
     }
-*/ 
+*/
 
     // 핸들러 세팅
     public void setHandler(Button button) {
