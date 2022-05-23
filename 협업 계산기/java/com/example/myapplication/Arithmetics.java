@@ -221,7 +221,7 @@ public class Arithmetics extends AppCompatActivity implements OnClickListener { 
             return true;
         }
     }
-
+ 
     // 입력값이 부호일때 처리하는 메서드
     private void setSign(String sign) {
         String message = result.getText().toString();
