@@ -1,33 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.drawerlayout.widget.DrawerLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Arithmetics"
-    android:id="@+id/drawer_layout"
     android:fitsSystemWindows="true"
-    >
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    tools:context=".Arithmetics">
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <include
-            layout="@layout/tool_bar"
-            />
-        <TextView
-            android:id="@+id/text1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="사칙연산 계산기" />
+
+        <include layout="@layout/tool_bar" />
 
         <TextView
             android:id="@+id/text2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="사칙연산계산기"
+            android:fontFamily="@font/malgun"
+            android:text="@string/title_bin"
+            android:textStyle="bold"
             android:textAlignment="center"
             android:textSize="30sp" />
 
@@ -36,72 +31,82 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/result0"
+                android:id="@+id/result9"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_weight="1" />
-
-            <ImageView
-                android:id="@+id/result1"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_weight="1" />
-
-            <TextView
-                android:layout_width="10dp"
-                android:layout_height="50dp" />
-
-            <ImageView
-                android:id="@+id/result2"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_weight="1" />
-
-            <ImageView
-                android:id="@+id/result3"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_weight="1" />
-
-            <ImageView
-                android:id="@+id/result4"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_weight="1" />
-
-            <ImageView
-                android:id="@+id/result5"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_weight="1" />
-
-            <TextView
-                android:layout_width="10dp"
-                android:layout_height="50dp" />
-
-            <ImageView
-                android:id="@+id/result6"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_weight="1" />
-
-            <ImageView
-                android:id="@+id/result7"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                tools:ignore="ContentDescription" />
 
             <ImageView
                 android:id="@+id/result8"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:layout_width="10dp"
+                android:layout_height="50dp" />
 
             <ImageView
-                android:id="@+id/result9"
+                android:id="@+id/result7"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/result6"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/result5"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/result4"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:layout_width="10dp"
+                android:layout_height="50dp" />
+
+            <ImageView
+                android:id="@+id/result3"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/result2"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/result1"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/result0"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                tools:ignore="ContentDescription" />
         </LinearLayout>
 
         <LinearLayout
@@ -118,7 +123,7 @@
                 android:text="" />
 
             <TextView
-                android:id="@+id/arith"
+                android:id="@+id/operator"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -130,7 +135,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:baselineAligned="false">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -145,7 +151,8 @@
                     android:layout_margin="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/btn_color_selector"
-                    android:text="←" />
+                    android:text="@string/back"
+                    tools:ignore="NestedWeights" />
 
                 <Button
                     android:id="@+id/andBtn"
@@ -154,7 +161,7 @@
                     android:layout_margin="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/btn_color_selector"
-                    android:text="AND" />
+                    android:text="@string/and" />
 
                 <Button
                     android:id="@+id/numBtn1"
@@ -163,7 +170,7 @@
                     android:layout_margin="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/btn_color_selector"
-                    android:text="1" />
+                    android:text="@string/one" />
 
                 <Button
                     android:id="@+id/numBtn0"
@@ -172,7 +179,7 @@
                     android:layout_margin="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/btn_color_selector"
-                    android:text="0" />
+                    android:text="@string/zero" />
             </LinearLayout>
 
             <LinearLayout
@@ -182,13 +189,14 @@
                 android:orientation="vertical">
 
                 <Button
-                    android:id="@+id/rollBackBtn"
+                    android:id="@+id/leftShiftBtn"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/btn_color_selector"
-                    android:text="C" />
+                    android:text="@string/left"
+                    tools:ignore="NestedWeights" />
 
                 <Button
                     android:id="@+id/orBtn"
@@ -197,7 +205,7 @@
                     android:layout_margin="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/btn_color_selector"
-                    android:text="OR" />
+                    android:text="@string/or" />
 
 
                 <Button
@@ -207,16 +215,16 @@
                     android:layout_margin="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/btn_color_selector"
-                    android:text="*" />
+                    android:text="@string/mul" />
 
                 <Button
-                    android:id="@+id/equla"
+                    android:id="@+id/equalBtn"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/btn_color_selector"
-                    android:text="=" />
+                    android:text="@string/equ" />
             </LinearLayout>
 
             <LinearLayout
@@ -226,14 +234,14 @@
                 android:orientation="vertical">
 
                 <Button
-                    android:id="@+id/empty"
+                    android:id="@+id/rightShiftBtn"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
-                    android:background="@drawable/btn_color"
-                    android:enabled="false"
-                    android:text="" />
+                    android:background="@drawable/btn_color_selector"
+                    android:text="@string/right"
+                    tools:ignore="NestedWeights" />
 
                 <Button
                     android:id="@+id/xorBtn"
@@ -242,7 +250,7 @@
                     android:layout_margin="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/btn_color_selector"
-                    android:text="XOR" />
+                    android:text="@string/xor" />
 
                 <Button
                     android:id="@+id/addBtn"
@@ -251,7 +259,7 @@
                     android:layout_margin="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/btn_color_selector"
-                    android:text="+" />
+                    android:text="@string/plu" />
 
                 <Button
                     android:id="@+id/subBtn"
@@ -260,7 +268,7 @@
                     android:layout_margin="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/btn_color_selector"
-                    android:text="-" />
+                    android:text="@string/minus" />
             </LinearLayout>
 
             <LinearLayout
@@ -270,13 +278,14 @@
                 android:orientation="vertical">
 
                 <Button
-                    android:id="@+id/hexa"
+                    android:id="@+id/clearBtn"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/btn_color_selector"
-                    android:text="Hexa" />
+                    android:text="@string/c"
+                    tools:ignore="NestedWeights" />
 
                 <Button
                     android:id="@+id/homeBtn"
@@ -285,7 +294,7 @@
                     android:layout_margin="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/btn_color_selector"
-                    android:text="Home" />
+                    android:text="@string/home" />
 
                 <Button
                     android:id="@+id/divBtn"
@@ -294,7 +303,7 @@
                     android:layout_margin="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/btn_color_selector"
-                    android:text="/" />
+                    android:text="@string/divide" />
 
                 <Button
                     android:id="@+id/remainBtn"
@@ -303,16 +312,17 @@
                     android:layout_margin="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/btn_color_selector"
-                    android:text="%" />
+                    android:text="@string/remain" />
 
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
+
     <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigation_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        android:id="@+id/navigation_view"
-        android:layout_gravity="left"
-        app:menu="@menu/tool_bar_menu"/>
+        app:menu="@menu/tool_bar_menu" />
 </androidx.drawerlayout.widget.DrawerLayout>
