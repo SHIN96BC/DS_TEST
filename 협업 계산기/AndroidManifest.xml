@@ -10,6 +10,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
         <activity
+            android:name=".GraphActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false" />
+        <activity
+            android:name=".Arithmetics_Graph"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false" />
+        <activity
             android:name=".Arithmetics"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="true">
@@ -22,6 +30,7 @@
         <activity
             android:name=".Arithmetics_Change"
             android:configChanges="orientation|screenSize|keyboardHidden" />
-        <activity android:name=".DateArithmetics"/>
+        <activity android:name=".DateArithmetics" />
     </application>
+
 </manifest>

@@ -15,10 +15,8 @@ public class TouchEvent implements View.OnTouchListener {
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
-            Toast.makeText(arithmetics,"down",Toast.LENGTH_LONG).show();
         }
         if(motionEvent.getAction() == MotionEvent.ACTION_UP){                               //handler_down이 runnable_down을 removeCallbacks 함
-            Toast.makeText(arithmetics,"up",Toast.LENGTH_LONG).show();
             switch (view.getId()) {
                 case R.id.backBtn:
                     arithmetics.getHandler_down().removeCallbacks(arithmetics.getRunnable_down());
