@@ -21,5 +21,4 @@
     <string name="remain">%</string>
     <string name="right"><![CDATA[>>]]></string>
     <string name="left"><![CDATA[<<]]></string>
-    <string name="title_bin">Binary Calculator</string>
 </resources>

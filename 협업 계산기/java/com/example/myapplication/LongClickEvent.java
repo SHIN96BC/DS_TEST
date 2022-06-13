@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.calculator;
 
 import android.os.Handler;
 import android.view.View;

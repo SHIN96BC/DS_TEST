@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.calculator;
 
 import android.util.Log;
 
@@ -31,7 +31,11 @@ public class CalculateHelper {
             } else {
                 if (flag) {
                     inputList.add(number);
-                    number = 0;
+                    if(data.equals("-")){
+                        number = -1;
+                    }else{
+                        number = 1;
+                    }
                 }
                 flag = false;
                 inputList.add(data);
@@ -280,8 +284,8 @@ public class CalculateHelper {
                             resultList5.add(bracket.get(i+3));
                             resultList5.add(bracket.get(i+1));*/
                         }else if(bracket.get(i+1).equals("(")){
-                                resultList6.add(bracket.get(i));
-                                resultList6.add(bracket.get(i + 2));
+                            resultList6.add(bracket.get(i));
+                            resultList6.add(bracket.get(i + 2));
                         }else{
                             resultList6.add(bracket.get(i));
                             resultList6.add(bracket.get(i + 1));
@@ -318,8 +322,8 @@ public class CalculateHelper {
             }
             muldivStr = separation(muldiv);             //중간에 덧셈이 끼어있는 곱셈 나눗셈 묶어서 분류
             /*if(bracket.size() != 0){*/
-                /*muldivStr = muldivStr.substring(3);*/
-                /*muldivStr = " + "+ muldivStr;*/
+            /*muldivStr = muldivStr.substring(3);*/
+            /*muldivStr = " + "+ muldivStr;*/
             /*}*/
         }
         if(addsub.size() != 0){                     //덧셈 뺄셈 배열 정렬

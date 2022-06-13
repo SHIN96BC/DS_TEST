@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.myapplication">
+    package="com.example.calculator">
 
     <application
         android:allowBackup="true"
@@ -10,15 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
         <activity
-            android:name=".GraphActivity"
+            android:name="com.example.calculator.GraphActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="false" />
         <activity
-            android:name=".Arithmetics_Graph"
+            android:name="com.example.calculator.Arithmetics_Graph"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="false" />
         <activity
-            android:name=".Arithmetics"
+            android:name="com.example.calculator.Arithmetics"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="true">
             <intent-filter>
@@ -28,9 +28,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Arithmetics_Change"
+            android:name="com.example.calculator.Arithmetics_Change"
             android:configChanges="orientation|screenSize|keyboardHidden" />
-        <activity android:name=".DateArithmetics" />
+        <activity android:name="com.example.calculator.DateArithmetics" />
     </application>
 
 </manifest>

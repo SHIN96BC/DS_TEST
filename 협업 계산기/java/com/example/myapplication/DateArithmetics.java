@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.calculator;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;

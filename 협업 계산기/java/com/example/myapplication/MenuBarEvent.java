@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.calculator;
 
 import android.content.Intent;
 import android.view.MenuItem;
@@ -29,12 +29,13 @@ public class MenuBarEvent implements NavigationView.OnNavigationItemSelectedList
                 Toast.makeText(activity, "Binary", Toast.LENGTH_SHORT).show();
                 intent = new Intent(activity.getApplicationContext(), Arithmetics_Change.class);
                 break;
-            case R.id.btn_data:
-                Toast.makeText(activity, "Data", Toast.LENGTH_SHORT).show();
-                break;
             case R.id.btn_date:
                 Toast.makeText(activity, "Date", Toast.LENGTH_SHORT).show();
                 intent = new Intent(activity.getApplicationContext(), DateArithmetics.class);
+                break;
+            case R.id.btn_graph:
+                Toast.makeText(activity.getApplicationContext(), "Graph", Toast.LENGTH_SHORT).show();
+                intent = new Intent(activity.getApplicationContext(), Arithmetics_Graph.class);
                 break;
         }
         activity.startActivity(intent);
