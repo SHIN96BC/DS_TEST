@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -32,6 +33,14 @@ public class GraphActivity extends AppCompatActivity implements View.OnClickList
     private LineChart chart;
     private Button graph;
     private String function1, function2, function3, empty1, empty2, empty3;
+
+    GraphAsyncTask graphAsyncTaskX;
+    GraphAsyncTask graphAsyncTaskY;
+    GraphAsyncTask graphAsyncTask1;
+    GraphAsyncTask graphAsyncTask2;
+    GraphAsyncTask graphAsyncTask3;
+
+    private static ArrayList<ILineDataSet> dataSets;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,8 +125,13 @@ public class GraphActivity extends AppCompatActivity implements View.OnClickList
         ArrayList<Entry> secondValues = new ArrayList<>();
         ArrayList<Entry> thirdsValues = new ArrayList<>();
 
+        graphAsyncTaskX = new GraphAsyncTask("", getApplicationContext(), X_LINE);
+        graphAsyncTaskY = new GraphAsyncTask("", getApplicationContext(), Y_LINE);
+
         if (!function1.equals("")) {
             String functionFirst = functionTest.getText().toString();
+            graphAsyncTask1 = new GraphAsyncTask(functionFirst, getApplicationContext(), FUNCTION_1);
+            /*
             Log.v("functionFirst", "functionFirst : " + functionFirst);
             String functionFirstRemove = functionFirst.replaceFirst("y=", "");
             Log.v("functionFirstRemove", "functionFirstRemove : " + functionFirstRemove);
@@ -150,9 +164,12 @@ public class GraphActivity extends AppCompatActivity implements View.OnClickList
                     firstValues.add(new Entry(x, y));
                 }
             }
+             */
         }
         if (!function2.equals("")) {
             String functionSecond = functionTest2.getText().toString();
+            graphAsyncTask2 = new GraphAsyncTask(functionSecond, getApplicationContext(), FUNCTION_2);
+            /*
             Log.v("functionSecond", "functionSecond : " + functionSecond);
             String functionSecondRemove = functionSecond.replaceFirst("y=", "");
             Log.v("functionSecondRemove", "functionSecondRemove : " + functionSecondRemove);
@@ -186,9 +203,12 @@ public class GraphActivity extends AppCompatActivity implements View.OnClickList
                     secondValues.add(new Entry(x, y));
                 }
             }
+             */
         }
         if (!function3.equals("")) {
             String functionThird = functionTest3.getText().toString();
+            graphAsyncTask3 = new GraphAsyncTask(functionThird, getApplicationContext(), FUNCTION_3);
+            /*
             Log.v("functionThird", "functionThird : " + functionThird);
             String functionThirdRemove = functionThird.replaceFirst("y=", "");
             Log.v("functionThirdRemove", "functionThirdRemove : " + functionThirdRemove);
@@ -222,20 +242,20 @@ public class GraphActivity extends AppCompatActivity implements View.OnClickList
                     thirdsValues.add(new Entry(x, y));
                 }
             }
+             */
         }
         for (float i = -10.00f; i < 20; i += 0.01f) {
             float y = i;
             float x = 0;
             yValues.add(new Entry(x, y));
-
         }
         for (float i = -10.00f; i < 20; i += 0.01f) {
             float y = 0;
             float x = i;
             xValues.add(new Entry(x, y));
-
         }
 
+        /*
         // x와 y를 Array로 가져온 후, for 문을 통해 ArrayList 추가?
         LineDataSet set1, set2, set3, set4, set5;
         set1 = new LineDataSet(firstValues, function1);
@@ -243,18 +263,22 @@ public class GraphActivity extends AppCompatActivity implements View.OnClickList
         set3 = new LineDataSet(thirdsValues, function3);
         set4 = new LineDataSet(xValues, "");
         set5 = new LineDataSet(yValues, "");
+         */
 
-        ArrayList<ILineDataSet> dataSets = new ArrayList<>();
+        dataSets = new ArrayList<>();
+        /*
         dataSets.add(set4); // add the data sets
         dataSets.add(set5); // add the data sets
         dataSets.add(set1); // add the data sets
         dataSets.add(set2); // add the data sets
         dataSets.add(set3); // add the data sets
+         */
 
 
         // create a data object with the data sets
         LineData data = new LineData(dataSets);
 
+        /*
         // black lines and points
         set4.setColor(Color.LTGRAY);
         set4.setCircleColor(Color.LTGRAY);
@@ -266,9 +290,14 @@ public class GraphActivity extends AppCompatActivity implements View.OnClickList
         set2.setCircleColor(Color.GREEN);
         set3.setColor(Color.BLUE);
         set3.setCircleColor(Color.BLUE);
+         */
 
         // set data
         chart.setData(data);
+    }
+
+    public synchronized ArrayList<ILineDataSet> getDataSets() {
+        return dataSets;
     }
 
     // Activity 종료 시 효과 제거
@@ -298,12 +327,13 @@ public class GraphActivity extends AppCompatActivity implements View.OnClickList
 
     private static int HANDLER_POSITION = 0;
     private static final int HANDLER_MESSAGE_GRAPH_ASYNC_DRAW = 1;
-    private static boolean CHECK_LOG = true;
-    private static String LOG_TAG = "sbc GraphActivity";
-    private static int X_Y_LINE = 0;
-    private static int FUNCTION_1 = 1;
-    private static int FUNCTION_2 = 2;
-    private static int FUNCTION_3 = 3;
+    public static boolean CHECK_LOG = true;
+    public static final String LOG_TAG = "sbc GraphActivity";
+    public static final int X_LINE = 0;
+    public static final int Y_LINE = 1;
+    public static final int FUNCTION_1 = 2;
+    public static final int FUNCTION_2 = 3;
+    public static final int FUNCTION_3 = 4;
 
 
 
@@ -312,14 +342,18 @@ public class GraphActivity extends AppCompatActivity implements View.OnClickList
         public void handleMessage(Message message) {
             if(CHECK_LOG) Log.i(LOG_TAG, "graphHandler.handleMessage()");
             if(message.what == HANDLER_MESSAGE_GRAPH_ASYNC_DRAW) {
-                if(HANDLER_POSITION == X_Y_LINE) {
-
+                if(HANDLER_POSITION == X_LINE) {
+                    // AsyncTask.SERIAL_EXECUTOR == 순차적 처리
+                    // AsyncTask.THREAD_POOL_EXECUTOR == 병렬 처리
+                    graphAsyncTaskX.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
+                }else if(HANDLER_POSITION == Y_LINE) {
+                    graphAsyncTaskY.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
                 }else if(HANDLER_POSITION == FUNCTION_1) {
-
+                    graphAsyncTask1.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
                 }else if(HANDLER_POSITION == FUNCTION_2) {
-
+                    graphAsyncTask2.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
                 }else if(HANDLER_POSITION == FUNCTION_3) {
-
+                    graphAsyncTask3.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
                 }
                 if(HANDLER_POSITION < FUNCTION_3) {
                     HANDLER_POSITION++;
