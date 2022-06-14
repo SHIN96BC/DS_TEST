@@ -94,33 +94,60 @@ public class GraphAsyncTask extends AsyncTask<String, Void, ArrayList<Entry>> {
                     Log.v("xFirstFront", "xFirstFront : " + xFirstFront);
 
                     /* x뒤에 붙어 있는 계산 및 연산 String 확인 */
-                    String xFirstBehind = functionDeleteEqualY.substring(firstFindXTest + 1);
+                    String xFirstBehind = functionDeleteEqualY.substring(firstFindXTest + 1).trim();
                     String xFirstBehindNumber = xFirstBehind.replaceAll("[^0-9]", "");
-                    Log.v("xFirstBehind", "xFirstBehind : " + xFirstBehind);
-                    Log.v("xFirstBehindNumber", "xFirstBehindNumber : " + xFirstBehindNumber);
+                    Log.v(GRAPH_LOG_TAG, "xFirstBehind : " + xFirstBehind);
+                    Log.v(GRAPH_LOG_TAG, "xFirstBehindNumber : " + xFirstBehindNumber);
 
                     /* 연산 String 을 Parsing 하여 계산 */
                     String[] xFirstBehindArray = xFirstBehind.split("");
+
+                    calculationStrNumber(xFirstBehind);
+
                     String xFirstBehindCalculate = "";
                     int behindCalculateResult = 0;
-                    if (xFirstBehindArray.length >= 4) {
-                        switch (xFirstBehindArray[3]) {
-                            case "+":
-                                behindCalculateResult = Integer.parseInt(xFirstBehindArray[2]) + Integer.parseInt(xFirstBehindArray[4]);
-                                break;
-                            case "-":
-                                behindCalculateResult = Integer.parseInt(xFirstBehindArray[2]) - Integer.parseInt(xFirstBehindArray[4]);
-                                break;
-                            case "*":
-                                behindCalculateResult = Integer.parseInt(xFirstBehindArray[2]) * Integer.parseInt(xFirstBehindArray[4]);
-                                break;
-                            case "/":
-                                behindCalculateResult = Integer.parseInt(xFirstBehindArray[2]) / Integer.parseInt(xFirstBehindArray[4]);
-                                break;
-                        }
-                    } else if (xFirstBehindArray.length >= 3) {
-                        behindCalculateResult = Integer.parseInt(xFirstBehindArray[2]);
+
+                    for(int i = 0; i < xFirstBehindArray.length; i++) {
+                        Log.i(GRAPH_LOG_TAG, "xFirstBehindArray["+ i + "] = " + xFirstBehindArray[i]);
                     }
+
+                    Log.i(GRAPH_LOG_TAG, "xFirstBehindArray.length = " + xFirstBehindArray.length);
+
+//                    if (xFirstBehindArray.length >= 4) {
+//                        Log.i(GRAPH_LOG_TAG, "if(xFirstBehindArray.length >= 4)");
+//                        Log.i(GRAPH_LOG_TAG, "if(xFirstBehindArray.length >= 4) ---> xFirstBehindArray[3] = " + xFirstBehindArray[3]);
+//                        for(int i = 2; i < xFirstBehindArray.length; i++) {
+//                            // 하나씩 분리된 숫자를 하나로 합치기 위한 변수 입니다.
+//                            int firstAddNumber = 0;
+//                            int lastAddNumber = 0;
+//                            switch (xFirstBehindArray[3]) {
+//                                case "+":
+//                                    firstAddNumber += lastAddNumber;
+//                                    // 계산후에는 다시 변수를 0으로 만들어줍니다.
+//                                    lastAddNumber = 0;
+//                                    break;
+//                                case "-":
+//                                    firstAddNumber -= lastAddNumber;
+//                                    lastAddNumber = 0;
+//                                    break;
+//                                case "*":
+//                                    firstAddNumber *= lastAddNumber;
+//                                    lastAddNumber = 0;
+//                                    break;
+//                                case "/":
+//                                    firstAddNumber /= lastAddNumber;
+//                                    lastAddNumber = 0;
+//                                    break;
+//                                default:
+//                                    // 아스키 코드 문자형식 0~9 는 48~57 이므로 i 번째가 숫자일 때의 조건문을 만듭니다.
+//                                    if(xFirstBehindArray[i].charAt(0) > 47 &&  xFirstBehindArray[i].charAt(0) < 58) {
+//                                        lastAddNumber += Integer.parseInt(xFirstBehindArray[i]);
+//                                    }
+//                            }
+//                        }
+//                    } else if (xFirstBehindArray.length >= 3) {
+//                        behindCalculateResult = Integer.parseInt(xFirstBehindArray[2]);
+//                    }
                     String behindCalculate = Integer.toString(behindCalculateResult);
 
                     /* x앞에 오는 값이 숫자인지 문자인지 확인 */
@@ -129,10 +156,11 @@ public class GraphAsyncTask extends AsyncTask<String, Void, ArrayList<Entry>> {
                     String operatorCheck = functionDeleteEqualY.substring(firstFindXTest + 1, firstFindXTest + 2);
                     Log.v("operatorCheck", "operatorCheck : " + operatorCheck);
                     int xIntFront = 0;
-                    if (xFirstFront != "") {
-                        xIntFront = Integer.parseInt(xFirstFront);
-                    }
+//                    if (xFirstFront != "") {
+//
+//                    }
                     if (xFront) { /* y = 정수 , x = 정수 , x항과 숫자항이 존재할 때, x항이 뒤로가는 경우는 아직 생각 안함 */
+                        xIntFront = Integer.parseInt(xFirstFront);
                         if (operatorCheck.equals("+")) {
                             for (float i = START_NUM; i < RANGE; i += STEP) {
                                 float y = xIntFront * i + Integer.parseInt(behindCalculate);
@@ -159,113 +187,115 @@ public class GraphAsyncTask extends AsyncTask<String, Void, ArrayList<Entry>> {
                             }
                         }
                     } else {
-                        if (xFirstFront.charAt(0) == '-') {
-                            xStringMinus = xFirstFront.substring(1);
-                            if (GraphActivity.numberCheck(xStringMinus)) {
-                                if (operatorCheck.equals("+")) {
-                                    for (float i = START_NUM; i < RANGE; i += STEP) {
-                                        float y = xIntFront * i + 2;
-                                        float x = i;
-                                        entryList.add(new Entry(x, y));
-                                    }
-                                } else if (operatorCheck.equals("-")) {
-                                    for (float i = START_NUM; i < RANGE; i += STEP) {
-                                        float y = xIntFront * i - Integer.parseInt(behindCalculate);
-                                        float x = i;
-                                        entryList.add(new Entry(x, y));
-                                    }
-                                } else if (operatorCheck.equals("*")) {
-                                    for (float i = START_NUM; i < RANGE; i += STEP) {
-                                        float y = xIntFront * i * Integer.parseInt(behindCalculate);
-                                        float x = i;
-                                        entryList.add(new Entry(x, y));
-                                    }
-                                } else if (operatorCheck.equals("/")) {
-                                    for (float i = START_NUM; i < RANGE; i += STEP) {
-                                        float y = xIntFront * i / Integer.parseInt(behindCalculate);
-                                        float x = i;
-                                        entryList.add(new Entry(x, y));
-                                    }
-                                } else if ("1" == "2") {
-                                    // 부호다음에 cos sin 같은 문자 오는거 생각
-                                }
-                            } else {
-                                if (xFirstFront.charAt(1) == 's') {
+                        if(xFirstFront != null && xFirstFront.length() != 0) {
+                            if (xFirstFront.charAt(0) == '-') {
+                                xStringMinus = xFirstFront.substring(1);
+                                if (GraphActivity.numberCheck(xStringMinus)) {
                                     if (operatorCheck.equals("+")) {
                                         for (float i = START_NUM; i < RANGE; i += STEP) {
-                                            float y = (float) sin(i) + 2;
+                                            float y = i + Integer.parseInt(behindCalculate);
                                             float x = i;
                                             entryList.add(new Entry(x, y));
                                         }
                                     } else if (operatorCheck.equals("-")) {
                                         for (float i = START_NUM; i < RANGE; i += STEP) {
-                                            float y = (float) sin(i) - Integer.parseInt(behindCalculate);
-                                            float x = i;
-                                            entryList.add(new Entry(x, y));
-                                        }
-                                    } else if (behindCalculate.equals("*")) {
-                                        for (float i = START_NUM; i < RANGE; i += STEP) {
-                                            float y = (float) sin(i) * Integer.parseInt(behindCalculate);
-                                            float x = i;
-                                            entryList.add(new Entry(x, y));
-                                        }
-                                    } else if (behindCalculate.equals("/")) {
-                                        for (float i = START_NUM; i < RANGE; i += STEP) {
-                                            float y = (float) sin(i) / Integer.parseInt(xFirstBehindNumber);
-                                            float x = i;
-                                            entryList.add(new Entry(x, y));
-                                        }
-                                    }
-                                } else if (xFirstFront.charAt(1) == 'c') {
-                                    if (operatorCheck.equals("+")) {
-                                        for (float i = START_NUM; i < RANGE; i += STEP) {
-                                            float y = (float) cos(i) + 2;
-                                            float x = i;
-                                            entryList.add(new Entry(x, y));
-                                        }
-                                    } else if (operatorCheck.equals("-")) {
-                                        for (float i = START_NUM; i < RANGE; i += STEP) {
-                                            float y = (float) cos(i) - Integer.parseInt(xFirstBehindNumber);
+                                            float y = i - Integer.parseInt(behindCalculate);
                                             float x = i;
                                             entryList.add(new Entry(x, y));
                                         }
                                     } else if (operatorCheck.equals("*")) {
                                         for (float i = START_NUM; i < RANGE; i += STEP) {
-                                            float y = (float) cos(i) * Integer.parseInt(xFirstBehindNumber);
+                                            float y = i * Integer.parseInt(behindCalculate);
                                             float x = i;
                                             entryList.add(new Entry(x, y));
                                         }
                                     } else if (operatorCheck.equals("/")) {
                                         for (float i = START_NUM; i < RANGE; i += STEP) {
-                                            float y = (float) cos(i) / Integer.parseInt(behindCalculate);
+                                            float y = xIntFront * i / Integer.parseInt(behindCalculate);
                                             float x = i;
                                             entryList.add(new Entry(x, y));
                                         }
+                                    } else if ("1" == "2") {
+                                        // 부호다음에 cos sin 같은 문자 오는거 생각
                                     }
-                                } else if (xFirstFront.charAt(1) == 't') {
-                                    if (operatorCheck.equals("+")) {
-                                        for (float i = START_NUM; i < RANGE; i += STEP) {
-                                            float y = (float) tan(i) + 2;
-                                            float x = i;
-                                            entryList.add(new Entry(x, y));
+                                } else {
+                                    if (xFirstFront.charAt(1) == 's') {
+                                        if (operatorCheck.equals("+")) {
+                                            for (float i = START_NUM; i < RANGE; i += STEP) {
+                                                float y = (float) sin(i) + 2;
+                                                float x = i;
+                                                entryList.add(new Entry(x, y));
+                                            }
+                                        } else if (operatorCheck.equals("-")) {
+                                            for (float i = START_NUM; i < RANGE; i += STEP) {
+                                                float y = (float) sin(i) - Integer.parseInt(behindCalculate);
+                                                float x = i;
+                                                entryList.add(new Entry(x, y));
+                                            }
+                                        } else if (behindCalculate.equals("*")) {
+                                            for (float i = START_NUM; i < RANGE; i += STEP) {
+                                                float y = (float) sin(i) * Integer.parseInt(behindCalculate);
+                                                float x = i;
+                                                entryList.add(new Entry(x, y));
+                                            }
+                                        } else if (behindCalculate.equals("/")) {
+                                            for (float i = START_NUM; i < RANGE; i += STEP) {
+                                                float y = (float) sin(i) / Integer.parseInt(xFirstBehindNumber);
+                                                float x = i;
+                                                entryList.add(new Entry(x, y));
+                                            }
                                         }
-                                    } else if (operatorCheck.equals("-")) {
-                                        for (float i = START_NUM; i < RANGE; i += STEP) {
-                                            float y = (float) tan(i) - Integer.parseInt(behindCalculate);
-                                            float x = i;
-                                            entryList.add(new Entry(x, y));
+                                    } else if (xFirstFront.charAt(1) == 'c') {
+                                        if (operatorCheck.equals("+")) {
+                                            for (float i = START_NUM; i < RANGE; i += STEP) {
+                                                float y = (float) cos(i) + 2;
+                                                float x = i;
+                                                entryList.add(new Entry(x, y));
+                                            }
+                                        } else if (operatorCheck.equals("-")) {
+                                            for (float i = START_NUM; i < RANGE; i += STEP) {
+                                                float y = (float) cos(i) - Integer.parseInt(xFirstBehindNumber);
+                                                float x = i;
+                                                entryList.add(new Entry(x, y));
+                                            }
+                                        } else if (operatorCheck.equals("*")) {
+                                            for (float i = START_NUM; i < RANGE; i += STEP) {
+                                                float y = (float) cos(i) * Integer.parseInt(xFirstBehindNumber);
+                                                float x = i;
+                                                entryList.add(new Entry(x, y));
+                                            }
+                                        } else if (operatorCheck.equals("/")) {
+                                            for (float i = START_NUM; i < RANGE; i += STEP) {
+                                                float y = (float) cos(i) / Integer.parseInt(behindCalculate);
+                                                float x = i;
+                                                entryList.add(new Entry(x, y));
+                                            }
                                         }
-                                    } else if (operatorCheck.equals("*")) {
-                                        for (float i = START_NUM; i < RANGE; i += STEP) {
-                                            float y = (float) tan(i) * Integer.parseInt(behindCalculate);
-                                            float x = i;
-                                            entryList.add(new Entry(x, y));
-                                        }
-                                    } else if (operatorCheck.equals("/")) {
-                                        for (float i = START_NUM; i < RANGE; i += STEP) {
-                                            float y = (float) tan(i) / Integer.parseInt(behindCalculate);
-                                            float x = i;
-                                            entryList.add(new Entry(x, y));
+                                    } else if (xFirstFront.charAt(1) == 't') {
+                                        if (operatorCheck.equals("+")) {
+                                            for (float i = START_NUM; i < RANGE; i += STEP) {
+                                                float y = (float) tan(i) + 2;
+                                                float x = i;
+                                                entryList.add(new Entry(x, y));
+                                            }
+                                        } else if (operatorCheck.equals("-")) {
+                                            for (float i = START_NUM; i < RANGE; i += STEP) {
+                                                float y = (float) tan(i) - Integer.parseInt(behindCalculate);
+                                                float x = i;
+                                                entryList.add(new Entry(x, y));
+                                            }
+                                        } else if (operatorCheck.equals("*")) {
+                                            for (float i = START_NUM; i < RANGE; i += STEP) {
+                                                float y = (float) tan(i) * Integer.parseInt(behindCalculate);
+                                                float x = i;
+                                                entryList.add(new Entry(x, y));
+                                            }
+                                        } else if (operatorCheck.equals("/")) {
+                                            for (float i = START_NUM; i < RANGE; i += STEP) {
+                                                float y = (float) tan(i) / Integer.parseInt(behindCalculate);
+                                                float x = i;
+                                                entryList.add(new Entry(x, y));
+                                            }
                                         }
                                     }
                                 }
@@ -273,9 +303,10 @@ public class GraphAsyncTask extends AsyncTask<String, Void, ArrayList<Entry>> {
 //                Log.v("xStringMinus", "xStringMinus : " + xStringMinus);
 
                         } else if (xFirstFront.equals("")) {    //루트랑 스퀘어 추가 생각 필요
+                            Log.i(GRAPH_LOG_TAG, "behindCalculate = " + behindCalculate);
                             if (operatorCheck.equals("+")) {
                                 for (float i = START_NUM; i < RANGE; i += STEP) {
-                                    float y = i + 2;
+                                    float y = i + Integer.parseInt(behindCalculate);
                                     float x = i;
                                     entryList.add(new Entry(x, y));
                                 }
@@ -343,5 +374,63 @@ public class GraphAsyncTask extends AsyncTask<String, Void, ArrayList<Entry>> {
             if(position == Y_LINE) graphActivity.setXYLineDone(true);
             if(position == FUNCTION_3) graphActivity.setDrawPlay(false);
         }
+    }
+
+    // 부호를 기준으로 잘라서 계산해주는 메서드
+    private int calculationStrNumber(String str) {
+        ArrayList<String> arrayList = new ArrayList<>();
+        Log.i(GRAPH_LOG_TAG, "str " + str);
+        if (str != null && str.length() != 0) {
+
+            // 숫자를 하나로 합쳐서 저장할 변수
+            StringBuffer addNumber = new StringBuffer();
+            for (int i = 0; i < str.length(); i++) {
+                Log.i(GRAPH_LOG_TAG, "str.charAt(i) " + str.charAt(i));
+                // 아스키 코드 문자형식 0~9 는 48~57 이므로 i 번째가 숫자일 때의 조건문을 만듭니다.
+                if (str.charAt(i) > 47 && str.charAt(i) < 58) {
+                    Log.i(GRAPH_LOG_TAG, "if str.charAt(i) > 47 && str.charAt(i) < 58");
+                    addNumber.append(str.charAt(i));
+                }else {
+                    Log.i(GRAPH_LOG_TAG, "addNumber.toString() 2 " + addNumber.toString());
+                    // 숫자가 아니면 합친 숫자문자열을 배열에 저장합니다.
+                    arrayList.add(addNumber.toString());
+                    // StringBuffer 초기화
+
+                    // 아스키코드 '+' == 43
+                    // 아스키코드 '-' == 45
+                    // 아스키코드 '*' == 42
+                    // 아스키코드 '/' == 47
+                    // 아스키코드 소문자 'x' == 120
+                    if (str.charAt(i) == 43 || str.charAt(i) == 45 || str.charAt(i) == 120 || str.charAt(i) == 47) {
+                        String signStr = String.valueOf(str.charAt(i));
+                        arrayList.add(signStr);
+                    }
+                }
+                 if(i == str.length()-1) {
+                    Log.i(GRAPH_LOG_TAG, "addNumber.toString() 1 " + addNumber.toString());
+                    arrayList.add(addNumber.toString());
+                }
+            }
+
+            for(int i = 0; i <arrayList.size(); i++) {
+                Log.i(GRAPH_LOG_TAG, "arrayList.get(i) = " + arrayList.get(i));
+                // 아스키코드 '+' == 43
+                // 아스키코드 '-' == 45
+                // 아스키코드 '*' == 42
+                // 아스키코드 '/' == 47
+                // 아스키코드 소문자 'x' == 120
+                if (str.charAt(i) == 43) {
+
+                } else if (str.charAt(i) == 45) {
+
+                } else if (str.charAt(i) == 120) {
+
+                } else if (str.charAt(i) == 47) {
+
+                }
+            }
+        }
+
+        return -1;
     }
 }
