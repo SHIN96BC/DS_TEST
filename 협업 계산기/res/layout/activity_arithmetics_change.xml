@@ -16,16 +16,13 @@
 
         <include layout="@layout/tool_bar" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="10pt"
-            />
         <TextView
             android:id="@+id/text2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/malgun"
-            android:text="사칙연산계산기"
+            android:text="@string/title_bin"
+            android:textStyle="bold"
             android:textAlignment="center"
             android:textSize="30sp" />
 

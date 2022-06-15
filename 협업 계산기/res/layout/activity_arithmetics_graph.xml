@@ -13,27 +13,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <include
-            layout="@layout/tool_bar"
-            />
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="10pt"
-            />
-        <TextView
-            android:id="@+id/text2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="사칙연산계산기"
-            android:textAlignment="center"
-            android:fontFamily="@font/malgun"
-            android:textSize="30dp" />
+
+        <include layout="@layout/tool_bar" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="2pt"
-            android:background="@color/teal_200"
-            />
+            android:background="@color/teal_200" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -44,12 +30,12 @@
                 android:id="@+id/function1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity=""
                 android:layout_weight="2"
                 android:height="50dp"
                 android:fontFamily="@font/lab"
-                android:textSize="15pt"
-                android:layout_gravity=""
-                android:text="Function"/>
+                android:text="Function"
+                android:textSize="15pt" />
 
             <TextView
                 android:id="@+id/equation1"
@@ -60,25 +46,28 @@
                 android:fontFamily="@font/lab"
                 android:gravity="end"
                 android:maxLength="10"
+                android:text=""
                 android:textSize="20pt"
-                android:text="" />
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"/>
+
             <TextView
                 android:id="@+id/empty1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:height="50dp"
                 android:fontFamily="@font/lab"
+                android:text=""
                 android:textSize="20pt"
-                android:visibility="invisible"
-                android:text="" />
+                android:visibility="invisible" />
         </LinearLayout>
-
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="2pt"
-            android:background="@color/teal_200"
-            />
+            android:background="@color/teal_200" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -88,12 +77,12 @@
                 android:id="@+id/function2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity=""
                 android:layout_weight="2"
                 android:height="50dp"
                 android:fontFamily="@font/lab"
-                android:textSize="15pt"
-                android:layout_gravity=""
-                android:text="Function"/>
+                android:text="Function"
+                android:textSize="15pt" />
 
             <TextView
                 android:id="@+id/equation2"
@@ -104,23 +93,28 @@
                 android:fontFamily="@font/lab"
                 android:gravity="end"
                 android:maxLength="10"
+                android:text=""
                 android:textSize="20pt"
-                android:text="" />
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground" />
+
             <TextView
                 android:id="@+id/empty2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:height="50dp"
                 android:fontFamily="@font/lab"
+                android:text=""
                 android:textSize="20pt"
-                android:visibility="invisible"
-                android:text="" />
+                android:visibility="invisible" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="2pt"
-            android:background="@color/teal_200"
-            />
+            android:background="@color/teal_200" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -130,12 +124,12 @@
                 android:id="@+id/function3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity=""
                 android:layout_weight="2"
                 android:height="50dp"
                 android:fontFamily="@font/lab"
-                android:textSize="15pt"
-                android:layout_gravity=""
-                android:text="Function"/>
+                android:text="Function"
+                android:textSize="15pt" />
 
             <TextView
                 android:id="@+id/equation3"
@@ -146,23 +140,28 @@
                 android:fontFamily="@font/lab"
                 android:gravity="end"
                 android:maxLength="10"
+                android:text=""
                 android:textSize="20pt"
-                android:text="" />
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"/>
+
             <TextView
                 android:id="@+id/empty3"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:height="50dp"
                 android:fontFamily="@font/lab"
+                android:text=""
                 android:textSize="20pt"
-                android:visibility="invisible"
-                android:text="" />
+                android:visibility="invisible" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="2pt"
-            android:background="@color/teal_200"
-            />
+            android:background="@color/teal_200" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -183,6 +182,15 @@
                     android:text="←" />
 
                 <Button
+                    android:id="@+id/sqrBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_color_selector"
+                    android:text="x²" />
+
+                <Button
                     android:id="@+id/sinBtn"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -191,15 +199,6 @@
                     android:background="@drawable/btn_color_selector"
                     android:text="sin"
                     android:textAllCaps="false" />
-
-                <Button
-                    android:id="@+id/sqrBtn"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/btn_color_selector"
-                    android:text="x²" />
 
                 <Button
                     android:id="@+id/numBtn7"
@@ -254,16 +253,6 @@
                     android:text="C" />
 
                 <Button
-                    android:id="@+id/cosBtn"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/btn_color_selector"
-                    android:text="cos"
-                    android:textAllCaps="false" />
-
-                <Button
                     android:id="@+id/rootBtn"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -271,6 +260,16 @@
                     android:layout_weight="1"
                     android:background="@drawable/btn_color_selector"
                     android:text="√x"
+                    android:textAllCaps="false" />
+
+                <Button
+                    android:id="@+id/cosBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_color_selector"
+                    android:text="cos"
                     android:textAllCaps="false" />
 
                 <Button
@@ -301,13 +300,14 @@
                     android:text="2" />
 
                 <Button
-                    android:id="@+id/dotBtn"
+                    android:id="@+id/xBtn"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/btn_color_selector"
-                    android:text="." />
+                    android:text="X" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -317,13 +317,20 @@
                 android:orientation="vertical">
 
                 <Button
-                    android:id="@+id/xBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_color_selector" />
+
+                <Button
+                    android:id="@+id/graphBtn"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/btn_color_selector"
-                    android:text="X" />
+                    android:text="Graph" />
 
                 <Button
                     android:id="@+id/tanBtn"
@@ -333,16 +340,6 @@
                     android:layout_weight="1"
                     android:background="@drawable/btn_color_selector"
                     android:text="tan"
-                    android:textAllCaps="false" />
-
-                <Button
-                    android:id="@+id/bracketBtn"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/btn_color_selector"
-                    android:text="( )"
                     android:textAllCaps="false" />
 
                 <Button
@@ -373,13 +370,13 @@
                     android:text="3" />
 
                 <Button
-                    android:id="@+id/equalBtn"
+                    android:id="@+id/yBtn"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/btn_color_selector"
-                    android:text="=" />
+                    android:text="Y" />
             </LinearLayout>
 
             <LinearLayout
@@ -389,15 +386,12 @@
                 android:orientation="vertical">
 
                 <Button
-                    android:id="@+id/yBtn"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/btn_color_selector"
-                    android:text="Y" />
-
-
+                    tools:ignore="NestedWeights" />
 
                 <Button
                     android:id="@+id/homeBtn"
@@ -406,15 +400,8 @@
                     android:layout_margin="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/btn_color_selector"
-                    android:text="Home"/>
-                <Button
-                    android:id="@+id/graphBtn"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/btn_color_selector"
-                    android:text="Graph"/>
+                    android:text="@string/home" />
+
                 <Button
                     android:id="@+id/addBtn"
                     android:layout_width="match_parent"
@@ -422,7 +409,7 @@
                     android:layout_margin="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/btn_color_selector"
-                    android:text="+" />
+                    android:text="@string/plu" />
 
                 <Button
                     android:id="@+id/subBtn"
@@ -431,7 +418,7 @@
                     android:layout_margin="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/btn_color_selector"
-                    android:text="-" />
+                    android:text="@string/minus" />
 
                 <Button
                     android:id="@+id/mulBtn"
@@ -440,7 +427,7 @@
                     android:layout_margin="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/btn_color_selector"
-                    android:text="*" />
+                    android:text="@string/mul" />
 
                 <Button
                     android:id="@+id/divBtn"
@@ -449,16 +436,25 @@
                     android:layout_margin="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/btn_color_selector"
-                    android:text="/" />
+                    android:text="@string/divide" />
+
+                <Button
+                    android:id="@+id/equalBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_color_selector"
+                    android:text="@string/equ" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigation_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        android:id="@+id/navigation_view"
         android:layout_gravity="left"
-        app:menu="@menu/tool_bar_menu"/>
+        android:fitsSystemWindows="true"
+        app:menu="@menu/tool_bar_menu" />
 </androidx.drawerlayout.widget.DrawerLayout>
