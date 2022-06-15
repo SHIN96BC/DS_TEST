@@ -15,7 +15,7 @@ public class Constants {
     public static final String X_String = "x";
     public static final String Y_String = "y";
     public static final float START_NUM = -10.00f;
-    public static final float RANGE = 20f;
+    public static final float RANGE = 10f;
     public static final float STEP = 0.01f;
 
 

@@ -427,7 +427,7 @@ public class GraphActivity extends AppCompatActivity implements View.OnClickList
         LineData lineData = new LineData(dataSets);
         chart.setData(lineData);
         chart.notifyDataSetChanged();
-        chart.moveViewTo(0.0f, 0.0f, YAxis.AxisDependency.LEFT);
+//        chart.moveViewTo(0.0f, 0.0f, YAxis.AxisDependency.LEFT);
         chart.invalidate();
         if(CHECK_LOG) Log.i(GRAPH_LOG_TAG, "dataSets = " + dataSets);
     }
