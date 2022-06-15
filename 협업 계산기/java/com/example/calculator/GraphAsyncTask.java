@@ -101,8 +101,6 @@ public class GraphAsyncTask extends AsyncTask<String, Void, ArrayList<Entry>> {
                     /* x뒤에 붙어 있는 계산 및 연산 String 확인 */
                     String xFirstBehind = functionDeleteEqualY.substring(firstFindXTest + 1).trim();
                     String xFirstBehindNumber = xFirstBehind.replaceAll("[^0-9]", "");
-                    Log.v(GRAPH_LOG_TAG, "xFirstBehind : " + xFirstBehind);
-                    Log.v(GRAPH_LOG_TAG, "xFirstBehindNumber : " + xFirstBehindNumber);
 
                     /* 연산 String 을 Parsing 하여 계산 */
                     String[] xFirstBehindArray = xFirstBehind.split("");
@@ -111,51 +109,10 @@ public class GraphAsyncTask extends AsyncTask<String, Void, ArrayList<Entry>> {
                     String[] strArray = functionStrSplit(xFirstBehind);
                     // 만든 배열을 계산합니다.
                     int behindCalculateResult = calculationStrArray(strArray);
-                    Log.v(GRAPH_LOG_TAG, "behindCalculateResult : " + behindCalculateResult);
 
                     String xFirstBehindCalculate = "";
 
-                    for(int i = 0; i < xFirstBehindArray.length; i++) {
-                        Log.i(GRAPH_LOG_TAG, "xFirstBehindArray["+ i + "] = " + xFirstBehindArray[i]);
-                    }
 
-                    Log.i(GRAPH_LOG_TAG, "xFirstBehindArray.length = " + xFirstBehindArray.length);
-
-//                    if (xFirstBehindArray.length >= 4) {
-//                        Log.i(GRAPH_LOG_TAG, "if(xFirstBehindArray.length >= 4)");
-//                        Log.i(GRAPH_LOG_TAG, "if(xFirstBehindArray.length >= 4) ---> xFirstBehindArray[3] = " + xFirstBehindArray[3]);
-//                        for(int i = 2; i < xFirstBehindArray.length; i++) {
-//                            // 하나씩 분리된 숫자를 하나로 합치기 위한 변수 입니다.
-//                            int firstAddNumber = 0;
-//                            int lastAddNumber = 0;
-//                            switch (xFirstBehindArray[3]) {
-//                                case "+":
-//                                    firstAddNumber += lastAddNumber;
-//                                    // 계산후에는 다시 변수를 0으로 만들어줍니다.
-//                                    lastAddNumber = 0;
-//                                    break;
-//                                case "-":
-//                                    firstAddNumber -= lastAddNumber;
-//                                    lastAddNumber = 0;
-//                                    break;
-//                                case "*":
-//                                    firstAddNumber *= lastAddNumber;
-//                                    lastAddNumber = 0;
-//                                    break;
-//                                case "/":
-//                                    firstAddNumber /= lastAddNumber;
-//                                    lastAddNumber = 0;
-//                                    break;
-//                                default:
-//                                    // 아스키 코드 문자형식 0~9 는 48~57 이므로 i 번째가 숫자일 때의 조건문을 만듭니다.
-//                                    if(xFirstBehindArray[i].charAt(0) > 47 &&  xFirstBehindArray[i].charAt(0) < 58) {
-//                                        lastAddNumber += Integer.parseInt(xFirstBehindArray[i]);
-//                                    }
-//                            }
-//                        }
-//                    } else if (xFirstBehindArray.length >= 3) {
-//                        behindCalculateResult = Integer.parseInt(xFirstBehindArray[2]);
-//                    }
                     String behindCalculate = Integer.toString(behindCalculateResult);
 
                     /* x앞에 오는 값이 숫자인지 문자인지 확인 */
@@ -311,7 +268,6 @@ public class GraphAsyncTask extends AsyncTask<String, Void, ArrayList<Entry>> {
 //                Log.v("xStringMinus", "xStringMinus : " + xStringMinus);
 
                         } else if (xFirstFront.equals("")) {    //루트랑 스퀘어 추가 생각 필요
-                            Log.i(GRAPH_LOG_TAG, "behindCalculate = " + behindCalculate);
                             if (operatorCheck.equals("+")) {
                                 for (float i = START_NUM; i < RANGE; i += STEP) {
                                     float y = i + Integer.parseInt(behindCalculate);
@@ -341,7 +297,6 @@ public class GraphAsyncTask extends AsyncTask<String, Void, ArrayList<Entry>> {
                     }
                 }
             }
-
         }
         return entryList;
     }
@@ -386,9 +341,6 @@ public class GraphAsyncTask extends AsyncTask<String, Void, ArrayList<Entry>> {
 
     // (sbc) 문자열을 부호를 기준으로 잘라서 배열로 만드는 메서드
     private String[] functionStrSplit(String str) {
-
-        Log.v(GRAPH_LOG_TAG, "functionStrSplit str = " + str);
-
         ArrayList<String> arrayList = new ArrayList<>();
         String[] strArray = null;
         if (str != null && str.length() != 0) {
@@ -444,38 +396,6 @@ public class GraphAsyncTask extends AsyncTask<String, Void, ArrayList<Entry>> {
         }
 
         String[] sortArray = infixToPostfix(strArray);
-
-        /*
-        for(int i = 0; i < sortArray.length; i++) {
-            // result 값이 초기값일 때 i 번째가 숫자라면 result 에 값을 저장합니다.
-            if(result == -1) {
-                if(sortArray[i].charAt(0) > 47 && sortArray[i].charAt(0) < 58){
-                    result = Integer.parseInt(sortArray[i]);
-                    continue;
-                }
-            }
-
-            // 아스키코드 '+' == 43
-            // 아스키코드 '-' == 45
-            // 아스키코드 '*' == 42
-            // 아스키코드 '/' == 47
-            // 아스키코드 소문자 'x' == 120
-            if (sortArray[i].charAt(0) == 43) {
-                result += Integer.parseInt(sortArray[i+1]);
-                i++;
-            }else if(sortArray[i].charAt(0) == 45) {
-                result -= Integer.parseInt(sortArray[i+1]);
-                i++;
-            }else if(sortArray[i].charAt(0) == 120) {
-                result *= Integer.parseInt(sortArray[i+1]);
-                i++;
-            }else if(sortArray[i].charAt(0) == 47) {
-                result /= Integer.parseInt(sortArray[i+1]);
-                i++;
-            }
-        }
-        return result;
-         */
         return postFixEval(sortArray);
     }
 
@@ -544,11 +464,6 @@ public class GraphAsyncTask extends AsyncTask<String, Void, ArrayList<Entry>> {
 
     //후위 표기식을 계산
     private int postFixEval(String[] expr) {
-
-        for(String str: expr) {
-            Log.v(GRAPH_LOG_TAG, "postFixEval str = "+str);
-        }
-
         //(shin) stack 하나로 모든 계산을 수행했더니 +, - 가 뒤에서부터 계산되어서 결과값이 맞지않는 문제가 있어서 Deque 과 stack 을 사용한 방법으로 수정
         Stack<String> plusMinusStack = new Stack();
         Deque<String> numberStack = new ArrayDeque();
@@ -571,9 +486,7 @@ public class GraphAsyncTask extends AsyncTask<String, Void, ArrayList<Entry>> {
             if (o.equals("+") || o.equals("-")) {
                 plusMinusStack.push(o);
             } else if (o.equals("*")) {
-                Log.v(GRAPH_LOG_TAG, "num1 numberStack.peekLast() = " + numberStack.peekLast());
                 num1 = Integer.parseInt(numberStack.pollLast());
-                Log.v(GRAPH_LOG_TAG, "num2 numberStack.peekLast() = " + numberStack.peekLast());
                 num2 = Integer.parseInt(numberStack.pollLast());
                 numberStack.addLast(Integer.toString(num2 * num1));
             } else if (o.equals("/")) {
@@ -586,9 +499,7 @@ public class GraphAsyncTask extends AsyncTask<String, Void, ArrayList<Entry>> {
         while (plusMinusStack.size() != 0) {
             String o = plusMinusStack.pop();
             if (o.equals("+")) {
-                Log.v(GRAPH_LOG_TAG, "num3 numberStack.peekLast() = " + numberStack.peekLast());
                 num1 = Integer.parseInt(numberStack.pollLast());
-                Log.v(GRAPH_LOG_TAG, "num4 numberStack.peekLast() = " + numberStack.peekLast());
                 num2 = Integer.parseInt(numberStack.pollLast());
                 numberStack.push(Integer.toString(num1 + num2));
             } else if (o.equals("-")) {
