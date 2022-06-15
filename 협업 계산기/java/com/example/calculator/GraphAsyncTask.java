@@ -27,6 +27,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /*
@@ -62,13 +63,13 @@ public class GraphAsyncTask extends AsyncTask<String, Void, ArrayList<Entry>> {
         ArrayList<Entry> entryList = new ArrayList<>();
         if(function != null && activity != null && function.length() != 0) {
             if(position == X_LINE) {
-                for (float i = -10.00f; i < 20; i += 0.01f) {
+                for (float i = -50.00f; i < 50; i += 0.01f) {
                     float y = i;
                     float x = 0;
                     entryList.add(new Entry(x, y));
                 }
             }else if(position == Y_LINE) {
-                for (float i = -10.00f; i < 20; i += 0.01f) {
+                for (float i = -50.00f; i < 50; i += 0.01f) {
                     float y = 0;
                     float x = i;
                     entryList.add(new Entry(x, y));
@@ -102,10 +103,12 @@ public class GraphAsyncTask extends AsyncTask<String, Void, ArrayList<Entry>> {
                     /* 연산 String 을 Parsing 하여 계산 */
                     String[] xFirstBehindArray = xFirstBehind.split("");
 
-                    calculationStrNumber(xFirstBehind);
+                    // x 뒤에 오는 계산식 String 값을 배열로 만듭니다.
+                    String[] strArray = functionStrSplit(xFirstBehind);
+                    // 만든 배열을 계산합니다.
+                    int behindCalculateResult = calculationStrArray(strArray);
 
                     String xFirstBehindCalculate = "";
-                    int behindCalculateResult = 0;
 
                     for(int i = 0; i < xFirstBehindArray.length; i++) {
                         Log.i(GRAPH_LOG_TAG, "xFirstBehindArray["+ i + "] = " + xFirstBehindArray[i]);
@@ -222,7 +225,7 @@ public class GraphAsyncTask extends AsyncTask<String, Void, ArrayList<Entry>> {
                                     if (xFirstFront.charAt(1) == 's') {
                                         if (operatorCheck.equals("+")) {
                                             for (float i = START_NUM; i < RANGE; i += STEP) {
-                                                float y = (float) sin(i) + 2;
+                                                float y = (float) sin(i) + Integer.parseInt(behindCalculate);
                                                 float x = i;
                                                 entryList.add(new Entry(x, y));
                                             }
@@ -248,7 +251,7 @@ public class GraphAsyncTask extends AsyncTask<String, Void, ArrayList<Entry>> {
                                     } else if (xFirstFront.charAt(1) == 'c') {
                                         if (operatorCheck.equals("+")) {
                                             for (float i = START_NUM; i < RANGE; i += STEP) {
-                                                float y = (float) cos(i) + 2;
+                                                float y = (float) cos(i) + Integer.parseInt(behindCalculate);
                                                 float x = i;
                                                 entryList.add(new Entry(x, y));
                                             }
@@ -274,7 +277,7 @@ public class GraphAsyncTask extends AsyncTask<String, Void, ArrayList<Entry>> {
                                     } else if (xFirstFront.charAt(1) == 't') {
                                         if (operatorCheck.equals("+")) {
                                             for (float i = START_NUM; i < RANGE; i += STEP) {
-                                                float y = (float) tan(i) + 2;
+                                                float y = (float) tan(i) + Integer.parseInt(behindCalculate);
                                                 float x = i;
                                                 entryList.add(new Entry(x, y));
                                             }
@@ -376,25 +379,25 @@ public class GraphAsyncTask extends AsyncTask<String, Void, ArrayList<Entry>> {
         }
     }
 
-    // 부호를 기준으로 잘라서 계산해주는 메서드
-    private int calculationStrNumber(String str) {
+    // (sbc) 문자열을 부호를 기준으로 잘라서 배열로 만드는 메서드
+    private String[] functionStrSplit(String str) {
         ArrayList<String> arrayList = new ArrayList<>();
-        Log.i(GRAPH_LOG_TAG, "str " + str);
+        String[] strArray = null;
         if (str != null && str.length() != 0) {
 
             // 숫자를 하나로 합쳐서 저장할 변수
             StringBuffer addNumber = new StringBuffer();
             for (int i = 0; i < str.length(); i++) {
-                Log.i(GRAPH_LOG_TAG, "str.charAt(i) " + str.charAt(i));
+                // 공백이 있는경우 스킵
+                if(str.charAt(i) == ' ') continue;
                 // 아스키 코드 문자형식 0~9 는 48~57 이므로 i 번째가 숫자일 때의 조건문을 만듭니다.
                 if (str.charAt(i) > 47 && str.charAt(i) < 58) {
-                    Log.i(GRAPH_LOG_TAG, "if str.charAt(i) > 47 && str.charAt(i) < 58");
                     addNumber.append(str.charAt(i));
                 }else {
-                    Log.i(GRAPH_LOG_TAG, "addNumber.toString() 2 " + addNumber.toString());
                     // 숫자가 아니면 합친 숫자문자열을 배열에 저장합니다.
                     arrayList.add(addNumber.toString());
-                    // StringBuffer 초기화
+                    // StringBuffer 를 초기화 합니다.
+                    addNumber.setLength(0);
 
                     // 아스키코드 '+' == 43
                     // 아스키코드 '-' == 45
@@ -407,30 +410,69 @@ public class GraphAsyncTask extends AsyncTask<String, Void, ArrayList<Entry>> {
                     }
                 }
                  if(i == str.length()-1) {
-                    Log.i(GRAPH_LOG_TAG, "addNumber.toString() 1 " + addNumber.toString());
                     arrayList.add(addNumber.toString());
                 }
             }
 
-            for(int i = 0; i <arrayList.size(); i++) {
-                Log.i(GRAPH_LOG_TAG, "arrayList.get(i) = " + arrayList.get(i));
-                // 아스키코드 '+' == 43
-                // 아스키코드 '-' == 45
-                // 아스키코드 '*' == 42
-                // 아스키코드 '/' == 47
-                // 아스키코드 소문자 'x' == 120
-                if (str.charAt(i) == 43) {
+            // list 에서 공백을 모두 제거합니다
+            /* ArrayList 의 removeAll 메서드는 파라미터값으로 넣은 컬렉션에 포함된 모든 요소를 삭제하는 메서드입니다.
+                거기서 Arrays 의 간단하게 컬렉션을 만들어주는 asList 메서드를 사용해서 파라미터에 지우고 싶은 값들을 넣습니다.
+             */
+            arrayList.removeAll(Arrays.asList("", null, " "));
 
-                } else if (str.charAt(i) == 45) {
+            strArray = new String[arrayList.size()];
+            for(int i = 0; i < arrayList.size(); i++) {
+                strArray[i] = arrayList.get(i);
+            }
+            arrayList = null;
+        }
+        return strArray;
+    }
 
-                } else if (str.charAt(i) == 120) {
+    // (sbc) 계산해주는 메서드
+    private int calculationStrArray(String[] strArray) {
+        int result = -1;
 
-                } else if (str.charAt(i) == 47) {
+        for(int i = 0; i < strArray.length; i++) {
 
+            // 첫번째 부호가 - 면 음수로 만듭니다.
+            if(i == 0) {
+                if(strArray[0].charAt(0) == 45) {
+                    strArray[1] = strArray[0] + strArray[1];
+                    continue;
+                }else if(strArray[0].charAt(0) == 43 || strArray[0].charAt(0) == 120 || strArray[0].charAt(0) == 47){
+                    continue;
                 }
             }
-        }
 
-        return -1;
+
+            // result 값이 초기값일 때 i 번째가 숫자라면 result 에 값을 저장합니다.
+            if(result == -1) {
+                if(strArray[i].charAt(0) > 47 && strArray[i].charAt(0) < 58){
+                    result = Integer.parseInt(strArray[i]);
+                    continue;
+                }
+            }
+
+            // 아스키코드 '+' == 43
+            // 아스키코드 '-' == 45
+            // 아스키코드 '*' == 42
+            // 아스키코드 '/' == 47
+            // 아스키코드 소문자 'x' == 120
+            if (strArray[i].charAt(0) == 43) {
+                result += Integer.parseInt(strArray[i+1]);
+                i++;
+            }else if(strArray[i].charAt(0) == 45) {
+                result -= Integer.parseInt(strArray[i+1]);
+                i++;
+            }else if(strArray[i].charAt(0) == 120) {
+                result *= Integer.parseInt(strArray[i+1]);
+                i++;
+            }else if(strArray[i].charAt(0) == 47) {
+                result /= Integer.parseInt(strArray[i+1]);
+                i++;
+            }
+        }
+        return result;
     }
 }
