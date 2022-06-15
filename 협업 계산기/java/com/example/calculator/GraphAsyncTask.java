@@ -26,9 +26,13 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Deque;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Stack;
 
 /*
  AsyncTask 는 비동기 작업을 수행하기위해 사용됩니다.
@@ -107,6 +111,7 @@ public class GraphAsyncTask extends AsyncTask<String, Void, ArrayList<Entry>> {
                     String[] strArray = functionStrSplit(xFirstBehind);
                     // 만든 배열을 계산합니다.
                     int behindCalculateResult = calculationStrArray(strArray);
+                    Log.v(GRAPH_LOG_TAG, "behindCalculateResult : " + behindCalculateResult);
 
                     String xFirstBehindCalculate = "";
 
@@ -381,6 +386,9 @@ public class GraphAsyncTask extends AsyncTask<String, Void, ArrayList<Entry>> {
 
     // (sbc) 문자열을 부호를 기준으로 잘라서 배열로 만드는 메서드
     private String[] functionStrSplit(String str) {
+
+        Log.v(GRAPH_LOG_TAG, "functionStrSplit str = " + str);
+
         ArrayList<String> arrayList = new ArrayList<>();
         String[] strArray = null;
         if (str != null && str.length() != 0) {
@@ -404,7 +412,7 @@ public class GraphAsyncTask extends AsyncTask<String, Void, ArrayList<Entry>> {
                     // 아스키코드 '*' == 42
                     // 아스키코드 '/' == 47
                     // 아스키코드 소문자 'x' == 120
-                    if (str.charAt(i) == 43 || str.charAt(i) == 45 || str.charAt(i) == 120 || str.charAt(i) == 47) {
+                    if (str.charAt(i) == 43 || str.charAt(i) == 45 || str.charAt(i) == 42 || str.charAt(i) == 47) {
                         String signStr = String.valueOf(str.charAt(i));
                         arrayList.add(signStr);
                     }
@@ -419,37 +427,30 @@ public class GraphAsyncTask extends AsyncTask<String, Void, ArrayList<Entry>> {
                 거기서 Arrays 의 간단하게 컬렉션을 만들어주는 asList 메서드를 사용해서 파라미터에 지우고 싶은 값들을 넣습니다.
              */
             arrayList.removeAll(Arrays.asList("", null, " "));
-
-            strArray = new String[arrayList.size()];
-            for(int i = 0; i < arrayList.size(); i++) {
-                strArray[i] = arrayList.get(i);
-            }
-            arrayList = null;
         }
-        return strArray;
+        return changeListIntoStringArray(arrayList);
     }
 
     // (sbc) 계산해주는 메서드
     private int calculationStrArray(String[] strArray) {
         int result = -1;
 
-        for(int i = 0; i < strArray.length; i++) {
+        // 첫번째 부호가 - 면 음수로 만듭니다.
+        if(strArray[0].charAt(0) == 45) {
+            strArray[1] = strArray[0] + strArray[1];
+            strArray[0] = "";
+        }else if(strArray[0].charAt(0) == 43 || strArray[0].charAt(0) == 42 || strArray[0].charAt(0) == 47){
+            strArray[0] = "";
+        }
 
-            // 첫번째 부호가 - 면 음수로 만듭니다.
-            if(i == 0) {
-                if(strArray[0].charAt(0) == 45) {
-                    strArray[1] = strArray[0] + strArray[1];
-                    continue;
-                }else if(strArray[0].charAt(0) == 43 || strArray[0].charAt(0) == 120 || strArray[0].charAt(0) == 47){
-                    continue;
-                }
-            }
+        String[] sortArray = infixToPostfix(strArray);
 
-
+        /*
+        for(int i = 0; i < sortArray.length; i++) {
             // result 값이 초기값일 때 i 번째가 숫자라면 result 에 값을 저장합니다.
             if(result == -1) {
-                if(strArray[i].charAt(0) > 47 && strArray[i].charAt(0) < 58){
-                    result = Integer.parseInt(strArray[i]);
+                if(sortArray[i].charAt(0) > 47 && sortArray[i].charAt(0) < 58){
+                    result = Integer.parseInt(sortArray[i]);
                     continue;
                 }
             }
@@ -459,20 +460,156 @@ public class GraphAsyncTask extends AsyncTask<String, Void, ArrayList<Entry>> {
             // 아스키코드 '*' == 42
             // 아스키코드 '/' == 47
             // 아스키코드 소문자 'x' == 120
-            if (strArray[i].charAt(0) == 43) {
-                result += Integer.parseInt(strArray[i+1]);
+            if (sortArray[i].charAt(0) == 43) {
+                result += Integer.parseInt(sortArray[i+1]);
                 i++;
-            }else if(strArray[i].charAt(0) == 45) {
-                result -= Integer.parseInt(strArray[i+1]);
+            }else if(sortArray[i].charAt(0) == 45) {
+                result -= Integer.parseInt(sortArray[i+1]);
                 i++;
-            }else if(strArray[i].charAt(0) == 120) {
-                result *= Integer.parseInt(strArray[i+1]);
+            }else if(sortArray[i].charAt(0) == 120) {
+                result *= Integer.parseInt(sortArray[i+1]);
                 i++;
-            }else if(strArray[i].charAt(0) == 47) {
-                result /= Integer.parseInt(strArray[i+1]);
+            }else if(sortArray[i].charAt(0) == 47) {
+                result /= Integer.parseInt(sortArray[i+1]);
                 i++;
             }
         }
         return result;
+         */
+        return postFixEval(sortArray);
+    }
+
+    //후위 표기식으로 변형
+    private String[] infixToPostfix(String[] inputData) {
+        ArrayList result = new ArrayList();
+        HashMap level = new HashMap();
+        Stack stack = new Stack();
+
+        //각 기호의 우선순위 레벨. 곱하기, 나누기 > 더하기, 빼기 > 기타
+        level.put("*", 3);
+        level.put("/", 3);
+        level.put("+", 2);
+        level.put("-", 2);
+        level.put("(", 1);
+
+        for (Object object : inputData) {
+            // 배열이 공백일때는 패스
+            String objStr = (String)object;
+            if(objStr == null || objStr.trim().length() == 0) continue;
+            if (object.equals("(")) {
+                stack.push(object);
+            } else if (object.equals(")")) {
+                while (!stack.peek().equals("(")) {
+                    Object val = stack.pop();
+                    if (!val.equals("(")) {
+                        result.add(val);
+                    }
+                }
+                stack.pop();
+            } else if (level.containsKey(object)) {
+                if (stack.isEmpty()) {
+                    stack.push(object);
+                } else {
+                    // 여기서 level 을 나타내는 숫자들로 비교를 하다보니, + 와 - 부호의 순서가 맞지않는 현상이 발생했다.
+                    // 해결: - 부호와 + 부호를 비교할때 >= 는 비교식 때문에 -가 배열로 들어가버려서 생기는 문제였다. 비교식을 > 로 변경했다.
+                    // 문제: 비교식을 > 로 수정하면 * 와 / 를 비교할때 배열에 남아있게되는 문제가 발생한다.
+                    // 해결: if 문을 사용해서 * / 일때와 + - 일때의 처리를 다르게 해준다.
+                    // 아스키 코드 120 == x , 47 == /
+                    if(stack.peek().toString().charAt(0) == 42 || stack.peek().toString().charAt(0) == 47) {
+                        if (Integer.parseInt(level.get(stack.peek()).toString()) >= Integer.parseInt(level.get(object).toString())) {
+                            result.add(stack.pop());
+                        }
+                    }else{
+                        if (Integer.parseInt(level.get(stack.peek()).toString()) > Integer.parseInt(level.get(object).toString())) {
+                            result.add(stack.pop());
+                        }
+                    }
+                    stack.push(object);
+                }
+            } else {
+                result.add(object);
+            }
+        }
+
+        while (!stack.isEmpty()) {
+            result.add(stack.pop());
+        }
+
+        return changeListIntoStringArray(result);
+    }
+
+    public static int num1;
+    public static int num2;
+    public static int resultNumber;
+
+    //후위 표기식을 계산
+    private int postFixEval(String[] expr) {
+
+        for(String str: expr) {
+            Log.v(GRAPH_LOG_TAG, "postFixEval str = "+str);
+        }
+
+        //(shin) stack 하나로 모든 계산을 수행했더니 +, - 가 뒤에서부터 계산되어서 결과값이 맞지않는 문제가 있어서 Deque 과 stack 을 사용한 방법으로 수정
+        Stack<String> plusMinusStack = new Stack();
+        Deque<String> numberStack = new ArrayDeque();
+        for (String o : expr) {
+
+            if (o.charAt(0) > 47 && o.charAt(0) < 58) {
+                // Deque 은 push 와 pop 을 하게 되면 맨 앞에서부터 넣고 빼고 하므로 addLast 나 add 메서드를 사용해야한다.
+                numberStack.addLast(o);
+                continue;
+            }else if(o.charAt(0) == 45) {
+                // 음수를 charAt 하니까 - 가 걸려서 음수가 숫자로 처리되지 않아서 if 문 추가
+                if(o.length() > 1) {
+                    if(o.charAt(1) > 47 && o.charAt(1) < 58) {
+                        numberStack.addLast(o);
+                        continue;
+                    }
+                }
+            }
+
+            if (o.equals("+") || o.equals("-")) {
+                plusMinusStack.push(o);
+            } else if (o.equals("*")) {
+                Log.v(GRAPH_LOG_TAG, "num1 numberStack.peekLast() = " + numberStack.peekLast());
+                num1 = Integer.parseInt(numberStack.pollLast());
+                Log.v(GRAPH_LOG_TAG, "num2 numberStack.peekLast() = " + numberStack.peekLast());
+                num2 = Integer.parseInt(numberStack.pollLast());
+                numberStack.addLast(Integer.toString(num2 * num1));
+            } else if (o.equals("/")) {
+                num1 = Integer.parseInt(numberStack.pollLast());
+                num2 = Integer.parseInt(numberStack.pollLast());
+                numberStack.addLast(Integer.toString(num2 / num1));
+            }
+        }
+        // 스텍은 뒤에서부터 꺼내고, 숫자는 앞에서 부터 꺼낸다.(+ - 는 왼쪽부터 계산)
+        while (plusMinusStack.size() != 0) {
+            String o = plusMinusStack.pop();
+            if (o.equals("+")) {
+                Log.v(GRAPH_LOG_TAG, "num3 numberStack.peekLast() = " + numberStack.peekLast());
+                num1 = Integer.parseInt(numberStack.pollLast());
+                Log.v(GRAPH_LOG_TAG, "num4 numberStack.peekLast() = " + numberStack.peekLast());
+                num2 = Integer.parseInt(numberStack.pollLast());
+                numberStack.push(Integer.toString(num1 + num2));
+            } else if (o.equals("-")) {
+                num1 = Integer.parseInt(numberStack.pollLast());
+                num2 = Integer.parseInt(numberStack.pollLast());
+                numberStack.push(Integer.toString(num1 - num2));
+            }
+        }
+
+        resultNumber = Integer.parseInt(numberStack.pollLast());;
+
+        return resultNumber;
+    }
+
+    // List 를 String 배열로 바꾸는 메서드
+    private String[] changeListIntoStringArray(List<String> list) {
+        String[] strArray = new String[list.size()];
+        for(int i = 0; i < list.size(); i++) {
+            if(list.get(i).equals(" ")) continue;
+            strArray[i] = list.get(i);
+        }
+        return strArray;
     }
 }
