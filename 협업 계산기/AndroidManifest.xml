@@ -10,15 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
         <activity
-            android:name="com.example.calculator.GraphActivity"
+            android:name=".GraphActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="false" />
         <activity
-            android:name="com.example.calculator.Arithmetics_Graph"
+            android:name=".Arithmetics_Graph"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="false" />
         <activity
-            android:name="com.example.calculator.Arithmetics"
+            android:name=".Arithmetics"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="true">
             <intent-filter>
@@ -28,10 +28,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.calculator.Arithmetics_Change"
+            android:name=".Arithmetics_Change"
             android:configChanges="orientation|screenSize|keyboardHidden" />
-        <activity android:name="com.example.calculator.DateArithmetics" />
-
+        <activity android:name=".DateArithmetics" />
     </application>
 
 </manifest>

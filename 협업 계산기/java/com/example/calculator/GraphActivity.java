@@ -44,8 +44,6 @@ public class GraphActivity extends AppCompatActivity implements View.OnClickList
     private Button graph;
     private String function1, function2, function3, empty1, empty2, empty3;
 
-
-
     GraphAsyncTask graphAsyncTaskX;
     GraphAsyncTask graphAsyncTaskY;
     GraphAsyncTask graphAsyncTask1;

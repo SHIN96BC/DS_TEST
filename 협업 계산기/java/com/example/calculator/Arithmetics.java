@@ -20,23 +20,21 @@ import com.google.android.material.navigation.NavigationView;
 
 
 public class Arithmetics extends AppCompatActivity {  //터치따로
-    private CalculateHelper calculateHelper;
+    private CalculateHelper calculateHelper;                        //계산 class
 
-    private boolean isDot, isBracket, isPreview;
+    private boolean isDot, isBracket, isPreview;                    //정수 실수, 괄호, 계산처리에 대한 논리 연산자
 
-    private TextView edit_result, edit_process, edit_arith;
+    private TextView edit_result, edit_process, edit_arith;         //계산 과정, 결과 , 부호 View
 
-    private int size;
+    private String result;                                          //return 결과 값
 
-    private String result;
+    private View view;                                              //버튼 클릭 효과 처리할 view값
 
-    private View view;
+    private Runnable runnable_up, runnable_down;                    //Number Touch Thread
 
-    private Runnable runnable_up, runnable_down;
+    private Handler handler_up, handler_down;                       //Number Touch Handler
 
-    private Handler handler_up, handler_down;
-
-    Button[] button = new Button[10];
+    Button[] button = new Button[10];                               //Button
 
     private Button addBtn, subBtn, mulBtn, divBtn, clear, bracket, backBtn, dot, equal, sinBtn, cosBtn, tanBtn, binary, sqr, root, sort, graph;
 
@@ -63,7 +61,6 @@ public class Arithmetics extends AppCompatActivity {  //터치따로
         calculateHelper = new CalculateHelper();
 
         view = null;
-        size = 0;
         int number = 25;
         int t = String.valueOf(Math.sqrt(number)).length();
         Log.d("test", "" + t + " ? " + String.valueOf(Math.sqrt(number)));
@@ -152,6 +149,14 @@ public class Arithmetics extends AppCompatActivity {  //터치따로
     private final Button.OnClickListener numClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            if(!edit_process.getText().toString().equals("")) {
+                if (edit_process.getText().toString().charAt(0) == 's'
+                        || edit_process.getText().toString().charAt(0) == 't'
+                        || edit_process.getText().toString().charAt(0) == 'c') {
+                    Toast.makeText(Arithmetics.this,"Please click C or <-", Toast.LENGTH_LONG).show();
+                    return;
+                }
+            }
             select(view);
             switch (view.getId()) {
                 case R.id.numBtn0:
@@ -195,6 +200,21 @@ public class Arithmetics extends AppCompatActivity {  //터치따로
     private final Button.OnClickListener markClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            if(!(view.getId() == R.id.backBtn ||view.getId() == R.id.clear||view.getId() == R.id.binary||view.getId() == R.id.graph)) {
+                if (!edit_process.getText().toString().equals("")) {
+                    if (edit_process.getText().toString().charAt(0) == 's'
+                            || edit_process.getText().toString().charAt(0) == 't'
+                            || edit_process.getText().toString().charAt(0) == 'c') {
+                        Toast.makeText(Arithmetics.this,"Please click C or <-", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                }
+            }
+            if(edit_process.getText().toString().equals("")){
+                if(!(view.getId() == R.id.subBtn ||view.getId() == R.id.bracket ||view.getId() == R.id.binary||view.getId() == R.id.graph)) {
+                    return;
+                }
+            }
             switch (view.getId()) {
                 case R.id.addBtn:
                     edit_arith.setText(" ");
@@ -237,6 +257,9 @@ public class Arithmetics extends AppCompatActivity {  //터치따로
                     break;
 
                 case R.id.sinBtn:
+                    if(edit_process.getText().toString().equals("")){
+                        return;
+                    }
                     edit_arith.setText(" ");
                     String sin = edit_process.getText().toString();
                     String sinProcess = "sin(" + sin + ")";
@@ -249,6 +272,9 @@ public class Arithmetics extends AppCompatActivity {  //터치따로
                     break;
 
                 case R.id.cosBtn:
+                    if(edit_process.getText().toString().equals("")){
+                        return;
+                    }
                     edit_arith.setText(" ");
                     String cos = edit_process.getText().toString();
                     String cosProcess = "cos(" + cos + ")";
@@ -261,6 +287,9 @@ public class Arithmetics extends AppCompatActivity {  //터치따로
                     break;
 
                 case R.id.tanBtn:
+                    if(edit_process.getText().toString().equals("")){
+                        return;
+                    }
                     edit_arith.setText(" ");
                     String tan = edit_process.getText().toString();
                     String tanProcess = "tan(" + tan + ")";
@@ -299,8 +328,14 @@ public class Arithmetics extends AppCompatActivity {  //터치따로
                     break;
 
                 case R.id.backBtn:
-                    size = edit_process.getText().length();
-
+                    if(edit_process.getText().toString().charAt(0)=='s'
+                            ||edit_process.getText().toString().charAt(0)=='t'
+                            || edit_process.getText().toString().charAt(0)=='c'){
+                        edit_process.setText("");
+                        edit_result.setText("");
+                        edit_arith.setText("");
+                    }
+                    int size = edit_process.getText().length();
                     if (size != 0)
                         edit_process.setText(edit_process.getText().toString().substring(0, size - 1));
 
@@ -312,7 +347,6 @@ public class Arithmetics extends AppCompatActivity {  //터치따로
                             edit_result.setText("");
                         }
                     }
-
                     break;
 
                 case R.id.dot:
