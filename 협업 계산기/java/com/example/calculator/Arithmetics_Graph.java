@@ -1,5 +1,6 @@
 package com.example.calculator;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -8,9 +9,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -26,6 +29,7 @@ public class Arithmetics_Graph extends AppCompatActivity implements View.OnClick
             xBtn, yBtn, backBtn, clearBtn, graphBtn, homeBtn;
     private Toolbar mainToolBar;
     private ActionBarDrawerToggle drawerToggle;
+    private String checkFunction1, checkFunction2, checkFunction3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +108,9 @@ public class Arithmetics_Graph extends AppCompatActivity implements View.OnClick
         clearBtn.setOnClickListener(this);
         graphBtn.setOnClickListener(this);
         homeBtn.setOnClickListener(this);
+        equation1.setOnClickListener(this);
+        equation2.setOnClickListener(this);
+        equation3.setOnClickListener(this);
     }
 
     // Activity 종료 시 효과 제거
@@ -115,6 +122,13 @@ public class Arithmetics_Graph extends AppCompatActivity implements View.OnClick
 
     @Override
     public void onClick(View view) {
+        if(empty3.getText().toString().equals("1")){
+            if(view.getId() == R.id.graphBtn ||view.getId() == R.id.backBtn || view.getId() == R.id.homeBtn ||view.getId() == R.id.clearBtn){
+                empty3.setText("");
+            }else{
+                return;
+            }
+        }
         switch (view.getId()) {
             case R.id.numBtn0:
                 if (empty1.getText().toString().equals("")) {
@@ -294,35 +308,44 @@ public class Arithmetics_Graph extends AppCompatActivity implements View.OnClick
                 }
             case R.id.sinBtn:
                 if (empty1.getText().toString().equals("")) {
-                    equation1.append("sin");
+                    equation1.setText("y=sinx");
+                    empty1.setText("1");
                     break;
                 } else if (empty2.getText().toString().equals("")) {
-                    equation2.append("sin");
+                    equation2.setText("y=sinx");
+                    empty2.setText("1");
                     break;
                 } else {
-                    equation3.append("sin");
+                    equation3.setText("y=sinx");
+                    empty3.setText("1");
                     break;
                 }
             case R.id.cosBtn:
                 if (empty1.getText().toString().equals("")) {
-                    equation1.append("cos");
+                    equation1.setText("y=cosx");
+                    empty1.setText("1");
                     break;
                 } else if (empty2.getText().toString().equals("")) {
-                    equation2.append("cos");
+                    equation2.setText("y=cosx");
+                    empty2.setText("1");
                     break;
                 } else {
-                    equation3.append("cos");
+                    equation3.setText("y=cosx");
+                    empty3.setText("1");
                     break;
                 }
             case R.id.tanBtn:
                 if (empty1.getText().toString().equals("")) {
-                    equation1.append("tan");
+                    equation1.setText("y=tanx");
+                    empty1.setText("1");
                     break;
                 } else if (empty2.getText().toString().equals("")) {
-                    equation2.append("tan");
+                    equation2.setText("y=tanx");
+                    empty2.setText("1");
                     break;
                 } else {
-                    equation3.append("tan");
+                    equation3.setText("y=tanx");
+                    empty3.setText("1");
                     break;
                 }
             case R.id.xBtn:
@@ -338,29 +361,82 @@ public class Arithmetics_Graph extends AppCompatActivity implements View.OnClick
                 }
             case R.id.yBtn:
                 if (empty1.getText().toString().equals("")) {
-                    equation1.append("y");
+                    equation1.append("y=x");
                     break;
                 } else if (empty2.getText().toString().equals("")) {
-                    equation2.append("y");
+                    equation2.append("y=x");
                     break;
                 } else {
-                    equation3.append("y");
+                    equation3.append("y=x");
                     break;
                 }
             case R.id.backBtn:
+                if(equation1.getText().toString().equals("")){
+                    return;
+                }
+                if(!equation1.getText().toString().equals("") && !equation2.getText().toString().equals("") && !equation3.getText().toString().equals("")){
+                    empty3.setText("");
+                }else if(!equation1.getText().toString().equals("") && !equation2.getText().toString().equals("") && equation3.getText().toString().equals("")){
+                    empty2.setText("");
+                }else if(!equation1.getText().toString().equals("") && equation2.getText().toString().equals("")){
+                    empty1.setText("");
+                }
+                int point = 0;
                 if (empty1.getText().toString().equals("")) {
+                    point = equation1.getText().toString().length() - 1;
+                    if (equation1.getText().toString().substring(point).equals("x")) {
+                        equation1.setText("");
+                        empty1.setText("");
+                        empty2.setText("");
+                        empty3.setText("");
+                        if(!equation3.getText().toString().equals("")){
+                            equation2.setText(equation3.getText().toString());
+                            equation3.setText("");
+                            empty1.setText("1");
+                            empty2.setText("1");
+                            empty3.setText("");
+                        }
+                        if(!equation2.getText().toString().equals("")){
+                            equation1.setText(equation2.getText().toString());
+                            equation2.setText("");
+                            empty1.setText("1");
+                            empty2.setText("");
+                            empty3.setText("");
+                        }
+                        break;
+                    }
                     int size = equation1.getText().length();
                     if (size >= 1) {
                         equation1.setText(equation1.getText().toString().substring(0, size - 1));
                     }
                     break;
                 } else if (empty2.getText().toString().equals("")) {
+                    point = equation2.getText().toString().length() - 1;
+                    if (equation2.getText().toString().substring(point).equals("x")) {
+                        equation2.setText("");
+                        empty2.setText("");
+                        empty3.setText("");
+                        if(!equation3.getText().toString().equals("")){
+                            equation2.setText(equation3.getText().toString());
+                            equation3.setText("");
+                            empty2.setText("");
+                            empty3.setText("");
+                        }
+                        break;
+                    }
                     int size = equation2.getText().length();
                     if (size >= 1) {
                         equation2.setText(equation2.getText().toString().substring(0, size - 1));
                     }
                     break;
                 } else {
+                    point = equation3.getText().toString().length() - 1;
+                    if (equation3.getText().toString().substring(point).equals("x")){
+                        equation3.setText("");
+                        empty2.setText("1");
+                        empty3.setText("");
+                        break;
+                    }
                     int size = equation3.getText().length();
                     if (size >= 1) {
                         equation3.setText(equation3.getText().toString().substring(0, size - 1));
@@ -395,6 +471,101 @@ public class Arithmetics_Graph extends AppCompatActivity implements View.OnClick
                     break;
                 }
             case R.id.graphBtn:
+                if(!equation1.getText().toString().equals("") && equation2.getText().toString().equals("") && equation3.getText().toString().equals("")){
+                    empty1.setText("");
+                    empty2.setText("");
+                    empty3.setText("");
+                }else if(!equation1.getText().toString().equals("") && !equation2.getText().toString().equals("") && equation3.getText().toString().equals("")){
+                    empty2.setText("");
+                    empty3.setText("");
+                }else{
+                    empty3.setText("");
+                }
+                // 각 함수의 마지막 부분에 부호가 들어가는 것을 방지
+                String equationCheck1 = equation1.getText().toString();
+                String equationCheck2 = equation2.getText().toString();
+                String equationCheck3 = equation3.getText().toString();
+
+                Log.v("Check equationCheck", "equationCheck1 : " + equationCheck1);
+                Log.v("Check equationCheck", "equationCheck2 : " + equationCheck2);
+                Log.v("Check equationCheck", "equationCheck3 : " + equationCheck3);
+
+                if (equationCheck1.contains("=")) {
+                    checkFunction1 = equationCheck1.substring(equationCheck1.length() - 1);
+                }
+                if (equationCheck2.contains("=")) {
+                    checkFunction2 = equationCheck2.substring(equationCheck2.length() - 1);
+                }
+                if (equationCheck3.contains("=")) {
+                    checkFunction3 = equationCheck3.substring(equationCheck3.length() - 1);
+                }
+                Log.v("Check Function", "checkFunction1 : " + checkFunction1);
+                Log.v("Check Function", "checkFunction2 : " + checkFunction2);
+                Log.v("Check Function", "checkFunction3 : " + checkFunction3);
+
+                if (!equationCheck1.equals("")) {
+                    if (checkFunction1.equals("+") || checkFunction1.equals("-") || checkFunction1.equals("*") || checkFunction1.equals("/")) {
+                        AlertDialog.Builder myAlertBuilder = new AlertDialog.Builder(Arithmetics_Graph.this);
+                        myAlertBuilder.setTitle("Alert");
+                        myAlertBuilder.setMessage("Do Not Put The Operator. \nAt The End Of Equation.");
+                        myAlertBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // OK 버튼을 눌렸을 경우
+                                equation1.setText("");
+                                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        myAlertBuilder.show();
+                        Log.v("Check Process", "Check Process1");
+                        break;
+                    } else {
+                        Log.v("Check Complete", "Check Complete1");
+                    }
+                } else {
+                    Log.v("Check Equation", "Equation1 Null");
+                }
+                if (!equationCheck2.equals("")) {
+                    if (checkFunction2.equals("+") || checkFunction2.equals("-") || checkFunction2.equals("*") || checkFunction2.equals("/")) {
+                        AlertDialog.Builder myAlertBuilder = new AlertDialog.Builder(Arithmetics_Graph.this);
+                        myAlertBuilder.setTitle("Alert");
+                        myAlertBuilder.setMessage("Do Not Put The Operator. \nAt The End Of Equation.");
+                        myAlertBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // OK 버튼을 눌렸을 경우
+                                equation2.setText("");
+                                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        myAlertBuilder.show();
+                        Log.v("Check Process", "Check Process2");
+                        break;
+                    } else {
+                        Log.v("Check Complete", "Check Complete2");
+                    }
+                } else {
+                    Log.v("Check Equation", "Equation2 Null");
+                }
+                if (!equationCheck3.equals("")) {
+                    if (checkFunction3.equals("+") || checkFunction3.equals("-") || checkFunction3.equals("*") || checkFunction3.equals("/")) {
+                        AlertDialog.Builder myAlertBuilder = new AlertDialog.Builder(Arithmetics_Graph.this);
+                        myAlertBuilder.setTitle("Alert");
+                        myAlertBuilder.setMessage("Do Not Put The Operator. \nAt The End Of Equation.");
+                        myAlertBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // OK 버튼을 눌렸을 경우
+                                equation3.setText("");
+                                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        myAlertBuilder.show();
+                        Log.v("Check Process", "Check Process3");
+                        break;
+                    } else {
+                        Log.v("Check Complete", "Check Complete3");
+                    }
+                } else {
+                    Log.v("Check Equation", "Equation3 Null");
+                }
                 if (empty1.getText().toString().equals("")) {
                     empty1.setText("1");
                     Intent intent = new Intent(getApplicationContext(), GraphActivity.class);
@@ -438,7 +609,47 @@ public class Arithmetics_Graph extends AppCompatActivity implements View.OnClick
                 homeIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);     // Activity 전환 시 효과 제거
                 startActivity(homeIntent);
                 break;
+
+            case R.id.equation1:
+                if(equation1.getText().toString().equals("")){
+                    equation1.setText("y=x");
+                }
+                empty1.setText("");
+                break;
+            case R.id.equation2:
+                if(!equation1.getText().toString().equals("")){
+                    empty1.setText("1");
+                    empty2.setText("");
+                    if(equation2.getText().toString().equals("")){
+                        equation2.setText("y=x");
+                    }
+                }else{
+                    equation1.setText("y=x");
+                    empty1.setText("");
+                    empty2.setText("");
+                }
+                break;
+            case R.id.equation3:
+                if(!equation1.getText().toString().equals("")) {
+                    if (!equation2.getText().toString().equals("")) {
+                        empty2.setText("1");
+                        if (equation3.getText().toString().equals("")) {
+                            equation3.setText("y=x");
+                        }
+                    }
+                    if (!equation1.getText().toString().equals("")) {
+                        empty1.setText("1");
+                        if (equation2.getText().toString().equals("")) {
+                            equation2.setText("y=x");
+                        }
+                    }
+                }else{
+                    equation1.setText("y=x");
+                    empty1.setText("");
+                }
+                break;
         }
+
     }
 
     @Override
