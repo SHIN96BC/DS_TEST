@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">DS_Calculator</string>
     <string name="hello_world">Hello World</string>
     <string name="drawer_open">menu open</string>
     <string name="drawer_close">menu close</string>
@@ -41,6 +41,7 @@
     <string name="sort">sort</string>
     <string name="bracket">bracket</string>
     <string name="Graph">Graph</string>
+    <string name="Date">Date</string>
     <string name="Binary">Binary</string>
     <string name="Function">Function</string>
     <string name="X">X</string>

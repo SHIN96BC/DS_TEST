@@ -155,4 +155,3 @@ public class DateArithmetics extends Activity implements View.OnClickListener {
         return -1L;
     }
 }
-

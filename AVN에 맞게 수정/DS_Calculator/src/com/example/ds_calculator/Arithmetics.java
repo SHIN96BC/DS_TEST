@@ -72,23 +72,23 @@ public class Arithmetics extends Activity {  //터치따로
 
     private void setButton() {
 
-        addBtn = findViewById(R.id.addBtn);
-        subBtn = findViewById(R.id.subBtn);
-        mulBtn = findViewById(R.id.mulBtn);
-        divBtn = findViewById(R.id.divBtn);
-        sqr = findViewById(R.id.sqr);
-        root = findViewById(R.id.root);
-        equal = findViewById(R.id.equal);
-        clear = findViewById(R.id.clear);
-        bracket = findViewById(R.id.bracket);
-        binary = findViewById(R.id.binary);
-        sort = findViewById(R.id.sort);
-        backBtn = findViewById(R.id.backBtn);
-        dot = findViewById(R.id.dot);
-        graph = findViewById(R.id.graph);
-        sinBtn = findViewById(R.id.sinBtn);
-        cosBtn = findViewById(R.id.cosBtn);
-        tanBtn = findViewById(R.id.tanBtn);
+        addBtn = (Button) findViewById(R.id.addBtn);
+        subBtn = (Button) findViewById(R.id.subBtn);
+        mulBtn = (Button) findViewById(R.id.mulBtn);
+        divBtn = (Button) findViewById(R.id.divBtn);
+        sqr = (Button) findViewById(R.id.sqr);
+        root = (Button) findViewById(R.id.root);
+        equal = (Button) findViewById(R.id.equal);
+        clear = (Button) findViewById(R.id.clear);
+        bracket = (Button) findViewById(R.id.bracket);
+        binary = (Button) findViewById(R.id.binary);
+        sort = (Button) findViewById(R.id.sort);
+        backBtn = (Button) findViewById(R.id.backBtn);
+        dot = (Button) findViewById(R.id.dot);
+        graph = (Button) findViewById(R.id.date);
+        sinBtn = (Button) findViewById(R.id.sinBtn);
+        cosBtn = (Button) findViewById(R.id.cosBtn);
+        tanBtn = (Button) findViewById(R.id.tanBtn);
 
         // number ClickListener
         Integer[] btn ={R.id.numBtn0, R.id.numBtn1, R.id.numBtn2,
@@ -99,7 +99,7 @@ public class Arithmetics extends Activity {  //터치따로
         TouchEvent touchEvent = new TouchEvent(this);
         setHandler(null); // 핸들러 초기 세팅
         for(int i = 0; i<button.length; i++) {
-            button[i] = findViewById(btn[i]);
+            button[i] = (Button) findViewById(btn[i]);
             button[i].setOnClickListener(numClickListener);
             button[i].setOnLongClickListener(longClickEvent);
             button[i].setOnTouchListener(touchEvent);
@@ -182,7 +182,7 @@ public class Arithmetics extends Activity {  //터치따로
     private final Button.OnClickListener markClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if(!(view.getId() == R.id.backBtn ||view.getId() == R.id.clear||view.getId() == R.id.binary||view.getId() == R.id.graph)) {
+            if(!(view.getId() == R.id.backBtn ||view.getId() == R.id.clear||view.getId() == R.id.binary||view.getId() == R.id.date)) {
                 if (!edit_process.getText().toString().equals("")) {
                     if (edit_process.getText().toString().charAt(0) == 's'
                             || edit_process.getText().toString().charAt(0) == 't'
@@ -193,7 +193,7 @@ public class Arithmetics extends Activity {  //터치따로
                 }
             }
             if(edit_process.getText().toString().equals("")){
-                if(!(view.getId() == R.id.subBtn ||view.getId() == R.id.bracket ||view.getId() == R.id.binary||view.getId() == R.id.graph)) {
+                if(!(view.getId() == R.id.subBtn ||view.getId() == R.id.bracket ||view.getId() == R.id.binary||view.getId() == R.id.date)) {
                     return;
                 }
             }
@@ -410,8 +410,8 @@ public class Arithmetics extends Activity {  //터치따로
                     startActivity(intent);
                     break;
 
-                case R.id.graph:
-                    Intent intentGra = new Intent(getApplicationContext(), Arithmetics_Graph.class);
+                case R.id.date:
+                    Intent intentGra = new Intent(getApplicationContext(), DateArithmetics.class);
                     intentGra.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(intentGra);
                     break;
@@ -434,9 +434,9 @@ public class Arithmetics extends Activity {  //터치따로
     }
 
     private void setTextView() {
-        edit_process = findViewById(R.id.edit_process);
-        edit_result = findViewById(R.id.edit_result);
-        edit_arith = findViewById(R.id.edit_arith);
+        edit_process = (TextView) findViewById(R.id.edit_process);
+        edit_result = (TextView) findViewById(R.id.edit_result);
+        edit_arith = (TextView) findViewById(R.id.edit_arith);
     }
 
     private void select(View view2) {
@@ -450,7 +450,7 @@ public class Arithmetics extends Activity {  //터치따로
     }
 
     // 핸들러 세팅
-    public void setHandler(Button button) {
+    public void setHandler(final Button button) {
         handler_up = new Handler();
         handler_down = new Handler();
         runnable_up = new Runnable() {

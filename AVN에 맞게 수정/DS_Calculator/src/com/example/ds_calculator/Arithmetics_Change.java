@@ -40,24 +40,24 @@ public class Arithmetics_Change extends Activity implements View.OnClickListener
         setContentView(R.layout.activity_arithmetics_change);
 
 
-        operator = findViewById(R.id.operator);
-        process = findViewById(R.id.process);
-        numBtn0 = findViewById(R.id.numBtn0);
-        numBtn1 = findViewById(R.id.numBtn1);
-        addBtn = findViewById(R.id.addBtn);
-        subBtn = findViewById(R.id.subBtn);
-        divBtn = findViewById(R.id.divBtn);
-        remainBtn = findViewById(R.id.remainBtn);
-        mulBtn = findViewById(R.id.mulBtn);
-        equalBtn = findViewById(R.id.equalBtn);
-        backBtn = findViewById(R.id.backBtn);
-        clearBtn = findViewById(R.id.clearBtn);
-        homeBtn = findViewById(R.id.homeBtn);
-        andBtn = findViewById(R.id.andBtn);
-        orBtn = findViewById(R.id.orBtn);
-        xorBtn = findViewById(R.id.xorBtn);
-        leftShiftBtn = findViewById(R.id.leftShiftBtn);
-        rightShiftBtn = findViewById(R.id.rightShiftBtn);
+        operator = (TextView) findViewById(R.id.operator);
+        process = (TextView) findViewById(R.id.process);
+        numBtn0 = (Button) findViewById(R.id.numBtn0);
+        numBtn1 = (Button) findViewById(R.id.numBtn1);
+        addBtn = (Button) findViewById(R.id.addBtn);
+        subBtn = (Button) findViewById(R.id.subBtn);
+        divBtn = (Button) findViewById(R.id.divBtn);
+        remainBtn = (Button) findViewById(R.id.remainBtn);
+        mulBtn = (Button) findViewById(R.id.mulBtn);
+        equalBtn = (Button) findViewById(R.id.equalBtn);
+        backBtn = (Button) findViewById(R.id.backBtn);
+        clearBtn = (Button) findViewById(R.id.clearBtn);
+        homeBtn = (Button) findViewById(R.id.homeBtn);
+        andBtn = (Button) findViewById(R.id.andBtn);
+        orBtn = (Button) findViewById(R.id.orBtn);
+        xorBtn = (Button) findViewById(R.id.xorBtn);
+        leftShiftBtn = (Button) findViewById(R.id.leftShiftBtn);
+        rightShiftBtn = (Button) findViewById(R.id.rightShiftBtn);
 
         operator.setOnClickListener(this);
         process.setOnClickListener(this);
@@ -85,7 +85,7 @@ public class Arithmetics_Change extends Activity implements View.OnClickListener
                 R.id.result6, R.id.result7, R.id.result8, R.id.result9};
 
         for (int i = 0; i < binaryView.length; i++) {
-            binaryView[i] = findViewById(res[i]);
+            binaryView[i] = (ImageView) findViewById(res[i]);
         }
     }
 

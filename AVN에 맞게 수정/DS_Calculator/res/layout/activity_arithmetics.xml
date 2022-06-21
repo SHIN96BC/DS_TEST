@@ -290,13 +290,13 @@
                 android:background="@drawable/btn_color_selector" />
 
             <Button
-                android:id="@+id/graph"
+                android:id="@+id/date"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:background="@drawable/btn_color_selector"
-                android:text="@string/Graph"/>/>
+                android:text="@string/Date"/>
 
             <Button
                 android:id="@+id/binary"
