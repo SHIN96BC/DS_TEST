@@ -46,6 +46,8 @@ public class Arithmetics extends Activity {  //터치따로
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_arithmetics);
 
+        TextView titleText = (TextView)findViewById(R.id.title_bar);
+        titleText.setText(R.string.title);
 
         calculateHelper = new CalculateHelper();
 

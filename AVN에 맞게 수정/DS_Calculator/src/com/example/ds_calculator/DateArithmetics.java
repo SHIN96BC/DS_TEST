@@ -35,6 +35,9 @@ public class DateArithmetics extends Activity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_date);
+        
+        TextView titleText = (TextView)findViewById(R.id.title_bar);
+        titleText.setText(R.string.title_date);
 
         // 현재 날짜 세팅
         Calendar calendar = Calendar.getInstance();
@@ -70,13 +73,7 @@ public class DateArithmetics extends Activity implements View.OnClickListener {
 
 			@Override
 			public void onClick(View arg0) {
-				Log.d(SBC_TAG, "moveToHome()");
-				   
-		        Intent intent = new Intent(Intent.ACTION_MAIN);
-		        intent.addCategory(Intent.CATEGORY_HOME);
-		        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-		        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-		        startActivity(intent);
+				Log.d(SBC_TAG, "moveToBack()");
 		        finish();
 			}
         	

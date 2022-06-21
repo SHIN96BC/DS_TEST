@@ -5,6 +5,8 @@
     <string name="drawer_open">menu open</string>
     <string name="drawer_close">menu close</string>
     <string name="title">사칙연산계산기</string>
+    <string name="title_bin">2진수 계산기</string>
+    <string name="title_date">날짜 계산기</string>
     <string name="back">←</string>
     <string name="and">AND</string>
     <string name="one">1</string>
@@ -22,7 +24,6 @@
     <string name="remain">%</string>
     <string name="right"><![CDATA[>>]]></string>
     <string name="left"><![CDATA[<<]]></string>
-    <string name="title_bin">Binary Calculator</string>
     <string name="two">2</string>
     <string name="three">3</string>
     <string name="four">4</string>

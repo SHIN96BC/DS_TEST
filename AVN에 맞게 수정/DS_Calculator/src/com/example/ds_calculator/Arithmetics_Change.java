@@ -42,7 +42,9 @@ public class Arithmetics_Change extends Activity implements View.OnClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_arithmetics_change);
-
+        
+        TextView titleText = (TextView)findViewById(R.id.title_bar);
+        titleText.setText(R.string.title_bin);
 
         operator = (TextView) findViewById(R.id.operator);
         process = (TextView) findViewById(R.id.process);
@@ -87,13 +89,7 @@ public class Arithmetics_Change extends Activity implements View.OnClickListener
 
 			@Override
 			public void onClick(View arg0) {
-				Log.d(SBC_TAG, "moveToHome()");
-				   
-		        Intent intent = new Intent(Intent.ACTION_MAIN);
-		        intent.addCategory(Intent.CATEGORY_HOME);
-		        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-		        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-		        startActivity(intent);
+				Log.d(SBC_TAG, "moveToBack()");
 		        finish();
 			}
         	
