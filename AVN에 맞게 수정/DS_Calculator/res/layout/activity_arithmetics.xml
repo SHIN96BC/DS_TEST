@@ -5,6 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+    
+    <include layout="@layout/title_bar_layout_main"
+    	android:id="@+id/title_bar_layout_main"/>
+        
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="10pt"

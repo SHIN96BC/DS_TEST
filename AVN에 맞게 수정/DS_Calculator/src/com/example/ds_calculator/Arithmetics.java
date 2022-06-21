@@ -1,5 +1,8 @@
 package com.example.ds_calculator;
 
+import static com.example.ds_calculator.util.LogTag.SBC_TAG;
+
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -7,10 +10,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import android.widget.ImageButton;
 
 
 
@@ -32,7 +36,10 @@ public class Arithmetics extends Activity {  //터치따로
 
     Button[] button = new Button[10];                               //Button
 
-    private Button addBtn, subBtn, mulBtn, divBtn, clear, bracket, backBtn, dot, equal, sinBtn, cosBtn, tanBtn, binary, sqr, root, sort, graph;
+    private Button addBtn, subBtn, mulBtn, divBtn, clear, bracket, backBtn, dot, equal, 
+    				sinBtn, cosBtn, tanBtn, binary, sqr, root, sort, graph;
+    
+    private ImageButton mBackBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +62,7 @@ public class Arithmetics extends Activity {  //터치따로
         setButton();
         setTextView();
     }
+    
 
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -89,6 +97,7 @@ public class Arithmetics extends Activity {  //터치따로
         sinBtn = (Button) findViewById(R.id.sinBtn);
         cosBtn = (Button) findViewById(R.id.cosBtn);
         tanBtn = (Button) findViewById(R.id.tanBtn);
+        mBackBtn = (ImageButton) findViewById(R.id.back_btn);
 
         // number ClickListener
         Integer[] btn ={R.id.numBtn0, R.id.numBtn1, R.id.numBtn2,
@@ -125,6 +134,23 @@ public class Arithmetics extends Activity {  //터치따로
         sinBtn.setOnClickListener(markClickListener);
         cosBtn.setOnClickListener(markClickListener);
         tanBtn.setOnClickListener(markClickListener);
+        
+        
+        mBackBtn.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				Log.d(SBC_TAG, "moveToHome()");
+				   
+		        Intent intent = new Intent(Intent.ACTION_MAIN);
+		        intent.addCategory(Intent.CATEGORY_HOME);
+		        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+		        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+		        startActivity(intent);
+		        finish();
+			}
+        	
+        });
     }
 
     // 숫자 버튼이 눌렸을 경우

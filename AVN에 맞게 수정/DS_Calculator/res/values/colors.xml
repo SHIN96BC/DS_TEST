@@ -12,4 +12,26 @@
     <color name="transparency">#00ffffff</color>
     <color name="normal">#b1ffff</color>
     <color name="yellow">#FFFF00</color>
+    
+    
+    <color name="bg_color">#99000000</color>
+    
+    <color name="list_normal_text_color">#FFFFFF</color>
+    <color name="list_normal_text_shadow_color">#FF000000</color>
+    <color name="list_disabled_text_color">#4D4D4D</color>
+    
+    <color name="viewpager_bg_color">#99000000</color>
+    <color name="page_divider_color">#A5A5A5</color>
+    <color name="bt_device_func_btn_color_normal">#FFFFFFFF</color>
+    <color name="bt_device_func_btn_color_disable">#FFA0A0A0</color>
+
+    <color name="title_normal_text_color">#FFFFFF</color>
+    <color name="title_normal_text_shadow_color">#FF000000</color>
+    <color name="title_disabled_text_color">#4D4D4D</color>   
+    <color name="title_secondary_text_color">#B2B2B2</color>
+     
+    <color name="text_color_light_gray">#B2B2B2</color>
+    <color name="list_text_color">@android:color/white</color>
+    <color name="dlg_message_text_color">@android:color/white</color>
+    <color name="dlg_btn_text_color">@color/text_color_light_gray</color>
 </resources>

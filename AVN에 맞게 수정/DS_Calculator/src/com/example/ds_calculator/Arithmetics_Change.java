@@ -7,11 +7,14 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import static com.example.ds_calculator.util.LogTag.SBC_TAG;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,6 +37,7 @@ public class Arithmetics_Change extends Activity implements View.OnClickListener
     public String resultNum = "";
     public String te_resultNum = "";
     public String firstNumNo = "";
+    private ImageButton mBackBtn;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +62,7 @@ public class Arithmetics_Change extends Activity implements View.OnClickListener
         xorBtn = (Button) findViewById(R.id.xorBtn);
         leftShiftBtn = (Button) findViewById(R.id.leftShiftBtn);
         rightShiftBtn = (Button) findViewById(R.id.rightShiftBtn);
+        mBackBtn = (ImageButton) findViewById(R.id.back_btn);
 
         operator.setOnClickListener(this);
         process.setOnClickListener(this);
@@ -77,6 +82,22 @@ public class Arithmetics_Change extends Activity implements View.OnClickListener
         xorBtn.setOnClickListener(this);
         leftShiftBtn.setOnClickListener(this);
         rightShiftBtn.setOnClickListener(this);
+        
+        mBackBtn.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				Log.d(SBC_TAG, "moveToHome()");
+				   
+		        Intent intent = new Intent(Intent.ACTION_MAIN);
+		        intent.addCategory(Intent.CATEGORY_HOME);
+		        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+		        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+		        startActivity(intent);
+		        finish();
+			}
+        	
+        });
 
         selectView = null;
 
@@ -370,10 +391,8 @@ public class Arithmetics_Change extends Activity implements View.OnClickListener
                 break;
 
             case R.id.homeBtn:
-                Intent homeIntent = new Intent(getApplicationContext(), Arithmetics.class);
-                homeIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);     // Activity 전환 시 효과 제거
-                startActivity(homeIntent);
-                break;
+                finish();
+                return;
 
             case R.id.equalBtn:
                 clear();

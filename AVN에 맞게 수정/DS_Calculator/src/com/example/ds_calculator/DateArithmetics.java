@@ -6,10 +6,15 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.TextView;
+
+import static com.example.ds_calculator.util.LogTag.SBC_TAG;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,6 +28,7 @@ public class DateArithmetics extends Activity implements View.OnClickListener {
     private TextView startView;
     private TextView lastView;
     private TextView resultView;
+    private ImageButton mBackBtn;
 
     // 안드로이드 os 버전 때문에 발생하는 LocalDate 에러를 해결하는 Annotation
     @Override
@@ -37,7 +43,7 @@ public class DateArithmetics extends Activity implements View.OnClickListener {
         calendar.add(Calendar.DATE, +1);
         Date tomorrow = calendar.getTime();
         // 날짜 표시형식 변경
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-M-d", Locale.getDefault());
         // 날짜 스트링으로 변환
         String startDay = simpleDateFormat.format(today);
         String lastDay = simpleDateFormat.format(tomorrow);
@@ -48,16 +54,35 @@ public class DateArithmetics extends Activity implements View.OnClickListener {
         lastView = (TextView)findViewById(R.id.lastDay);
         lastView.setText(lastDay);
         resultView = (TextView)findViewById(R.id.resultView);
-        resultView.setText("0Day");
+        resultView.setText("1Day");
+        mBackBtn = (ImageButton) findViewById(R.id.back_btn);
 
 
         // 클릭 이벤트
         Button btnStart = (Button)findViewById(R.id.btn_date_start);
         Button btnLast = (Button)findViewById(R.id.btn_date_last);
+        Button btnHome = (Button)findViewById(R.id.btn_date_home);
         btnStart.setOnClickListener(this);
         btnLast.setOnClickListener(this);
-    }
+        btnHome.setOnClickListener(this);
+        
+        mBackBtn.setOnClickListener(new OnClickListener() {
 
+			@Override
+			public void onClick(View arg0) {
+				Log.d(SBC_TAG, "moveToHome()");
+				   
+		        Intent intent = new Intent(Intent.ACTION_MAIN);
+		        intent.addCategory(Intent.CATEGORY_HOME);
+		        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+		        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+		        startActivity(intent);
+		        finish();
+			}
+        	
+        });
+    }
+    
     @Override
     public void onClick(View view) {
         DatePickerDialog datePickerDialog = null;
@@ -103,6 +128,9 @@ public class DateArithmetics extends Activity implements View.OnClickListener {
                     }, intArr[0], intArr[1]-1, intArr[2]); // 월이 +1 되서 들어가서 -1 해줘야한다.
                 }
                 break;
+            case R.id.btn_date_home:
+            	finish();
+            	return;
         }
         if(datePickerDialog != null) {
             datePickerDialog.show();
