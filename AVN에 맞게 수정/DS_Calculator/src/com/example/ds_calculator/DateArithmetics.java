@@ -1,6 +1,7 @@
 package com.example.ds_calculator;
 
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
@@ -33,11 +34,16 @@ public class DateArithmetics extends Activity implements View.OnClickListener {
     // 안드로이드 os 버전 때문에 발생하는 LocalDate 에러를 해결하는 Annotation
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+    	ActionBar actionBar = getActionBar();
+        actionBar.hide();
+    	
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_date);
         
         TextView titleText = (TextView)findViewById(R.id.title_bar);
         titleText.setText(R.string.title_date);
+        
+        
 
         // 현재 날짜 세팅
         Calendar calendar = Calendar.getInstance();

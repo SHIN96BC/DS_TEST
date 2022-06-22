@@ -29,6 +29,7 @@ public final class R {
         public static final int purple_200=0x7f040000;
         public static final int purple_500=0x7f040001;
         public static final int purple_700=0x7f040002;
+        public static final int secondary_text_color=0x7f04001d;
         public static final int teal_200=0x7f040003;
         public static final int teal_700=0x7f040004;
         public static final int text_color_light_gray=0x7f040018;
@@ -42,12 +43,15 @@ public final class R {
         public static final int yellow=0x7f04000b;
     }
     public static final class dimen {
+        public static final int function_text_size=0x7f050008;
+        public static final int list_text_size=0x7f050007;
         public static final int settings_menu_bar_back_btn_width=0x7f050004;
         public static final int settings_menu_bar_separate_line_height=0x7f050002;
         public static final int settings_menu_bar_separate_line_width=0x7f050001;
         public static final int settings_menu_bar_widget_height=0x7f050000;
         public static final int tab_widget_text_size=0x7f050005;
         public static final int title_bar_separate_line_width=0x7f050003;
+        public static final int title_text_size=0x7f050006;
     }
     public static final class drawable {
         public static final int back_btn_dis=0x7f020000;
@@ -56,14 +60,15 @@ public final class R {
         public static final int btn_color=0x7f020003;
         public static final int btn_color_selector=0x7f020004;
         public static final int btn_press=0x7f020005;
-        public static final int ic_launcher=0x7f020006;
-        public static final int list_title_line_foc=0x7f020007;
-        public static final int list_title_line_nor=0x7f020008;
-        public static final int one=0x7f020009;
-        public static final int separate_line=0x7f02000a;
-        public static final int tab_widget_indicator_selector=0x7f02000b;
-        public static final int title_back_btn_selector=0x7f02000c;
-        public static final int zero=0x7f02000d;
+        public static final int calculator=0x7f020006;
+        public static final int ic_launcher=0x7f020007;
+        public static final int list_title_line_foc=0x7f020008;
+        public static final int list_title_line_nor=0x7f020009;
+        public static final int one=0x7f02000a;
+        public static final int separate_line=0x7f02000b;
+        public static final int tab_widget_indicator_selector=0x7f02000c;
+        public static final int title_back_btn_selector=0x7f02000d;
+        public static final int zero=0x7f02000e;
     }
     public static final class id {
         public static final int addBtn=0x7f08001b;
@@ -210,9 +215,14 @@ public final class R {
          */
         public static final int AppBaseTheme=0x7f070000;
         /**  Application theme. 
- All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static final int AppTheme=0x7f070001;
-        public static final int MenuBtnTitleTextStyle=0x7f070002;
+        public static final int FunctionBtnTextStyle=0x7f070004;
+        public static final int ListTextStyle=0x7f070003;
+        public static final int MediaSelectBtnTextStyle=0x7f070005;
+        public static final int MenuBtnTitleMapqueeTextStyle=0x7f070006;
+        public static final int MenuBtnTitleTextStyle=0x7f070007;
+        public static final int ThemeSelectBtnTextStyle=0x7f070008;
+        public static final int TitleTextStyle=0x7f070002;
     }
 }

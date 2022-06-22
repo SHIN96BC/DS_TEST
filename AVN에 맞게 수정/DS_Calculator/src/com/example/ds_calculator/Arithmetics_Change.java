@@ -1,5 +1,6 @@
 package com.example.ds_calculator;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -40,11 +41,16 @@ public class Arithmetics_Change extends Activity implements View.OnClickListener
     private ImageButton mBackBtn;
 
     protected void onCreate(Bundle savedInstanceState) {
+    	ActionBar actionBar = getActionBar();
+        actionBar.hide();
+    	
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_arithmetics_change);
         
         TextView titleText = (TextView)findViewById(R.id.title_bar);
         titleText.setText(R.string.title_bin);
+        
+        
 
         operator = (TextView) findViewById(R.id.operator);
         process = (TextView) findViewById(R.id.process);

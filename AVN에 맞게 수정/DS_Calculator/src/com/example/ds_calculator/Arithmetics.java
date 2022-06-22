@@ -2,7 +2,10 @@ package com.example.ds_calculator;
 
 import static com.example.ds_calculator.util.LogTag.SBC_TAG;
 
+import com.dseltec.HardwareServiceManager;
+import android.view.KeyEvent;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -40,14 +43,24 @@ public class Arithmetics extends Activity {  //터치따로
     				sinBtn, cosBtn, tanBtn, binary, sqr, root, sort, graph;
     
     private ImageButton mBackBtn;
+    
+    private HardwareServiceManager mHardwareServiceManager = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+    	ActionBar actionBar = getActionBar();
+        actionBar.hide();
+    	
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_arithmetics);
 
+        // shin update 타이틀 바 추가
         TextView titleText = (TextView)findViewById(R.id.title_bar);
         titleText.setText(R.string.title);
+        
+        // shin update 하드키 추가
+        mHardwareServiceManager = new HardwareServiceManager(this);
+        mHardwareServiceManager.addListener(mHwListener);
 
         calculateHelper = new CalculateHelper();
 
@@ -225,6 +238,10 @@ public class Arithmetics extends Activity {  //터치따로
                     return;
                 }
             }
+            
+         // shin update
+            String errorCheckStr = "";
+            
             switch (view.getId()) {
                 case R.id.addBtn:
                     edit_arith.setText(" ");
@@ -270,6 +287,10 @@ public class Arithmetics extends Activity {  //터치따로
                     if(edit_process.getText().toString().equals("")){
                         return;
                     }
+                 // shin update 괄호가 마지막으로 오면 발생하는 에러 처리
+                    errorCheckStr = edit_process.getText().toString();
+                    if(!bracketCheck(errorCheckStr)) return;
+                    
                     edit_arith.setText(" ");
                     String sin = edit_process.getText().toString();
                     String sinProcess = "sin(" + sin + ")";
@@ -285,6 +306,10 @@ public class Arithmetics extends Activity {  //터치따로
                     if(edit_process.getText().toString().equals("")){
                         return;
                     }
+                 // shin update 괄호가 마지막으로 오면 발생하는 에러 처리
+                    errorCheckStr = edit_process.getText().toString();
+                    if(!bracketCheck(errorCheckStr)) return;
+                    
                     edit_arith.setText(" ");
                     String cos = edit_process.getText().toString();
                     String cosProcess = "cos(" + cos + ")";
@@ -300,6 +325,10 @@ public class Arithmetics extends Activity {  //터치따로
                     if(edit_process.getText().toString().equals("")){
                         return;
                     }
+                 // shin update 괄호가 마지막으로 오면 발생하는 에러 처리
+                    errorCheckStr = edit_process.getText().toString();
+                    if(!bracketCheck(errorCheckStr)) return;
+                    
                     edit_arith.setText(" ");
                     String tan = edit_process.getText().toString();
                     String tanProcess = "tan(" + tan + ")";
@@ -365,6 +394,10 @@ public class Arithmetics extends Activity {  //터치따로
                     break;
 
                 case R.id.sqr:
+                	// shin update 괄호가 마지막으로 오면 발생하는 에러 처리
+                    errorCheckStr = edit_process.getText().toString();
+                    if(!bracketCheck(errorCheckStr)) return;
+                    
                     String[] processSqr;                   //전체 process 배열
                     String lastNumSqr = "";                //root 적용할 값
                     result = "";                        //출력할 값
@@ -384,6 +417,10 @@ public class Arithmetics extends Activity {  //터치따로
                     break;
 
                 case R.id.root:
+                	// shin update 괄호가 마지막으로 오면 발생하는 에러 처리
+                    errorCheckStr = edit_process.getText().toString();
+                    if(!bracketCheck(errorCheckStr)) return;
+                    
                     String[] processRoot;                   //전체 process 배열
                     String lastNumRoot = "";                //root 적용할 값
                     result = "";                        //출력할 값
@@ -408,6 +445,10 @@ public class Arithmetics extends Activity {  //터치따로
                     break;
 
                 case R.id.sort:
+                	// shin update 괄호가 마지막으로 오면 발생하는 에러 처리
+                    errorCheckStr = edit_process.getText().toString();
+                    if(!bracketCheck(errorCheckStr)) return;
+                    
                     String sortStr = edit_process.getText().toString();
                     String sortresult = calculateHelper.sorted(sortStr);
                     if(calculateHelper.checkError(sortresult)){
@@ -418,6 +459,10 @@ public class Arithmetics extends Activity {  //터치따로
                     break;
 
                 case R.id.equal:
+                	// shin update 괄호가 마지막으로 오면 발생하는 에러 처리
+                    errorCheckStr = edit_process.getText().toString();
+                    if(!bracketCheck(errorCheckStr)) return;
+                	
                     result = edit_process.getText().toString();
                     double r = calculateHelper.process(result);
 
@@ -447,6 +492,50 @@ public class Arithmetics extends Activity {  //터치따로
         }
     };
 
+    // shin update 괄호를 체크하는 메서드
+    private boolean bracketCheck(String errorCheckStr) {
+    	// 괄호가 마지막으로 오면 발생하는 에러 처리
+        // 아스키코드 ( == 40,  ) == 41
+        if(errorCheckStr.charAt(errorCheckStr.length()-1) == 41) {
+        	// 괄호가 닫혀있을 때 바로 전에 있는 값이 숫자면 true 아니면 false 를 return 합니다.
+        	// 아스키코드 0 ~ 9 == 48 ~ 57
+        	if(errorCheckStr.charAt(errorCheckStr.length()-1) > 47
+        			&& errorCheckStr.charAt(errorCheckStr.length()-1) < 58) return true;
+        }
+        return false;   
+    }
+    
+    // shin update 하드키 추가
+    private HardwareServiceManager.Listener mHwListener = new HardwareServiceManager.Listener() {
+		@Override
+		public void onHardKeyDown(int keyCode) {
+			Log.d(SBC_TAG, "HardwareServiceManager.Listener onHardKeyDown() key=" + keyCode);
+			if (keyCode == KeyEvent.KEYCODE_FBDJR_LCD_FUNC3) {
+				// VR Key
+				moveToHome();
+			} else if (keyCode == KeyEvent.KEYCODE_FBDJR_LCD_FUNC4) {
+				// HOME Key
+			} else if (keyCode == KeyEvent.KEYCODE_FBDJR_LCD_FUNC5) {
+				// FAVORITE Key
+			} else if (keyCode == KeyEvent.KEYCODE_FBDJR_LCD_FUNC7) {
+				// Track Down
+			} else if (keyCode == KeyEvent.KEYCODE_FBDJR_LCD_FUNC6) {
+				// Track Up
+			}
+		}
+    };
+    
+    private void moveToHome() {
+    	Log.d(SBC_TAG, "moveToHome()");
+		   
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        startActivity(intent);
+        finish();
+    }
+    
     private void preview() {
         if (isPreview) {
             result = edit_process.getText().toString();

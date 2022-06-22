@@ -13,6 +13,8 @@
         android:allowBackup="true"
         android:label="@string/app_name"
         android:supportsRtl="true">
+        <activity android:name="com.ds.photo.ViewImage" 
+            android:theme="@android:style/Theme.Wallpaper.NoTitleBar.Fullscreen" ></activity>
         <activity
             android:name="com.example.ds_calculator.Arithmetics"
             android:configChanges="orientation|screenSize|keyboardHidden"

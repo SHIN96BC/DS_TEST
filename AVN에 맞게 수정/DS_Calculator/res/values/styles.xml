@@ -4,7 +4,7 @@
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
-    <style name="AppBaseTheme" parent="android:Theme.Light">
+    <style name="AppBaseTheme" parent="@android:style/Theme.Wallpaper.NoTitleBar">
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
@@ -15,7 +15,66 @@
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        <item name="android:splitMotionEvents">false</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:fitsSystemWindows">true</item>
+
     </style>
+
+    <style name="TitleTextStyle">        
+        <item name="android:layerType">software</item>
+        <item name="android:textSize">@dimen/title_text_size</item>
+        <item name="android:textScaleX">0.87</item>
+        <item name="android:textColor">@color/list_normal_text_color</item>
+        <item name="android:shadowColor">@color/list_normal_text_shadow_color</item>
+        <item name="android:shadowDy">1.0</item>
+        <item name="android:shadowRadius">1.0</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+    
+    <style name="ListTextStyle">
+        <item name="android:layerType">software</item>
+        <item name="android:textSize">@dimen/list_text_size</item>
+        <item name="android:textScaleX">0.87</item>
+        <item name="android:textColor">@color/list_normal_text_color</item>
+        <item name="android:shadowColor">@color/list_normal_text_shadow_color</item>
+        <item name="android:shadowDy">1.0</item>
+        <item name="android:shadowRadius">1.0</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="FunctionBtnTextStyle">
+        <item name="android:layerType">software</item>
+        <item name="android:textSize">@dimen/function_text_size</item>
+        <item name="android:textScaleX">0.87</item>
+        <item name="android:textColor">@color/secondary_text_color</item>
+        <item name="android:shadowColor">#FF000000</item>
+        <item name="android:shadowDy">1.0</item>
+        <item name="android:shadowRadius">1.0</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+     
+    <style name="MediaSelectBtnTextStyle">
+        <item name="android:layerType">software</item>
+        <item name="android:textSize">28dp</item>
+        <item name="android:textScaleX">0.87</item>
+        <item name="android:textColor">@color/secondary_text_color</item>
+        <item name="android:shadowColor">#FF000000</item>
+        <item name="android:shadowDy">1.0</item>
+        <item name="android:shadowRadius">1.0</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+
+    <style name="MenuBtnTitleMapqueeTextStyle">        
+        <item name="android:textSize">28dp</item>
+        <item name="android:textScaleX">0.87</item>
+        <item name="android:textColor">@color/title_normal_text_color</item>
+        <item name="android:shadowColor">@color/title_normal_text_shadow_color</item>
+        <item name="android:shadowDy">1.0</item>
+        <item name="android:shadowRadius">1.0</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>    
     
     <style name="MenuBtnTitleTextStyle">
         <item name="android:layerType">software</item>
@@ -29,5 +88,20 @@
         <item name="android:ellipsize">end</item>
         <item name="android:includeFontPadding">false</item>
     </style>
+        
+    
+    <style name="ThemeSelectBtnTextStyle">
+        <item name="android:layerType">software</item>
+        <item name="android:textSize">28dp</item>
+        <item name="android:textScaleX">0.87</item>
+        <item name="android:textColor">@color/secondary_text_color</item>
+        <item name="android:shadowColor">#FF000000</item>
+        <item name="android:shadowDy">1.0</item>
+        <item name="android:shadowRadius">1.0</item>
+        <item name="android:gravity">left|center</item>
+        <item name="android:includeFontPadding">false</item>        
+    </style>
+
+    
 
 </resources>
