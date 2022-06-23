@@ -43,6 +43,9 @@ public class CalculateHelper {
                         number = 1;
                     }
                 }
+                if(data.equals("-")){
+                    number = -1;
+                }
                 flag = false;
                 inputList.add(data);
             }

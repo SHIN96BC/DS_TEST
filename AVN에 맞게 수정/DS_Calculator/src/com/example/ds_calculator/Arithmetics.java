@@ -2,6 +2,14 @@ package com.example.ds_calculator;
 
 import static com.example.ds_calculator.util.LogTag.SBC_TAG;
 
+import com.dseltec.micom.key.MicomKeyManager;
+import com.dseltec.micom.key.MicomKeyStatusListener;
+import com.dseltec.micom.mode.MicomModeConsts;
+import com.dseltec.micom.protocol.key.KEY;
+import com.dseltec.micom.system.MicomSystemListener;
+import com.dseltec.micom.system.MicomSystemManager;
+import com.dseltec.micom.mode.MicomModeListener;
+import com.dseltec.micom.mode.MicomModeManager;
 import com.dseltec.HardwareServiceManager;
 import android.view.KeyEvent;
 
@@ -11,6 +19,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -45,6 +54,9 @@ public class Arithmetics extends Activity {  //터치따로
     private ImageButton mBackBtn;
     
     private HardwareServiceManager mHardwareServiceManager = null;
+    private MicomKeyManager mKeyManager;
+    private MicomSystemManager mSystemManager = null;
+    private MicomModeManager mModeManager = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +69,19 @@ public class Arithmetics extends Activity {  //터치따로
         // shin update 타이틀 바 추가
         TextView titleText = (TextView)findViewById(R.id.title_bar);
         titleText.setText(R.string.title);
+        
+        // shin update micon 추가
+        mKeyManager = new MicomKeyManager(this);
+        mKeyManager.addListener(mMicomKeyStatusListener);
+        
+        mSystemManager = new MicomSystemManager(this);
+        mSystemManager.addListener(mMicomSystemListener);
+        mSystemManager.getModel();
+        
+        mModeManager = new MicomModeManager(this);
+        mModeManager.addListener(mMicomModesListener);
+        mModeManager.getMicomMode();
+        mModeManager.getAuxStatus();
         
         // shin update 하드키 추가
         mHardwareServiceManager = new HardwareServiceManager(this);
@@ -150,7 +175,7 @@ public class Arithmetics extends Activity {  //터치따로
         cosBtn.setOnClickListener(markClickListener);
         tanBtn.setOnClickListener(markClickListener);
         
-        
+        // shin update
         mBackBtn.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -179,6 +204,12 @@ public class Arithmetics extends Activity {  //터치따로
                     Toast.makeText(Arithmetics.this,"Please click C or <-", Toast.LENGTH_LONG).show();
                     return;
                 }
+            }
+            // shin update
+            if(edit_result.getText().toString().equals("ERROR")) {
+            	edit_result.setText("");
+            	edit_process.setText("");
+            	edit_arith.setText("");
             }
             select(view);
             switch (view.getId()) {
@@ -465,13 +496,18 @@ public class Arithmetics extends Activity {  //터치따로
                 	
                     result = edit_process.getText().toString();
                     double r = calculateHelper.process(result);
+                    
+                    if(r <= 2147483647) {
+                    	if (!isDot)
+                            edit_process.setText(String.valueOf((int) r));
+                        else
+                            edit_process.setText(String.valueOf(r));
+                    }else {
+                    	edit_result.setText("ERROR");
+                    }
+                    
 
-                    if (!isDot)
-                        edit_process.setText(String.valueOf((int) r));
-                    else
-                        edit_process.setText(String.valueOf(r));
-
-                    edit_result.setText("");
+                    edit_process.setText("");
                     edit_arith.setText("");
                     isDot = false;
                     isPreview = false;
@@ -502,14 +538,76 @@ public class Arithmetics extends Activity {  //터치따로
         	if(errorCheckStr.charAt(errorCheckStr.length()-1) > 47
         			&& errorCheckStr.charAt(errorCheckStr.length()-1) < 58) return true;
         }
+        if(errorCheckStr.charAt(errorCheckStr.length()-1) > 47
+    			&& errorCheckStr.charAt(errorCheckStr.length()-1) < 58) return true;
         return false;   
     }
+    
+    // shin update micom 추가
+    private MicomKeyStatusListener mMicomKeyStatusListener = new MicomKeyStatusListener() {
+    	
+
+        @Override
+        public void onHardKeyDown(int arg0) {
+            // TODO Auto-generated method stub
+            
+        }
+ 
+        @Override
+        public void onHardKeyUp(int arg0) {
+            // TODO Auto-generated method stub
+            
+        }
+
+        @Override
+        public void onIRKeyDown(int arg0, int arg1) {
+            // TODO Auto-generated method stub
+            
+        }
+
+        @Override
+        public void onIRKeyUp(int arg0, int arg1) {
+            // TODO Auto-generated method stub
+            
+        }
+
+        @Override
+        public void onSWRCKeyDown(int arg0) {
+            // TODO Auto-generated method stub
+        }
+
+        @Override
+        public void onSWRCKeyUp(int keycode) {
+            // TODO Auto-generated method stub
+            Log.v(SBC_TAG, "onSWRCKeyUp ");
+            
+        }
+        
+    };
+    // Added by chkim 20180316 Add DOP Model Function ->
+    private MicomSystemListener mMicomSystemListener = new MicomSystemListener(){
+
+    	
+        @Override
+        public void onModelInfo(int model) {
+            Log.v(SBC_TAG, "onModelInfo() model = " + model);
+            
+        }
+    };
+    
+    private MicomModeListener mMicomModesListener = new MicomModeListener() {
+
+        @Override
+        public void onMicomMode(int micomMode) {
+        	Log.v(SBC_TAG, "micom mode start>>>>>>>>>>>>>>>>>");
+        }
+    };
     
     // shin update 하드키 추가
     private HardwareServiceManager.Listener mHwListener = new HardwareServiceManager.Listener() {
 		@Override
 		public void onHardKeyDown(int keyCode) {
-			Log.d(SBC_TAG, "HardwareServiceManager.Listener onHardKeyDown() key=" + keyCode);
+			Log.v(SBC_TAG, "HardwareServiceManager.Listener onHardKeyDown() key=" + keyCode);
 			if (keyCode == KeyEvent.KEYCODE_FBDJR_LCD_FUNC3) {
 				// VR Key
 				moveToHome();
@@ -525,6 +623,7 @@ public class Arithmetics extends Activity {  //터치따로
 		}
     };
     
+    // shin update 
     private void moveToHome() {
     	Log.d(SBC_TAG, "moveToHome()");
 		   
@@ -536,22 +635,34 @@ public class Arithmetics extends Activity {  //터치따로
         finish();
     }
     
+    // sbc update 계산된 결과 값이 int 의 범위를 초과하면 ERROR 를 보여주도록 수정
     private void preview() {
         if (isPreview) {
             result = edit_process.getText().toString();
             double r = calculateHelper.process(result);
-
-            if (!isDot) {
-                edit_result.setText(String.valueOf((int) r));
+            
+            if(r < 2147483647) {
+            	if (!isDot) {
+            		edit_result.setText(String.valueOf((int) r));
+                    edit_process.setText(String.valueOf((int) r));
+            	}else {
+            		edit_result.setText(String.valueOf(r));
+                    edit_process.setText(String.valueOf(r));
+            	}
             }else {
-                r = Math.floor(r * 100) / 100;
-                edit_result.setText(String.valueOf(r));
+            	edit_result.setText("ERROR");
+            	edit_process.setText("");
+            	isPreview = false;
+            	edit_arith.setText("");
+                isDot = false;
             }
         }
     }
 
     private void setTextView() {
         edit_process = (TextView) findViewById(R.id.edit_process);
+        // shin update 스크롤 바 추가
+        edit_process.setMovementMethod(new ScrollingMovementMethod());
         edit_result = (TextView) findViewById(R.id.edit_result);
         edit_arith = (TextView) findViewById(R.id.edit_arith);
     }
@@ -579,8 +690,9 @@ public class Arithmetics extends Activity {  //터치따로
                 }
                 if(st != null) {
                     st = st.trim();
+                    // shin update
+                    if(edit_result.getText().toString().equals("ERROR")) edit_result.setText("");
                     if(st.length() != 0) {
-                        edit_result.append(st);
                         edit_process.append(st);
                     }
                 }
@@ -595,9 +707,17 @@ public class Arithmetics extends Activity {  //터치따로
                 if (size >= 1) {
                     edit_result.setText(edit_result.getText().toString().substring(0, size - 1));
                 }
-                if(size1 >=1){
-                    edit_process.setText(edit_process.getText().toString().substring(0, size1 - 1));
+                //shin update
+                if(isPreview) {
+                	edit_process.setText("");
+                	edit_arith.setText("");
+                }else {
+                	if(size1 >=1){
+                        edit_process.setText(edit_process.getText().toString().substring(0, size1 - 1));
+                        edit_arith.setText("");
+                    }
                 }
+                
                 handler_down.postDelayed(this,100);
             }
         };

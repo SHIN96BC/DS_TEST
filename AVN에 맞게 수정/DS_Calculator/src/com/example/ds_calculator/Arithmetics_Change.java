@@ -2,10 +2,12 @@ package com.example.ds_calculator;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -71,6 +73,9 @@ public class Arithmetics_Change extends Activity implements View.OnClickListener
         leftShiftBtn = (Button) findViewById(R.id.leftShiftBtn);
         rightShiftBtn = (Button) findViewById(R.id.rightShiftBtn);
         mBackBtn = (ImageButton) findViewById(R.id.back_btn);
+        
+     // shin update 스크롤 바 추가
+        process.setMovementMethod(new ScrollingMovementMethod());
 
         operator.setOnClickListener(this);
         process.setOnClickListener(this);
@@ -139,9 +144,25 @@ public class Arithmetics_Change extends Activity implements View.OnClickListener
                 }
                 Log.v("realZeroArray", "realZeroArray : " + Arrays.toString(realZeroArray));
                 Log.v("reverseZeroArray", "reverseZeroArray : " + Arrays.toString(reverseZeroArray));
-                if (realZeroArray.length > 10) {
-                    Toast.makeText(getApplicationContext(), "Excess", Toast.LENGTH_SHORT).show();// 입력 값이 10자리 넘어갈 경우 Alert
+                if (realZeroArray.length > 10) {                                            // 입력 값이 10자리 넘어갈 경우 Alert
+                    AlertDialog.Builder myAlertBuilder = new AlertDialog.Builder(Arithmetics_Change.this);
+                    myAlertBuilder.setTitle("Alert");
+                    myAlertBuilder.setMessage("Error.");
+                    myAlertBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // OK 버튼을 눌렸을 경우
+                            clear();
+                            process.setText("");
+                            operator.setText("");
+                            inputNum = "";
+                            Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                     clear();
+                    process.setText("");
+                    operator.setText("");
+                    inputNum = "";
+                    myAlertBuilder.show();
                 } else {
                     for (count = 0; count < realZeroArray.length; count++) {
                         if (reverseZeroArray[count].equals("0")) {
@@ -167,8 +188,24 @@ public class Arithmetics_Change extends Activity implements View.OnClickListener
                 Log.v("realOneArray", "realOneArray : " + Arrays.toString(realOneArray));
                 Log.v("reverseOneArray", "reverseOneArray : " + Arrays.toString(reverseOneArray));
                 if (realOneArray.length > 10) {
-                    Toast.makeText(getApplicationContext(), "Excess", Toast.LENGTH_SHORT).show();
+                    AlertDialog.Builder myAlertBuilder = new AlertDialog.Builder(Arithmetics_Change.this);
+                    myAlertBuilder.setTitle("Alert");
+                    myAlertBuilder.setMessage("Error.");
+                    myAlertBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // OK 버튼을 눌렸을 경우
+                            clear();
+                            process.setText("");
+                            operator.setText("");
+                            inputNum = "";
+                            Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                     clear();
+                    process.setText("");
+                    operator.setText("");
+                    inputNum = "";
+                    myAlertBuilder.show();
                 } else {
                     for (count = 0; count < realOneArray.length; count++) {
                         if (reverseOneArray[count].equals("0")) {
@@ -438,19 +475,48 @@ public class Arithmetics_Change extends Activity implements View.OnClickListener
                 }else if(operaTor.equals("-")) {
                     result = firstBinary - secondBinary;
                     if (result < 0 && result != 0) {
-                        Toast.makeText(getApplicationContext(), "Negative Number", Toast.LENGTH_SHORT).show();
+                        AlertDialog.Builder myAlertBuilder = new AlertDialog.Builder(Arithmetics_Change.this);
+                        myAlertBuilder.setTitle("Alert");
+                        myAlertBuilder.setMessage("Cannot Calculate Negative Data.");
+                        myAlertBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // OK 버튼을 눌렸을 경우
+                                clear();
+                                process.setText("");
+                                operator.setText("");
+                                firstResultNum = "";
+                                Toast.makeText(getApplicationContext(), "Negative Number", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        process.setText("");
+                        operator.setText("");
+                        firstResultNum = "";
+                        myAlertBuilder.show();
                     }
                 }else if(operaTor.equals("*")) {
                     result = firstBinary * secondBinary;
                 }else if(operaTor.equals("/")) {
                     result = firstBinary / secondBinary;
-                    // 2진수 계산 값이 소수값으로 나올 때, 계산 불가 및 Reset 처리
+                 // 2진수 계산 값이 소수값으로 나올 때, 계산 불가 및 Reset 처리
                     if (result == 0) {
-                        Toast.makeText(getApplicationContext(), "Double", Toast.LENGTH_SHORT).show();
+                        AlertDialog.Builder myAlertBuilder = new AlertDialog.Builder(Arithmetics_Change.this);
+                        myAlertBuilder.setTitle("Alert");
+                        myAlertBuilder.setMessage("Cannot Calculate Double Data.");
+                        myAlertBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // OK 버튼을 눌렸을 경우
+                                Toast.makeText(getApplicationContext(), "Double", Toast.LENGTH_SHORT).show();
+                                clear();
+                                process.setText("");
+                                operator.setText("");
+                                firstResultNum = "";
+                            }
+                        });
                         clear();
                         process.setText("");
                         operator.setText("");
                         firstResultNum = "";
+                        myAlertBuilder.show();
                     }
                 }else if(operaTor.equals("%")) {
                     result = firstBinary % secondBinary;
@@ -486,14 +552,27 @@ public class Arithmetics_Change extends Activity implements View.OnClickListener
                 String[] te_resultArray = deleteEmpty(te_binaryArray);
                 Log.v("te_resultArray", "te_resultArray : " + Arrays.toString(te_resultArray));
 
-                // 계산 값 10자리 넘어갈 때, Reset
                 if (resultArray.length > 10) {
-                    Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                    AlertDialog.Builder myAlertBuilder = new AlertDialog.Builder(Arithmetics_Change.this);
+                    myAlertBuilder.setTitle("Alert");
+                    myAlertBuilder.setMessage("Cannot Calculate.");
+                    myAlertBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // OK 버튼을 눌렸을 경우
+                            Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                            clear();
+                            process.setText("");
+                            operator.setText("");
+                            inputNum = "";
+                            firstResultNum = "";
+                        }
+                    });
                     clear();
                     process.setText("");
                     operator.setText("");
                     inputNum = "";
                     firstResultNum = "";
+                    myAlertBuilder.show();
                     break;
                 }
 
